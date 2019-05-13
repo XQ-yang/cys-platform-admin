@@ -8,5 +8,33 @@ export default {
    *              如果不使用，则需要在路由中给需要在菜单中展示的路由设置meta: {title: 'xxx'}
    *              用来在菜单中显示文字
    */
-  useI18n: false
+  useI18n: false,
+  /**
+   * @description api请求基础路径
+   */
+  baseUrl: {
+    dev: 'http://127.0.0.1:8092/api',
+    pro: 'http://192.168.10.115:8090/api'
+  },
+
+  /**
+   * @description 文件下载地址
+   */
+  fileUrl: {
+    dev: 'http://127.0.0.1:8092/',
+    pro: 'http://192.168.10.115:8090/'
+  },
+  /**
+   * @description 默认打开的首页的路由name值，默认为home
+   */
+  homeName: 'home',
+  /**
+   * @description 需要加载的插件
+   */
+  plugin: {
+    'error-store': {
+      showInHeader: false, // 设为false后不会在顶部显示错误日志徽标
+      developmentOff: true // 设为true后在开发环境不会收集错误信息，方便开发中排查错误
+    }
+  }
 }

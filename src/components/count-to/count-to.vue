@@ -52,7 +52,7 @@ export default {
       default: 2
     },
     /**
-     * @description 动画持续的时间，单位是秒
+     * @description 动画延迟开始的时间，单位是秒
      */
     delay: {
       type: Number,
@@ -92,7 +92,7 @@ export default {
      */
     unit: {
       type: Array,
-      default () {
+      default() {
         return [[3, 'K+'], [6, 'M+'], [9, 'B+']]
       }
     },
@@ -105,25 +105,25 @@ export default {
       default: ''
     }
   },
-  data () {
+  data() {
     return {
       counter: null,
       unitText: ''
     }
   },
   computed: {
-    counterId () {
+    counterId() {
       return `count_to_${this._uid}`
     }
   },
   methods: {
-    getHandleVal (val, len) {
+    getHandleVal(val, len) {
       return {
         endVal: parseInt(val / Math.pow(10, this.unit[len - 1][0])),
         unitText: this.unit[len - 1][1]
       }
     },
-    transformValue (val) {
+    transformValue(val) {
       let len = this.unit.length
       let res = {
         endVal: 0,
@@ -138,7 +138,7 @@ export default {
       if (val > Math.pow(10, this.unit[len - 1][0])) res = this.getHandleVal(val, len)
       return res
     },
-    getValue (val) {
+    getValue(val) {
       let res = 0
       if (this.simplify) {
         let { endVal, unitText } = this.transformValue(val)
@@ -150,22 +150,22 @@ export default {
       return res
     }
   },
-  mounted () {
+  mounted() {
     this.$nextTick(() => {
+      let endVal = this.getValue(this.end)
+      this.counter = new CountUp(this.counterId, this.startVal, endVal, this.decimals, this.duration, {
+        useEasing: !this.uneasing,
+        useGrouping: this.useGroup,
+        separator: this.separator,
+        decimal: this.decimal
+      })
       setTimeout(() => {
-        let endVal = this.getValue(this.end)
-        this.counter = new CountUp(this.counterId, this.startVal, endVal, this.decimals, this.duration, {
-          useEasing: !this.uneasing,
-          useGrouping: this.useGroup,
-          separator: this.separator,
-          decimal: this.decimal
-        })
         if (!this.counter.error) this.counter.start()
       }, this.delay)
     })
   },
   watch: {
-    end (newVal) {
+    end(newVal) {
       let endVal = this.getValue(newVal)
       this.counter.update(endVal)
     }

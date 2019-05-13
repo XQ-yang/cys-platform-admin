@@ -1,14 +1,11 @@
-<style lang="less">
-  @import './login.less';
-</style>
 
 <template>
-  <div class="login" @keydown.enter="handleLogin">
-    <div class="login-con">
-      <Card icon="log-in" title="欢迎登录" :bordered="false">
+  <div class="login">
+    <div class="login-con login-content">
+      <Card icon="log-in" title=" " :bordered="false">
         <div class="form-con">
           <login-form @on-success-valid="handleSubmit"></login-form>
-          <p class="login-tip">输入任意用户名和密码即可</p>
+          <!-- <p class="login-tip">输入任意用户名和密码即可</p> -->
         </div>
       </Card>
     </div>
@@ -27,19 +24,25 @@ export default {
       'handleLogin',
       'getUserInfo'
     ]),
-    handleSubmit ({ userName, password }) {
+    handleSubmit({ userName, password }) {
       this.handleLogin({ userName, password }).then(res => {
         this.getUserInfo().then(res => {
+          window.localStorage.removeItem('tagNaveList')
           this.$router.push({
-            name: 'home'
+            name: this.$config.homeName
           })
         })
+      }).catch(error => {
+        this.$Message.error(error.msg)
       })
     }
   }
 }
 </script>
 
-<style>
+<style lang="less" >
+
+ @import './login.less';
+ @import './login-edit.less';
 
 </style>

@@ -15,12 +15,12 @@ export default {
   components: {
     Tables
   },
-  data () {
+  data() {
     return {
       columns: [
-        {title: 'Name', key: 'name', sortable: true},
-        {title: 'Email', key: 'email', editable: true},
-        {title: 'Create-Time', key: 'createTime'},
+        { title: 'Name', key: 'name', sortable: true },
+        { title: 'Email', key: 'email', editable: true },
+        { title: 'Create-Time', key: 'createTime' },
         {
           title: 'Handle',
           key: 'handle',
@@ -49,16 +49,16 @@ export default {
     }
   },
   methods: {
-    handleDelete (params) {
-      console.log(params)
+    handleDelete(params) {
+      // console.log(params)
     },
-    exportExcel () {
+    exportExcel() {
       this.$refs.tables.exportCsv({
         filename: `table-${(new Date()).valueOf()}.csv`
       })
     }
   },
-  mounted () {
+  mounted() {
     getTableData().then(res => {
       this.tableData = res.data
     })

@@ -1,90 +1,115 @@
-import Axios from 'axios'
-import baseURL from '_conf/url'
-import { Message } from 'iview'
-import Cookies from 'js-cookie'
-import { TOKEN_KEY } from '@/libs/util'
-class httpRequest {
-  constructor () {
-    this.options = {
-      method: '',
-      url: ''
-    }
-    // 存储请求队列
+import axios from 'axios'
+import { getToken } from '@/libs/util'
+// import { Message as Msg } from 'iview'
+class HttpRequest {
+  constructor(baseUrl) {
+    this.baseUrl = baseUrl
     this.queue = {}
   }
-  // 销毁请求实例
-  destroy (url) {
-    delete this.queue[url]
-    const queue = Object.keys(this.queue)
-    return queue.length
+  getInsideConfig() {
+    const config = {
+      baseURL: this.baseUrl
+    }
+    return config
   }
-  // 请求拦截
-  interceptors (instance, url) {
-    // 添加请求拦截器
+  destroy(url) {
+    delete this.queue[url]
+    if (!Object.keys(this.queue).length) {
+      // Spin.hide()
+    }
+  }
+  interceptors(instance, url) {
+    // 请求拦截
     instance.interceptors.request.use(config => {
-      if (!config.url.includes('/users')) {
-        config.headers['x-access-token'] = Cookies.get(TOKEN_KEY)
-      }
-      // Spin.show()
-      // 在发送请求之前做些什么
-      return config
-    }, error => {
-      // 对请求错误做些什么
-      return Promise.reject(error)
-    })
-
-    // 添加响应拦截器
-    instance.interceptors.response.use((res) => {
-      let { data } = res
-      const is = this.destroy(url)
-      if (!is) {
-        setTimeout(() => {
-          // Spin.hide()
-        }, 500)
-      }
-      if (!(data instanceof Blob)) {
-        if (data.code !== 200) {
-          // 后端服务在个别情况下回报201，待确认
-          if (data.code === 401) {
-            Cookies.remove(TOKEN_KEY)
-            window.location.href = '/#/login'
-            Message.error('未登录，或登录失效，请登录')
-          } else {
-            if (data.msg) Message.error(data.msg)
-          }
-          return false
+      if (!config.url.includes('/user/login')) {
+        if (getToken()) {
+          config.headers['Authorization'] = getToken()
+        } else {
+          // 如果token过期或者不存在则跳转到登录页面
+          window.location.href = '/login'
         }
       }
-      return data
-    }, (error) => {
-      Message.error('服务内部错误')
-      // 对响应错误做点什么
+      // 添加全局的loading...
+      if (!Object.keys(this.queue).length) {
+        // Spin.show()
+      }
+      this.queue[url] = true
+      return config
+    }, error => {
+      this.destroy(url)
       return Promise.reject(error)
     })
-  }
-  // 创建实例
-  create () {
-    let conf = {
-      baseURL: baseURL,
-      // timeout: 2000,
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        'X-URL-PATH': location.pathname
+    // 响应拦截
+    instance.interceptors.response.use(res => {
+      this.destroy(url)
+      if (res.data.code !== 0) {
+        // token 过期应该返回登陆页面
+        if (res.data.code === 10002) {
+          // Msg.error('未登录，或者登录已过期，请登录')
+          window.location.href = '/login'
+        }
+        return Promise.reject(res.data)
+      } else {
+        return res.data
       }
-    }
-    return Axios.create(conf)
+    }, error => {
+      // 错误的请求结果处理，这里的代码根据后台的状态码来决定错误的输出信息
+      this.destroy(url)
+      if (error && error.response) {
+        switch (error.response.status) {
+          case 400:
+            error.message = '错误请求'
+            break
+          case 401:
+            // 如果token过期或者不存在则跳转到登录页面
+            window.location.href = '/login'
+            // Msg.error('未登录，或者登录已过期，请登录')
+            error.message = '未授权，请重新登录'
+            break
+          case 403:
+            error.message = '拒绝访问'
+            break
+          case 404:
+            error.message = '请求错误，未找到资源'
+            break
+          case 405:
+            error.message = '请求方法未允许'
+            break
+          case 408:
+            error.message = '请求超时'
+            break
+          case 500:
+            error.message = '服务器端出错'
+            break
+          case 501:
+            error.message = '网络未实现'
+            break
+          case 502:
+            error.message = '网络错误'
+            break
+          case 503:
+            error.message = '服务不可用'
+            break
+          case 504:
+            error.message = '网络超时'
+            break
+          case 505:
+            error.message = 'http版本不支持请求'
+            break
+          default:
+            error.message = `链接错误${error.response.status}`
+        }
+      } else {
+        error.message = '链接服务器失败'
+      }
+      return Promise.reject(error.message)
+    })
   }
-  // 合并请求实例
-  mergeReqest (instances = []) {
-    //
-  }
-  // 请求实例
-  request (options) {
-    var instance = this.create()
+  request(options) {
+    const instance = axios.create()
+    options = Object.assign(this.getInsideConfig(), options)
     this.interceptors(instance, options.url)
-    options = Object.assign({}, options)
-    this.queue[options.url] = instance
     return instance(options)
   }
 }
-export default httpRequest
+export default HttpRequest

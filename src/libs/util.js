@@ -1,12 +1,12 @@
 import Cookies from 'js-cookie'
 // cookie保存的天数
 import config from '@/config'
-import { forEach, hasOneOf } from '@/libs/tools'
+import { forEach, hasOneOf, objEqual } from '@/libs/tools'
 
 export const TOKEN_KEY = 'token'
 
 export const setToken = (token) => {
-  Cookies.set(TOKEN_KEY, token, {expires: config.cookieExpires || 1})
+  Cookies.set(TOKEN_KEY, token, { expires: config.cookieExpires || 1 })
 }
 
 export const getToken = () => {
@@ -32,15 +32,16 @@ const showThisMenuEle = (item, access) => {
 export const getMenuByRouter = (list, access) => {
   let res = []
   forEach(list, item => {
-    if (item.meta && !item.meta.hideInMenu) {
+    if (!item.meta || (item.meta && !item.meta.hideInMenu)) {
       let obj = {
         icon: (item.meta && item.meta.icon) || '',
         name: item.name,
         meta: item.meta
       }
-      if (hasChild(item) && showThisMenuEle(item, access)) {
+      if ((hasChild(item) || (item.meta && item.meta.showAlways)) && showThisMenuEle(item, access)) {
         obj.children = getMenuByRouter(item.children, access)
       }
+      if (item.meta && item.meta.href) obj.href = item.meta.href
       if (showThisMenuEle(item, access)) res.push(obj)
     }
   })
@@ -51,27 +52,50 @@ export const getMenuByRouter = (list, access) => {
  * @param {Array} routeMetched 当前路由metched
  * @returns {Array}
  */
-export const getBreadCrumbList = (routeMetched) => {
+export const getBreadCrumbList = (route, homeRoute) => {
+  let homeItem = { ...homeRoute, icon: homeRoute.meta.icon }
+  let routeMetched = route.matched
+  if (routeMetched.some(item => item.name === homeRoute.name)) return [homeItem]
   let res = routeMetched.filter(item => {
-    return item.meta === undefined || !item.meta.hide
+    return item.meta === undefined || !item.meta.hideInBread
   }).map(item => {
+    let meta = { ...item.meta }
+    if (meta.title && typeof meta.title === 'function') meta.title = meta.title(route)
     let obj = {
       icon: (item.meta && item.meta.icon) || '',
       name: item.name,
-      meta: item.meta
+      meta: meta
     }
     return obj
   })
   res = res.filter(item => {
     return !item.meta.hideInMenu
   })
-  return [{
-    name: 'home',
-    to: '/home'
-  }, ...res]
+  return [{ ...homeItem, to: homeRoute.path }, ...res]
 }
 
-export const showTitle = (item, vm) => vm.$config.useI18n ? vm.$t(item.name) : ((item.meta && item.meta.title) || item.name)
+export const getRouteTitleHandled = (route) => {
+  let router = { ...route }
+  let meta = { ...route.meta }
+  let title = ''
+  if (meta.title) {
+    if (typeof meta.title === 'function') title = meta.title(router)
+    else title = meta.title
+  }
+  meta.title = title
+  router.meta = meta
+  return router
+}
+
+export const showTitle = (item, vm) => {
+  let title = item.meta.title
+  if (!title) return
+  if (vm.$config.useI18n) {
+    if (title.includes('{{') && title.includes('}}') && vm.$config.useI18n) title = title.replace(/({{[\s\S]+?}})/, (m, str) => str.replace(/{{([\s\S]*)}}/, (m, _) => vm.$t(_.trim())))
+    else title = vm.$t(item.name)
+  } else title = (item.meta && item.meta.title) || item.name
+  return title
+}
 
 /**
  * @description 本地存储和获取标签导航列表
@@ -91,17 +115,17 @@ export const getTagNavListFromLocalstorage = () => {
  * @param {Array} routers 路由列表数组
  * @description 用于找到路由列表中name为home的对象
  */
-export const getHomeRoute = routers => {
+export const getHomeRoute = (routers, homeName = 'home') => {
   let i = -1
   let len = routers.length
   let homeRoute = {}
   while (++i < len) {
     let item = routers[i]
     if (item.children && item.children.length) {
-      let res = getHomeRoute(item.children)
+      let res = getHomeRoute(item.children, homeName)
       if (res.name) return res
     } else {
-      if (item.name === 'home') homeRoute = item
+      if (item.name === homeName) homeRoute = item
     }
   }
   return homeRoute
@@ -121,17 +145,6 @@ export const getNewTagList = (list, newRoute) => {
 }
 
 /**
- * @param {Boolean} status 状态 1 => locked  0 => unlocked
- * @description 这里只是为了演示，实际应该将锁定状态的设置和获取用接口来实现
- */
-export const setLockStatus = (status) => {
-  localStorage.isLocked = status
-}
-export const getLockStatus = () => {
-  return parseInt(localStorage.isLocked)
-}
-
-/**
  * @param {*} access 用户权限数组，如 ['super_admin', 'admin']
  * @param {*} route 路由列表
  */
@@ -141,29 +154,24 @@ const hasAccess = (access, route) => {
 }
 
 /**
+ * 权鉴
  * @param {*} name 即将跳转的路由name
  * @param {*} access 用户权限数组
  * @param {*} routes 路由列表
  * @description 用户是否可跳转到该页
  */
 export const canTurnTo = (name, access, routes) => {
-  const getHasAccessRouteNames = (list) => {
-    let res = []
-    list.forEach(item => {
+  const routePermissionJudge = (list) => {
+    return list.some(item => {
       if (item.children && item.children.length) {
-        res = [].concat(res, getHasAccessRouteNames(item.children))
-      } else {
-        if (item.meta && item.meta.access) {
-          if (hasAccess(access, item)) res.push(item.name)
-        } else {
-          res.push(item.name)
-        }
+        return routePermissionJudge(item.children)
+      } else if (item.name === name) {
+        return hasAccess(access, item)
       }
     })
-    return res
   }
-  const canTurnToNames = getHasAccessRouteNames(routes)
-  return canTurnToNames.indexOf(name) > -1
+
+  return routePermissionJudge(routes)
 }
 
 /**
@@ -184,13 +192,14 @@ export const getParams = url => {
  * @param {Array} list 标签列表
  * @param {String} name 当前关闭的标签的name
  */
-export const getNextName = (list, name) => {
-  let res = ''
+export const getNextRoute = (list, route) => {
+  let res = {}
   if (list.length === 2) {
-    res = 'home'
+    res = getHomeRoute(list)
   } else {
-    if (list.findIndex(item => item.name === name) === list.length - 1) res = list[list.length - 2].name
-    else res = list[list.findIndex(item => item.name === name) + 1].name
+    const index = list.findIndex(item => routeEqual(item, route))
+    if (index === list.length - 1) res = list[list.length - 2]
+    else res = list[index + 1]
   }
   return res
 }
@@ -202,7 +211,7 @@ export const getNextName = (list, name) => {
 export const doCustomTimes = (times, callback) => {
   let i = -1
   while (++i < times) {
-    callback()
+    callback(i)
   }
 }
 
@@ -218,7 +227,7 @@ export const getArrayFromFile = (file) => {
     let reader = new FileReader()
     reader.readAsText(file) // 以文本格式读取
     let arr = []
-    reader.onload = function (evt) {
+    reader.onload = function(evt) {
       let data = evt.target.result // 读到的数据
       let pasteData = data.trim()
       arr = pasteData.split((/[\n\u0085\u2028\u2029]|\r\n?/g)).map(row => {
@@ -261,3 +270,113 @@ export const getTableDataFromArray = (array) => {
     tableData
   }
 }
+
+export const findNodeUpper = (ele, tag) => {
+  if (ele.parentNode) {
+    if (ele.parentNode.tagName === tag.toUpperCase()) {
+      return ele.parentNode
+    } else {
+      return findNodeUpper(ele.parentNode, tag)
+    }
+  }
+}
+
+export const findNodeUpperByClasses = (ele, classes) => {
+  let parentNode = ele.parentNode
+  if (parentNode) {
+    let classList = parentNode.classList
+    if (classList && classes.every(className => classList.contains(className))) {
+      return parentNode
+    } else {
+      return findNodeUpperByClasses(parentNode, classes)
+    }
+  }
+}
+
+export const findNodeDownward = (ele, tag) => {
+  const tagName = tag.toUpperCase()
+  if (ele.childNodes.length) {
+    let i = -1
+    let len = ele.childNodes.length
+    while (++i < len) {
+      let child = ele.childNodes[i]
+      if (child.tagName === tagName) return child
+      else return findNodeDownward(child, tag)
+    }
+  }
+}
+
+export const showByAccess = (access, canViewAccess) => {
+  return hasOneOf(canViewAccess, access)
+}
+
+/**
+ * @description 根据name/params/query判断两个路由对象是否相等
+ * @param {*} route1 路由对象
+ * @param {*} route2 路由对象
+ */
+export const routeEqual = (route1, route2) => {
+  const params1 = route1.params || {}
+  const params2 = route2.params || {}
+  const query1 = route1.query || {}
+  const query2 = route2.query || {}
+  return (route1.name === route2.name) && objEqual(params1, params2) && objEqual(query1, query2)
+}
+
+/**
+ * @description 根据name判断两个路由对象是否相等
+ * @param {*} route1 路由对象
+ * @param {*} route2 路由对象
+ */
+export const routeNameEqual = (route1, route2) => {
+  return (route1.name === route2.name)
+}
+
+/**
+ * 判断打开的标签列表里是否已存在这个新添加的路由对象
+ */
+export const routeNameHasExist = (tagNavList, routeItem) => {
+  let len = tagNavList.length
+  let res = false
+  doCustomTimes(len, (index) => {
+    if (routeNameEqual(tagNavList[index], routeItem)) res = true
+  })
+  return res
+}
+
+/**
+ * 判断打开的标签列表里是否已存在这个新添加的路由对象
+ */
+export const routeHasExist = (tagNavList, routeItem) => {
+  let len = tagNavList.length
+  let res = false
+  doCustomTimes(len, (index) => {
+    if (routeEqual(tagNavList[index], routeItem)) res = true
+  })
+  return res
+}
+
+export const localSave = (key, value) => {
+  localStorage.setItem(key, value)
+}
+
+export const localRead = (key) => {
+  return localStorage.getItem(key) || ''
+}
+
+// 递归调用给按照tree组件结构组合数据
+export const expandTree = (treeData) => {
+  return treeData.map(item => {
+    item.expand = true
+    item.title = item.name
+    // 判断是否有子项
+    if (item.children && item.children.length) {
+      if (!item.children.checked) {
+        item.checked = false
+      }
+      item.children = expandTree(item.children)
+    }
+    return item
+  })
+}
+

@@ -1,4 +1,4 @@
-import { login, logout, getUserInfo } from '@/api/user'
+import { login, getUserInfo, logout, authorization } from '@/api/user'
 import { setToken, getToken } from '@/libs/util'
 
 export default {
@@ -7,29 +7,41 @@ export default {
     userId: '',
     avatorImgPath: '',
     token: getToken(),
-    access: ''
+    access: '',
+    hasGetInfo: false,
+    btnRules: [],
+    roleIds: []
   },
   mutations: {
-    setAvator (state, avatorPath) {
+    setAvator(state, avatorPath) {
       state.avatorImgPath = avatorPath
     },
-    setUserId (state, id) {
+    setUserId(state, id) {
       state.userId = id
     },
-    setUserName (state, name) {
+    setUserName(state, name) {
       state.userName = name
     },
-    setAccess (state, access) {
+    setAccess(state, access) {
       state.access = access
     },
-    setToken (state, token) {
+    setToken(state, token) {
       state.token = token
       setToken(token)
+    },
+    setHasGetInfo(state, status) {
+      state.hasGetInfo = status
+    },
+    setRules(state, rules) {
+      state.btnRules = rules
+    },
+    setRoleIds(state, roleIds) {
+      state.roleIds = roleIds
     }
   },
   actions: {
     // 登录
-    handleLogin ({ commit }, {userName, password}) {
+    handleLogin({ commit }, { userName, password }) {
       userName = userName.trim()
       return new Promise((resolve, reject) => {
         login({
@@ -37,7 +49,8 @@ export default {
           password
         }).then(res => {
           const data = res.data
-          commit('setToken', data.token)
+          window.localStorage.removeItem('tagNaveList')
+          commit('setToken', data)
           resolve()
         }).catch(err => {
           reject(err)
@@ -45,33 +58,48 @@ export default {
       })
     },
     // 退出登录
-    handleLogOut ({ state, commit }) {
+    handleLogOut({ state, commit }) {
       return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
+        logout().then(() => {
+          window.localStorage.removeItem('tagNaveList')
           commit('setToken', '')
-          commit('setAccess', [])
+          commit('setHasGetInfo', false)
           resolve()
         }).catch(err => {
           reject(err)
         })
-        // 如果你的退出登录无需请求接口，则可以直接使用下面三行代码而无需使用logout调用接口
-        // commit('setToken', '')
-        // commit('setAccess', [])
-        // resolve()
       })
     },
     // 获取用户相关信息
-    getUserInfo ({ state, commit }) {
+    getUserInfo({ state, commit }) {
       return new Promise((resolve, reject) => {
-        getUserInfo(state.token).then(res => {
-          const data = res.data
-          commit('setAvator', data.avator)
-          commit('setUserName', data.user_name)
-          commit('setUserId', data.user_id)
-          commit('setAccess', data.access)
+        try {
+          getUserInfo().then(res => {
+            const data = res.data
+            commit('setAvator', data.avatar)
+            commit('setUserName', data.username)
+            commit('setUserId', data.id)
+            commit('setRoleIds', data.roleId.split(','))
+            commit('setHasGetInfo', true)
+            resolve(data)
+          }).catch(err => {
+            reject(err)
+          })
+        } catch (error) {
+          reject(error)
+        }
+      })
+    },
+    authorization({ state, commit }) {
+      return new Promise((resolve, reject) => {
+        authorization().then(res => {
+          const data = res.data.map(item => {
+            return item.code
+          })
+          commit('setRules', data)
           resolve(data)
-        }).catch(err => {
-          reject(err)
+        }).catch(error => {
+          reject(error)
         })
       })
     }

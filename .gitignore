@@ -24,3 +24,5 @@ yarn-error.log*
 *.sw*
 
 build/env.js
+src/view/storage/pot/index.css
+src/view/schedule/index.css
