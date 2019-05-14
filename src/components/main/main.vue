@@ -1,13 +1,17 @@
 <template>
   <Layout style="height: 100%" class="main">
     <Sider hide-trigger collapsible :width="256" :collapsed-width="64" v-model="collapsed" class="left-sider" :style="{overflow: 'hidden'}">
-      <side-menu  :class="{'left-margin-top':fixedHeader}" accordion ref="sideMenu" :active-name="$route.name" :collapsed="collapsed" @on-select="turnToPage" :menu-list="menuList">
+      <div :class="{'header-fixed':fixedHeader}">
         <!-- 需要放在菜单上面的内容，如Logo，写在side-menu标签内部，如下 -->
-        <div class="logo-con" :class="{'header-fixed':fixedHeader}">
+        <div class="logo-con">
           <img v-show="!collapsed" :src="maxLogo" key="max-logo" />
           <img v-show="collapsed" :src="minLogo" key="min-logo" />
         </div>
-      </side-menu>
+      </div>
+      <div :class="{'left-margin-top':fixedHeader}">
+        <side-menu  accordion ref="sideMenu" :active-name="$route.name" :collapsed="collapsed" @on-select="turnToPage" :menu-list="menuList">
+        </side-menu>
+      </div>
     </Sider>
     <Layout>
       <Header class="header-con">
@@ -206,9 +210,9 @@ export default {
         text-align: center;
     }
     .header-fixed{
-      position: absolute;
+      position: fixed;
       top:0;
-      right: 0;
+      left: 0;
       background: #2b3042;
       z-index:999;
       transition: width 0.28s;
