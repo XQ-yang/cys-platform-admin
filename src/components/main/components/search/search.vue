@@ -1,11 +1,10 @@
 <template>
   <div>
-    <Input search placeholder="请输入样本条码"  v-if="isView" @on-search="searchSampleCode" />
+    <Input search placeholder="请输入查询条件"  v-if="isView"  />
   </div>
 </template>
 <script>
 import { hasOneOf } from '@/libs/tools'
-import { getBySampleCode } from '@/api/retrospect'
 export default{
   name: 'Search',
   computed: {
@@ -17,25 +16,6 @@ export default{
     }
   },
   methods: {
-    searchSampleCode(e) {
-      if (e) {
-        getBySampleCode(e).then(res => {
-          if (res.data) {
-            const route = {
-              name: 'retrospectView',
-              query: {
-                sampleId: res.data.id
-              }
-            }
-            this.$router.push(route)
-          } else {
-            this.$Message.info('样本条码不存在')
-          }
-        }).catch(error => {
-          this.$Message.error(error.msg)
-        })
-      }
-    }
   }
 }
 </script>
