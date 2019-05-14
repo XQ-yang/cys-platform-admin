@@ -160,6 +160,72 @@ export const routes = [
         component: () => import('@/view/single-page/message')
       }
     ]
+  },
+  {
+    path: '/system',
+    name: 'system',
+    meta: {
+      icon: 'md-settings',
+      title: '系统基础设置',
+      showAlways: true
+    },
+    component: Main,
+    children: [
+      {
+        path: 'user',
+        name: 'user',
+        meta: {
+          icon: 'md-contacts',
+          title: '用户管理'
+        },
+        component: () => import('@/view/system/user')
+      },
+      {
+        path: 'role',
+        name: 'role',
+        meta: {
+          icon: 'ios-lock-outline',
+          title: '角色管理'
+        },
+        component: () => import('@/view/system/role')
+      },
+      {
+        path: 'postion',
+        name: 'postion',
+        meta: {
+          icon: 'md-locate',
+          title: '岗位管理'
+        },
+        component: () => import('@/view/system/postion')
+      },
+      {
+        path: 'organize',
+        name: 'organize',
+        meta: {
+          icon: 'md-git-network',
+          title: '机构管理'
+        },
+        component: () => import('@/view/system/organize')
+      },
+      {
+        path: 'dept',
+        name: 'department',
+        meta: {
+          icon: 'md-albums',
+          title: '部门管理'
+        },
+        component: () => import('@/view/system/organize/dept.vue')
+      },
+      {
+        path: 'module',
+        name: 'module',
+        meta: {
+          icon: 'ios-document-outline',
+          title: '系统菜单'
+        },
+        component: () => import('@/view/system/module')
+      }
+    ]
   }
 ]
 // 错误处理页面
