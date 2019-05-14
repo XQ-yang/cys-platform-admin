@@ -1,9 +1,9 @@
 <template>
   <Layout style="height: 100%" class="main">
-    <Sider hide-trigger collapsible :width="256" :collapsed-width="64" v-model="collapsed" class="left-sider left-margin-top" :style="{overflow: 'hidden'}">
-      <side-menu accordion ref="sideMenu" :active-name="$route.name" :collapsed="collapsed" @on-select="turnToPage" :menu-list="menuList">
+    <Sider hide-trigger collapsible :width="256" :collapsed-width="64" v-model="collapsed" class="left-sider" :style="{overflow: 'hidden'}">
+      <side-menu  :class="{'left-margin-top':fixedHeader}" accordion ref="sideMenu" :active-name="$route.name" :collapsed="collapsed" @on-select="turnToPage" :menu-list="menuList">
         <!-- 需要放在菜单上面的内容，如Logo，写在side-menu标签内部，如下 -->
-        <div class="logo-con header-fixed">
+        <div class="logo-con" :class="{'header-fixed':fixedHeader}">
           <img v-show="!collapsed" :src="maxLogo" key="max-logo" />
           <img v-show="collapsed" :src="minLogo" key="min-logo" />
         </div>
@@ -74,7 +74,8 @@ export default {
       mesCount: 10,
       isTestReport: false, // 定期检测报告
       isPatrolReport: false, // 巡检报告
-      todoItems: []
+      todoItems: [],
+      fixedHeader: true// 判断是否固定header-log
     }
   },
   computed: {
@@ -207,15 +208,12 @@ export default {
     .header-fixed{
       position: absolute;
       top:0;
-      left:1px;
+      right: 0;
       background: #2b3042;
       z-index:999;
       transition: width 0.28s;
     }
-    .left-margin-top .ivu-menu-vertical{
-      margin-top:64px;
-    }
-    .side-menu-wrapper {
+    .left-margin-top {
       margin-top:64px;
     }
 </style>
