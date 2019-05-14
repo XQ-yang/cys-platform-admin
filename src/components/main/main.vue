@@ -30,7 +30,7 @@
               <router-view/>
             </keep-alive>
           </Content>
-           <Footer class="layout-footer-center"  style="padding: 10px 50px;border-top:1px solid #dcdee2; background:#fff;">版权所有 深圳华云生物科技发展有限公司  &copy;2019 </Footer>
+           <Footer class="layout-footer-center"  style="padding: 10px 50px;border-top:1px solid #dcdee2; background:#fff;">版权所有 xxxxxx限公司  &copy;2019 </Footer>
         </Layout>
       </Content>
     </Layout>
@@ -50,7 +50,6 @@ import Search from './components/search'
 import messageTip from './components/message-tip'
 import minLogo from '@/assets/images/logo-min.png'
 import maxLogo from '@/assets/images/logo.png'
-import { getTodoStatusList } from '@/api/todo'
 import './main.less'
 import './main-edit.less'
 export default {
@@ -161,21 +160,7 @@ export default {
       this.$router.push({
         name: 'reportupload'
       })
-    },
-    getTodoStatusList() {
-      const temp = {
-        informType: 1,
-        fromModule: 2,
-        roleIds: this.$store.state.user.roleIds
-      }
-      // const rules = this.$store.state.user.btnRules
-      getTodoStatusList(temp).then(res => {
-        this.todoItems = res.data
-      }).catch(error => {
-        this.$Message.error(error.msg)
-      })
     }
-
   },
   watch: {
     '$route'(newRoute) {
@@ -204,7 +189,6 @@ export default {
       route: { name, params, query, meta }
     })
     this.setBreadCrumb(this.$route)
-    this.getTodoStatusList()
     // 设置初始语言
     this.setLocal(this.$i18n.locale)
     // 如果当前打开页面不在标签栏中，跳到homeName页

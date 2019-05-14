@@ -114,7 +114,7 @@ export const routes = [
           notCache: true,
           icon: 'md-home'
         },
-        component: () => import('@/view/single-page/home/example.vue')
+        component: () => import('@/view/single-page/home/')
       }
     ]
   },

@@ -49,7 +49,7 @@ export default {
           password
         }).then(res => {
           const data = res.data
-          // window.localStorage.removeItem('tagNaveList')
+          window.localStorage.removeItem('tagNaveList')
           commit('setToken', data.token)
           resolve()
         }).catch(err => {
@@ -72,11 +72,9 @@ export default {
     },
     // 获取用户相关信息
     getUserInfo({ state, commit }) {
-      debugger
       return new Promise((resolve, reject) => {
         try {
           getUserInfo(state.token).then(res => {
-            debugger
             const data = res.data
             commit('setAvator', data.avator)
             commit('setUserName', data.name)
