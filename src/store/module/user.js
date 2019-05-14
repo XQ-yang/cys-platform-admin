@@ -49,8 +49,8 @@ export default {
           password
         }).then(res => {
           const data = res.data
-          window.localStorage.removeItem('tagNaveList')
-          commit('setToken', data)
+          // window.localStorage.removeItem('tagNaveList')
+          commit('setToken', data.token)
           resolve()
         }).catch(err => {
           reject(err)
@@ -72,14 +72,16 @@ export default {
     },
     // 获取用户相关信息
     getUserInfo({ state, commit }) {
+      debugger
       return new Promise((resolve, reject) => {
         try {
-          getUserInfo().then(res => {
+          getUserInfo(state.token).then(res => {
+            debugger
             const data = res.data
-            commit('setAvator', data.avatar)
-            commit('setUserName', data.username)
-            commit('setUserId', data.id)
-            commit('setRoleIds', data.roleId.split(','))
+            commit('setAvator', data.avator)
+            commit('setUserName', data.name)
+            commit('setUserId', data.user_id)
+            commit('setAccess', data.access)
             commit('setHasGetInfo', true)
             resolve(data)
           }).catch(err => {

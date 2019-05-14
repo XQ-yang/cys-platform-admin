@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getToken } from '@/libs/util'
+// import { getToken } from '@/libs/util'
 // import { Message as Msg } from 'iview'
 class HttpRequest {
   constructor(baseUrl) {
@@ -21,14 +21,6 @@ class HttpRequest {
   interceptors(instance, url) {
     // 请求拦截
     instance.interceptors.request.use(config => {
-      if (!config.url.includes('/user/login')) {
-        if (getToken()) {
-          config.headers['Authorization'] = getToken()
-        } else {
-          // 如果token过期或者不存在则跳转到登录页面
-          window.location.href = '/login'
-        }
-      }
       // 添加全局的loading...
       if (!Object.keys(this.queue).length) {
         // Spin.show()
@@ -42,16 +34,8 @@ class HttpRequest {
     // 响应拦截
     instance.interceptors.response.use(res => {
       this.destroy(url)
-      if (res.data.code !== 0) {
-        // token 过期应该返回登陆页面
-        if (res.data.code === 10002) {
-          // Msg.error('未登录，或者登录已过期，请登录')
-          window.location.href = '/login'
-        }
-        return Promise.reject(res.data)
-      } else {
-        return res.data
-      }
+      const { data, status } = res
+      return { data, status }
     }, error => {
       // 错误的请求结果处理，这里的代码根据后台的状态码来决定错误的输出信息
       this.destroy(url)
