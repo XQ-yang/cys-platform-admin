@@ -223,7 +223,7 @@ export const routes = [
           icon: 'ios-document-outline',
           title: '系统菜单'
         },
-        component: () => import('@/view/system/module')
+        component: () => import('@/view/system/menu')
       }
     ]
   },
