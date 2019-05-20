@@ -48,6 +48,8 @@ export default {
           userName,
           password
         }).then(res => {
+          debugger
+          console.log(res)
           const data = res.data
           window.localStorage.removeItem('tagNaveList')
           commit('setToken', data.token)
@@ -75,6 +77,7 @@ export default {
       return new Promise((resolve, reject) => {
         try {
           getUserInfo(state.token).then(res => {
+            debugger
             const data = res.data
             commit('setAvator', data.avator)
             commit('setUserName', data.name)

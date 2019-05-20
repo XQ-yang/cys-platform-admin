@@ -166,7 +166,7 @@ export const routes = [
     name: 'system',
     meta: {
       icon: 'md-settings',
-      title: '系统基础设置',
+      title: '系统设置',
       showAlways: true
     },
     component: Main,

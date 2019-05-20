@@ -1,6 +1,7 @@
 import axios from 'axios'
-// import { getToken } from '@/libs/util'
-// import { Message as Msg } from 'iview'
+import { getToken } from '@/libs/util'
+import { Message as Msg } from 'iview'
+
 class HttpRequest {
   constructor(baseUrl) {
     this.baseUrl = baseUrl
@@ -8,7 +9,11 @@ class HttpRequest {
   }
   getInsideConfig() {
     const config = {
-      baseURL: this.baseUrl
+      baseURL: this.baseUrl,
+      headers: {
+        'X-URL-PATH': location.pathname
+      }
+
     }
     return config
   }
@@ -21,6 +26,14 @@ class HttpRequest {
   interceptors(instance, url) {
     // 请求拦截
     instance.interceptors.request.use(config => {
+      if (!config.url.includes('/oauth/token')) {
+        if (getToken()) {
+          config.headers['Authorization'] = 'Bearer ' + getToken()
+        } else {
+          // 如果token过期或者不存在则跳转到登录页面
+          window.location.href = '/login'
+        }
+      }
       // 添加全局的loading...
       if (!Object.keys(this.queue).length) {
         // Spin.show()
@@ -33,9 +46,18 @@ class HttpRequest {
     })
     // 响应拦截
     instance.interceptors.response.use(res => {
+      debugger
       this.destroy(url)
-      const { data, status } = res
-      return { data, status }
+      if (res.data.code !== 0 && !url.includes('/oauth/token')) {
+        // token 过期应该返回登陆页面
+        if (res.data.code === 10002) {
+          Msg.error('未登录，或者登录已过期，请登录')
+          window.location.href = '/login'
+        }
+        return Promise.reject(res.data)
+      } else {
+        return res.data
+      }
     }, error => {
       // 错误的请求结果处理，这里的代码根据后台的状态码来决定错误的输出信息
       this.destroy(url)
@@ -89,6 +111,7 @@ class HttpRequest {
       return Promise.reject(error.message)
     })
   }
+
   request(options) {
     const instance = axios.create()
     options = Object.assign(this.getInsideConfig(), options)
@@ -96,4 +119,5 @@ class HttpRequest {
     return instance(options)
   }
 }
+
 export default HttpRequest

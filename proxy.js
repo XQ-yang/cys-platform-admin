@@ -4,12 +4,12 @@
 const http = require('http')
 const request = require('request')
 const hostname = '127.0.0.1'
-const port = '8010'
+const port = '8099'
 
 // 创建一个API代理服务，转发请求，实现本地开发vue-cli跨域问题
 const apiServer = http.createServer((req, res) => {
   // 代理地址
-  const url = 'http://127.0.0.1:8092' + req.url
+  const url = 'http://192.168.10.115:8100/' + req.url
 
   var method1 = req.method
   // PUT 和 DELETE 请求经过代理 会变成OPTIONS

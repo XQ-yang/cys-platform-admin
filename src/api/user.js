@@ -1,22 +1,25 @@
 import axios from '@/libs/api.request'
 export const login = ({ userName, password }) => {
+  let grant_type = 'password'
+  let client_id = 'admin-web'
+  let client_secret = '4402b06a67334d769fed712453284dae'
   const data = {
     username: userName,
-    password: password
+    password: password,
+    grant_type: grant_type,
+    client_id: client_id,
+    client_secret: client_secret
   }
   return axios.request({
-    url: '/user/login',
-    data,
+    url: '/oauth/token',
+    data: data,
     method: 'post'
   })
 }
 
 export const getUserInfo = (token) => {
   return axios.request({
-    url: 'get_info',
-    params: {
-      token
-    },
+    url: '/v1/user/current',
     method: 'get'
   })
 }
