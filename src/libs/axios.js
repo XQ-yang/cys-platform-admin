@@ -13,7 +13,6 @@ class HttpRequest {
       headers: {
         'X-URL-PATH': location.pathname
       }
-
     }
     return config
   }
@@ -48,9 +47,9 @@ class HttpRequest {
     instance.interceptors.response.use(res => {
       debugger
       this.destroy(url)
-      if (res.data.code !== 0 && !url.includes('/oauth/token')) {
+      if (res.data.code !== 200 && !url.includes('/oauth/token')) {
         // token 过期应该返回登陆页面
-        if (res.data.code === 10002) {
+        if (res.data.code === 401) {
           Msg.error('未登录，或者登录已过期，请登录')
           window.location.href = '/login'
         }

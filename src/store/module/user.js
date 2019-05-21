@@ -4,26 +4,22 @@ import { setToken, getToken } from '@/libs/util'
 export default {
   state: {
     userName: '',
+    realName: '',
     userId: '',
-    avatorImgPath: '',
     token: getToken(),
-    access: '',
     hasGetInfo: false,
     btnRules: [],
     roleIds: []
   },
   mutations: {
-    setAvator(state, avatorPath) {
-      state.avatorImgPath = avatorPath
-    },
     setUserId(state, id) {
       state.userId = id
     },
     setUserName(state, name) {
       state.userName = name
     },
-    setAccess(state, access) {
-      state.access = access
+    setRealName(state, realName) {
+      state.realName = realName
     },
     setToken(state, token) {
       state.token = token
@@ -48,11 +44,8 @@ export default {
           userName,
           password
         }).then(res => {
-          debugger
-          console.log(res)
-          const data = res.data
           window.localStorage.removeItem('tagNaveList')
-          commit('setToken', data.token)
+          commit('setToken', res.access_token)
           resolve()
         }).catch(err => {
           reject(err)
@@ -79,10 +72,9 @@ export default {
           getUserInfo(state.token).then(res => {
             debugger
             const data = res.data
-            commit('setAvator', data.avator)
-            commit('setUserName', data.name)
-            commit('setUserId', data.user_id)
-            commit('setAccess', data.access)
+            commit('setUserId', data.id)
+            commit('setUserName', data.username)
+            commit('setRealName', data.realName)
             commit('setHasGetInfo', true)
             resolve(data)
           }).catch(err => {

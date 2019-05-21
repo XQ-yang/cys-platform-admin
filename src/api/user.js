@@ -1,4 +1,5 @@
 import axios from '@/libs/api.request'
+import qs from 'qs'
 export const login = ({ userName, password }) => {
   let grant_type = 'password'
   let client_id = 'admin-web'
@@ -12,14 +13,14 @@ export const login = ({ userName, password }) => {
   }
   return axios.request({
     url: '/oauth/token',
-    data: data,
+    data: qs.stringify(data),
     method: 'post'
   })
 }
 
 export const getUserInfo = (token) => {
   return axios.request({
-    url: '/v1/user/current',
+    url: '/user/current',
     method: 'get'
   })
 }
