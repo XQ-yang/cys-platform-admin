@@ -13,9 +13,10 @@ import '@/assets/theme/index.less'
 import '@/assets/icons/iconfont.css'
 import { formatDate } from '@/libs/tools.js'
 // 引入element的table 作一些简单尝试
-import { Table, TableColumn } from 'element-ui'
+import { Table, TableColumn, Button } from 'element-ui'
 Vue.use(Table)
 Vue.use(TableColumn)
+Vue.use(Button)
 // 实际打包时应该不引入mock
 /* eslint-disable */
 if (process.env.NODE_ENV !== 'production') require('@/mock')

@@ -70,7 +70,6 @@ export default {
       return new Promise((resolve, reject) => {
         try {
           getUserInfo(state.token).then(res => {
-            debugger
             const data = res.data
             commit('setUserId', data.id)
             commit('setUserName', data.username)
