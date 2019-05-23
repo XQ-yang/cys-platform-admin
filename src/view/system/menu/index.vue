@@ -2,7 +2,7 @@
 <div>
   <Card>
     <div class="search-con search-con-top">
-      <Button class="search-btn">新增</Button>
+      <Button class="search-btn" @click="addOrUpdateHandle">新增</Button>
     </div>
     <div class="table-dom">
       <el-table :data="tableData" style="width: 100%;margin-bottom: 20px;" border row-key="id">
@@ -54,43 +54,15 @@
         </el-table-column>
       </el-table>
     </div>
-    <div class="modal">
-      <Modal
-      v-model="dialogFormVisible"
-      title="新增"
-      >
-
-      </Modal>
-    </div>
+    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpate"></add-or-update>
   </Card>
-
 </div>
 </template>
 <script>
+import AddOrUpdate from './meun-add-or-update'
 export default {
   data() {
     return {
-      menuTemp: {
-        id: undefined, // 菜单/按钮id
-        parent_id: undefined, // 上级菜单id
-        title: '', // 菜单/按钮名称
-        url: '', // 链接url
-        permission: '', // 权限标识
-        icon: '', // 图标
-        type: null, // 类型 0菜单 1按钮
-        order: null, // 排序
-        remark: '', // 描述
-        component: '', // 组件
-        path: '', // 菜单路径
-        level: '', // 层级
-        status: '', // 是否启用
-        create_by: '', // 创建人
-        modify_by: '', // 修改人
-        modify_time: null, // 修改时间
-        create_time: null, // 创建时间
-        version: '', // 乐观锁版本号
-        is_deleted: ''// 删除标记（0未删除，1已删除）
-      },
       tableData: [
         {
           id: 3,
@@ -140,10 +112,21 @@ export default {
           }]
         }
       ],
-      dialogFormVisible: false
+      addOrUpdateVisible: true
     }
   },
   methods: {
+    addOrUpdateHandle(id) {
+      this.addOrUpdateVisible = true
+      this.$nextTick(() => {
+        // 父子组件通信
+        this.$refs.addOrUpate.dataForm.id = id
+        this.$refs.addOrUpate.init()
+      })
+    }
+  },
+  components: {
+    AddOrUpdate
   }
 }
 </script>
