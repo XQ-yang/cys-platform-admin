@@ -4,7 +4,7 @@
     class="tree-select"
     v-bind="$attrs"
     @on-change="handleChange"
-    multiple
+    :multiple="false"
   >
     <tree-select-tree-item
       :selectedArray="value"

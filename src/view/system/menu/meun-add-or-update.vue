@@ -19,7 +19,15 @@
             <Input type="text"  :maxlength="8"></Input>
           </Form-item>
           <Form-item label="上级菜单" >
-            <tree-select  :data="tableData"></tree-select>
+            <tree-select
+            v-model="treeSelected"
+            :data="tableData"
+            @on-change="handleTreeSelectChange"
+            @on-toggle-expand="handleTreeSelectExpand"
+            @on-check-change="handleTreeSelectCheckChange"
+            @on-select-change="handleTreeSelectClick"
+            >
+            </tree-select>
           </Form-item>
           <Form-item label="路由地址" prop="url">
             <Input type="text"  :maxlength="8"></Input>
@@ -44,6 +52,7 @@ export default {
   name: '',
   data() {
     return {
+      treeSelected: [],
       visible: false,
       loading: true,
       dataForm: {
@@ -128,6 +137,19 @@ export default {
   methods: {
     init() {
       this.visible = true
+    },
+    handleTreeSelectChange(list) {
+      // console.log('=-========', list)
+    },
+    handleTreeSelectExpand(item) {
+      // console.log('toggle expand', item);
+    },
+    handleTreeSelectCheckChange(selectedArray, item) {
+      // console.log(selectedArray, item)
+    },
+    handleTreeSelectClick(selectArray, item) {
+      this.treeSelected.push(item)
+      console.log(this.treeSelected)
     }
   }
 }

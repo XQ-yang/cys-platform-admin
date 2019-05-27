@@ -1,10 +1,11 @@
 <template>
   <Tree
     :data="data"
-    @on-check-change="handleCheckSelect"
+    @on-select-change="handleCheckSelect"
     v-on="parent.$listeners"
     v-bind="parent.$attrs"
     :load-data="loadDataCallback"
+    :show-checkbox="false"
   ></Tree>
 </template>
 
@@ -97,7 +98,14 @@ export default {
       })
     },
     handleCheckSelect(selectArray, selectItem) {
+      // 子组件像父组件派发事件on-check
       this.$emit('on-check', selectArray)
+      // 处罚父组件的on-change事件
+      this.parent.$emit('on-change', selectArray)
+    },
+    handleTreeSelect(selectArray, selectItem) {
+      debugger
+      // this.$emit('on-select', selectArray)
       this.parent.$emit('on-change', selectArray)
     },
     checkData(data, emit, expandAll) {
@@ -113,6 +121,7 @@ export default {
         }
       })
     },
+
     loadDataCallback(item, callback) {
       this.loadData(item, data => {
         return (() => {
