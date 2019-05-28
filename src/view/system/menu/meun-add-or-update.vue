@@ -2,25 +2,26 @@
   <div>
       <Modal
       v-model="visible"
-      title="新增"
+      :title="returnModalTitle"
       :loading="loading"
+      @on-ok="dataFormSubmitHandle()"
       class-name="vertical-center-modal"
       :mask-closable="false"
       width="960"
       >
-        <Form ref="menuModal" :model="dataForm" :rules="rules" :label-width="100">
+        <Form ref="menuForm" :model="dataForm" :rules="rules" :label-width="100">
           <Form-item label="类型" prop="type" >
             <RadioGroup v-model="dataForm.type">
-              <Radio :label="0">菜单</Radio>
-              <Radio :label="1">按钮</Radio>
+              <Radio label="0">菜单</Radio>
+              <Radio label="1">按钮</Radio>
             </RadioGroup>
           </Form-item>
           <Form-item label="名称" prop="title">
             <Input v-model="dataForm.title" type="text"  :maxlength="8"></Input>
           </Form-item>
           <Form-item label="上级菜单" prop="parentName">
-            <Poptip trigger='click' v-model="popVisible" placement="bottom-start"  width="300">
-              <Input type="text" v-model="dataForm.parentName" :readonly='true'  :maxlength="8"></Input>
+            <Poptip trigger='click' v-model="popVisible" placement="bottom-start" >
+              <Input type="text" v-model="dataForm.parentName" :readonly='true' :maxlength="8"></Input>
               <div slot="content">
                 <Tree
                 :data='selectData'
@@ -48,18 +49,18 @@
 </template>
 
 <script>
-import TreeSelect from '_c/tree-select'
 const PARENT_NAME_DEFAULT = '一级菜单'
 export default {
   name: '',
   data() {
     return {
+      modalTitle: '',
       popVisible: false,
       treeSelected: '',
       visible: false,
       loading: true,
       dataForm: {
-        id: undefined, // 菜单/按钮id
+        id: '', // 菜单/按钮id
         parent_id: '0', // 上级菜单id
         title: '', // 菜单/按钮名称
         url: '', // 链接url
@@ -162,17 +163,22 @@ export default {
       }
     }
   },
-
-  components: {
-    TreeSelect
+  computed: {
+    returnModalTitle() {
+      if (!this.dataForm.id) {
+        return '新增'
+      } else {
+        return '编辑'
+      }
+    }
   },
-
-  mounted() {},
-  computed: {},
   methods: {
     init() {
       this.visible = true
       this.parentName = PARENT_NAME_DEFAULT
+      this.$nextTick(() => {
+        this.$refs['menuForm'].resetFields()
+      })
     },
     menuListTreeSetDefaultHandle() {
       this.dataForm.parent_id = '0'
@@ -183,6 +189,21 @@ export default {
       this.dataForm.parent_id = item.id
       this.dataForm.parentName = item.title
       this.popVisible = false
+    },
+    changeLoading() {
+      this.loading = false
+      this.$nextTick(() => {
+        this.loading = true
+      })
+    },
+    dataFormSubmitHandle() {
+      this.$refs['menuForm'].validate(valid => {
+        if (valid) {
+
+        } else {
+          return this.changeLoading()
+        }
+      })
     }
   }
 }

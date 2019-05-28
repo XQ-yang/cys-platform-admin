@@ -46,9 +46,9 @@ class HttpRequest {
     // 响应拦截
     instance.interceptors.response.use(res => {
       this.destroy(url)
-      if (res.data.code !== 20000 && !url.includes('/oauth/token')) {
+      if (res.data.code !== 2000 && !url.includes('/oauth/token')) {
         // token 过期应该返回登陆页面
-        if (res.data.code === 40000 || res.data.code === 40001) {
+        if (res.data.code === 1400 || res.data.code === 1401) {
           Msg.error('未登录，或者登录已过期，请登录')
           window.location.href = '/login'
         }

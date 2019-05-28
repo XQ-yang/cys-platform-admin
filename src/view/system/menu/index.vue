@@ -2,7 +2,7 @@
 <div>
   <Card>
     <div class="search-con search-con-top">
-      <Button class="search-btn" @click="addOrUpdateHandle">新增</Button>
+      <Button class="search-btn" @click="addOrUpdateHandle()">新增</Button>
     </div>
     <div class="table-dom">
       <el-table :data="tableData" style="width: 100%;margin-bottom: 20px;" border row-key="id">
@@ -119,7 +119,6 @@ export default {
     addOrUpdateHandle(id) {
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
-        // 父子组件通信
         this.$refs.addOrUpate.dataForm.id = id
         this.$refs.addOrUpate.init()
       })
