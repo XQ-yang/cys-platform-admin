@@ -34,8 +34,8 @@
           <Form-item label="路由地址" prop="url">
             <Input v-model="dataForm.url" type="text"  :maxlength="8"></Input>
           </Form-item>
-          <Form-item label="排序" prop="order">
-            <Input v-model="dataForm.order" type="text"  :maxlength="8"></Input>
+          <Form-item label="排序" prop="orderIndex">
+            <Input v-model="dataForm.orderIndex" type="text"  :maxlength="8"></Input>
           </Form-item>
           <Form-item label="授权标识" prop="permission">
              <Input v-model="dataForm.permission" type="text"  :maxlength="8"></Input>
@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import { addOrUpdateMenu } from '@/api/menu'
 const PARENT_NAME_DEFAULT = '一级菜单'
 export default {
   name: '',
@@ -61,25 +62,25 @@ export default {
       loading: true,
       dataForm: {
         id: '', // 菜单/按钮id
-        parent_id: '0', // 上级菜单id
+        parentId: '0', // 上级菜单id
         title: '', // 菜单/按钮名称
         url: '', // 链接url
         permission: '', // 权限标识
         icon: '', // 图标
         type: null, // 类型 0菜单 1按钮
-        order: null, // 排序
+        orderIndex: null, // 排序
         remark: '', // 描述
         component: '', // 组件
         path: '', // 菜单路径
         level: '', // 层级
         status: '', // 是否启用
-        create_by: '', // 创建人
-        modify_by: '', // 修改人
-        modify_time: null, // 修改时间
-        create_time: null, // 创建时间
+        createBy: '', // 创建人
+        modifyBy: '', // 修改人
+        modifyTime: null, // 修改时间
+        createTime: null, // 创建时间
         version: '', // 乐观锁版本号
         is_deleted: '', // 删除标记（0未删除，1已删除）
-        parentName: ''
+        parentName: ''// 父菜单名称
       },
       tableData: [
         {
@@ -175,18 +176,18 @@ export default {
   methods: {
     init() {
       this.visible = true
-      this.parentName = PARENT_NAME_DEFAULT
       this.$nextTick(() => {
         this.$refs['menuForm'].resetFields()
+        this.dataForm.parentName = PARENT_NAME_DEFAULT
       })
     },
     menuListTreeSetDefaultHandle() {
-      this.dataForm.parent_id = '0'
+      this.dataForm.parentId = '0'
       this.dataForm.parentName = PARENT_NAME_DEFAULT
     },
     // 绑定父级菜单选中值
     handleTreeSelectChange(selectArray, item) {
-      this.dataForm.parent_id = item.id
+      this.dataForm.parentId = item.id
       this.dataForm.parentName = item.title
       this.popVisible = false
     },
@@ -198,11 +199,20 @@ export default {
     },
     dataFormSubmitHandle() {
       this.$refs['menuForm'].validate(valid => {
-        if (valid) {
-
-        } else {
+        if (!valid) {
           return this.changeLoading()
         }
+        addOrUpdateMenu(this.dataForm).then(res => {
+          this.changeLoading()
+          this.visible = false
+          // 触发刷新列表事件
+          this.$emit('refreshDataList')
+          this.$Message.success(res.msg)
+        }).catch(error => {
+          this.changeLoading()
+          this.visible = true
+          this.$Message.error(error.msg)
+        })
       })
     }
   }

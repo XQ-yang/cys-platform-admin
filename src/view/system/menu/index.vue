@@ -54,12 +54,13 @@
         </el-table-column>
       </el-table>
     </div>
-    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpate"></add-or-update>
+    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpate" @refreshDataList="getList"></add-or-update>
   </Card>
 </div>
 </template>
 <script>
 import AddOrUpdate from './meun-add-or-update'
+import { fetchList } from '@/api/menu'
 export default {
   data() {
     return {
@@ -115,7 +116,17 @@ export default {
       addOrUpdateVisible: true
     }
   },
+  mounted() {
+    this.getList()
+  },
   methods: {
+    getList() {
+      fetchList().then(res => {
+        console.log(res)
+      }).catch(error => {
+        this.$Message.error(error.msg)
+      })
+    },
     addOrUpdateHandle(id) {
       this.addOrUpdateVisible = true
       this.$nextTick(() => {

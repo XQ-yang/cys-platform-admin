@@ -8,17 +8,16 @@ export const addOrUpdateMenu = (menuTemp) => {
   })
 }
 
-export const fetchList = (query) => {
+export const fetchList = () => {
   return axios.request({
-    url: '/menu/page',
-    method: 'get',
-    params: query
+    url: '/menu/',
+    method: 'get'
   })
 }
 
 export const getTreeList = () => {
   return axios.request({
-    url: '/menu/page/menu/tree',
+    url: '/menu/tree',
     method: 'get'
   })
 }
