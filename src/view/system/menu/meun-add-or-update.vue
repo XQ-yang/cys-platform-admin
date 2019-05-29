@@ -108,7 +108,7 @@ export default {
         this.dataForm.parentName = PARENT_NAME_DEFAULT
         this.getMenuList().then(() => {
           if (this.dataForm.id) {
-
+            this.getInfo()
           }
         })
       })
