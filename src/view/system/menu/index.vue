@@ -65,7 +65,8 @@ export default {
   data() {
     return {
       tableData: [],
-      addOrUpdateVisible: true
+      addOrUpdateVisible: true,
+      dataListLoading: false
     }
   },
   created() {
@@ -76,9 +77,10 @@ export default {
   },
   methods: {
     getList() {
+      this.dataListLoading = true
       fetchList().then(res => {
         this.tableData = res.data
-        console.log(res.data)
+        this.dataListLoading = false
       }).catch(error => {
         this.$Message.error(error.msg)
       })

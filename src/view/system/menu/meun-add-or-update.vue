@@ -35,7 +35,7 @@
             <Input v-model="dataForm.url" type="text"  :maxlength="8"></Input>
           </Form-item>
           <Form-item label="排序" prop="orderIndex">
-            <Input v-model="dataForm.orderIndex" type="text"  :maxlength="8"></Input>
+            <Input v-model="dataForm.orderIndex" type="number"  :maxlength="8"></Input>
           </Form-item>
           <Form-item label="授权标识" prop="permission">
              <Input v-model="dataForm.permission" type="text"  :maxlength="8"></Input>
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { addOrUpdateMenu } from '@/api/menu'
+import { addOrUpdateMenu, getTreeList, getMenuInfo } from '@/api/menu'
 const PARENT_NAME_DEFAULT = '一级菜单'
 export default {
   name: '',
@@ -69,88 +69,15 @@ export default {
         icon: '', // 图标
         type: null, // 类型 0菜单 1按钮
         orderIndex: null, // 排序
-        remark: '', // 描述
-        component: '', // 组件
-        path: '', // 菜单路径
-        level: '', // 层级
-        status: '', // 是否启用
         createBy: '', // 创建人
         modifyBy: '', // 修改人
         modifyTime: null, // 修改时间
         createTime: null, // 创建时间
         version: '', // 乐观锁版本号
-        is_deleted: '', // 删除标记（0未删除，1已删除）
+        isDeleted: '', // 删除标记（0未删除，1已删除）
         parentName: ''// 父菜单名称
       },
-      tableData: [
-        {
-          id: 3,
-          title: '系统设置',
-          icon: '',
-          type: '菜单',
-          order: '0',
-          url: '',
-          permission: '',
-          children: [{
-            id: 31,
-            title: '用户管理',
-            icon: '',
-            type: '菜单',
-            order: '0',
-            url: '',
-            permission: '',
-            children: [
-              {
-                id: 32,
-                title: '新增',
-                icon: '',
-                type: '按钮',
-                order: '0',
-                url: '',
-                permission: ''
-              },
-              {
-                id: 33,
-                title: '编辑',
-                icon: '',
-                type: '按钮',
-                order: '0',
-                url: '',
-                permission: ''
-              },
-              {
-                id: 34,
-                title: '删除',
-                icon: '',
-                type: '按钮',
-                order: '0',
-                url: '',
-                permission: ''
-              }
-            ]
-          }]
-        }
-      ],
-      selectData: [
-        {
-          id: 3,
-          title: '系统设置',
-          icon: '',
-          type: '菜单',
-          order: '0',
-          url: '',
-          permission: '',
-          children: [{
-            id: 31,
-            title: '用户管理',
-            icon: '',
-            type: '菜单',
-            order: '0',
-            url: '',
-            permission: ''
-          }]
-        }
-      ],
+      selectData: [],
       rules: {
         type: [
           { required: true, message: '必填项，不能为空', trigger: 'change' }
@@ -179,8 +106,14 @@ export default {
       this.$nextTick(() => {
         this.$refs['menuForm'].resetFields()
         this.dataForm.parentName = PARENT_NAME_DEFAULT
+        this.getMenuList().then(() => {
+          if (this.dataForm.id) {
+
+          }
+        })
       })
     },
+    // 初始化菜单下拉框的值
     menuListTreeSetDefaultHandle() {
       this.dataForm.parentId = '0'
       this.dataForm.parentName = PARENT_NAME_DEFAULT
@@ -197,17 +130,34 @@ export default {
         this.loading = true
       })
     },
+    getMenuList() {
+      return getTreeList('0').then(res => {
+        this.selectData = res.data
+      })
+    },
+    getInfo() {
+      getMenuInfo(this.dataForm.id).then(res => {
+        this.dataForm = {
+          ...this.dataForm,
+          ...res.data
+        }
+        if (this.dataForm.parentId === '0') {
+          this.menuListTreeSetDefaultHandle()
+        }
+      })
+    },
     dataFormSubmitHandle() {
       this.$refs['menuForm'].validate(valid => {
         if (!valid) {
           return this.changeLoading()
         }
         addOrUpdateMenu(this.dataForm).then(res => {
+          debugger
           this.changeLoading()
           this.visible = false
           // 触发刷新列表事件
           this.$emit('refreshDataList')
-          this.$Message.success(res.msg)
+          this.$Message.success('新增成功')
         }).catch(error => {
           this.changeLoading()
           this.visible = true
