@@ -46,7 +46,6 @@ import HeaderBar from './components/header-bar'
 import TagsNav from './components/tags-nav'
 import User from './components/user'
 import Fullscreen from './components/fullscreen'
-import Language from './components/language'
 import ErrorStore from './components/error-store'
 import { mapMutations, mapActions, mapGetters } from 'vuex'
 import { getNewTagList, getNextRoute, routeEqual } from '@/libs/util'
@@ -61,7 +60,6 @@ export default {
   components: {
     SideMenu,
     HeaderBar,
-    Language,
     TagsNav,
     Fullscreen,
     ErrorStore,
@@ -194,8 +192,6 @@ export default {
       route: { name, params, query, meta }
     })
     this.setBreadCrumb(this.$route)
-    // 设置初始语言
-    this.setLocal(this.$i18n.locale)
     // 如果当前打开页面不在标签栏中，跳到homeName页
     if (!this.tagNavList.find(item => item.name === this.$route.name)) {
       this.$router.push({

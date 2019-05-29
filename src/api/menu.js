@@ -8,6 +8,9 @@ export const addOrUpdateMenu = (menuTemp) => {
   })
 }
 
+/**
+ *获取菜单列表数据
+*/
 export const fetchList = () => {
   return axios.request({
     url: '/menu/',
@@ -15,10 +18,11 @@ export const fetchList = () => {
   })
 }
 
-export const getTreeList = () => {
+export const getTreeList = (type) => {
   return axios.request({
     url: '/menu/tree',
-    method: 'get'
+    method: 'get',
+    params: type
   })
 }
 

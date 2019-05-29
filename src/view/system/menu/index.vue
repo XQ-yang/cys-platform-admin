@@ -64,65 +64,21 @@ import { fetchList } from '@/api/menu'
 export default {
   data() {
     return {
-      tableData: [
-        {
-          id: 3,
-          title: '系统设置',
-          icon: '',
-          type: '菜单',
-          order: '0',
-          url: '',
-          permission: '',
-          children: [{
-            id: 31,
-            title: '用户管理',
-            icon: '',
-            type: '菜单',
-            order: '0',
-            url: '',
-            permission: '',
-            children: [
-              {
-                id: 32,
-                title: '新增',
-                icon: '',
-                type: '按钮',
-                order: '0',
-                url: '',
-                permission: ''
-              },
-              {
-                id: 33,
-                title: '编辑',
-                icon: '',
-                type: '按钮',
-                order: '0',
-                url: '',
-                permission: ''
-              },
-              {
-                id: 34,
-                title: '删除',
-                icon: '',
-                type: '按钮',
-                order: '0',
-                url: '',
-                permission: ''
-              }
-            ]
-          }]
-        }
-      ],
+      tableData: [],
       addOrUpdateVisible: true
     }
   },
-  mounted() {
+  created() {
     this.getList()
+  },
+  mounted() {
+
   },
   methods: {
     getList() {
       fetchList().then(res => {
-        console.log(res)
+        this.tableData = res.data
+        console.log(res.data)
       }).catch(error => {
         this.$Message.error(error.msg)
       })
