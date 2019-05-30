@@ -48,8 +48,8 @@
           header-align="center"
           align="center">
           <template slot-scope="scope">
-            <el-button  size="mini">编辑</el-button>
-            <el-button  size="mini">删除</el-button>
+            <el-button  size="mini" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
+            <el-button  size="mini" @click="deleteHandle(scope.row.id)" >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -90,6 +90,15 @@ export default {
       this.$nextTick(() => {
         this.$refs.addOrUpate.dataForm.id = id
         this.$refs.addOrUpate.init()
+      })
+    },
+    deleteHandle(id) {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '此操作为永久删除，是否继续？',
+        onOk: () => {
+          this.$Message.info('Clicked ok')
+        }
       })
     }
   },

@@ -12,8 +12,8 @@
         <Form ref="menuForm" :model="dataForm" :rules="rules" :label-width="100">
           <Form-item label="类型" prop="type" >
             <RadioGroup v-model="dataForm.type">
-              <Radio label="0">菜单</Radio>
-              <Radio label="1">按钮</Radio>
+              <Radio :label="0">菜单</Radio>
+              <Radio :label="1">按钮</Radio>
             </RadioGroup>
           </Form-item>
           <Form-item label="名称" prop="title">
@@ -67,7 +67,7 @@ export default {
         url: '', // 链接url
         permission: '', // 权限标识
         icon: '', // 图标
-        type: null, // 类型 0菜单 1按钮
+        type: '', // 类型 0菜单 1按钮
         orderIndex: null, // 排序
         createBy: '', // 创建人
         modifyBy: '', // 修改人
@@ -80,7 +80,7 @@ export default {
       selectData: [],
       rules: {
         type: [
-          { required: true, message: '必填项，不能为空', trigger: 'change' }
+          { type: 'number', required: true, message: '请选择', trigger: 'change' }
         ],
         title: [
           { required: true, message: '必填项，不能为空', trigger: 'blur' }
@@ -141,6 +141,7 @@ export default {
           ...this.dataForm,
           ...res.data
         }
+        console.log(this.dataForm)
         if (this.dataForm.parentId === '0') {
           this.menuListTreeSetDefaultHandle()
         }
