@@ -12,8 +12,8 @@
         <Form ref="menuForm" :model="dataForm" :rules="rules" :label-width="100">
           <Form-item label="类型" prop="type" >
             <RadioGroup v-model="dataForm.type">
-              <Radio :label="0">菜单</Radio>
-              <Radio :label="1">按钮</Radio>
+              <Radio :label="0" v-bind:disabled="typeVisible">菜单</Radio>
+              <Radio :label="1" v-bind:disabled="typeVisible">按钮</Radio>
             </RadioGroup>
           </Form-item>
           <Form-item label="名称" prop="title">
@@ -57,6 +57,7 @@ export default {
     return {
       modalTitle: '',
       popVisible: false,
+      typeVisible: false,
       treeSelected: '',
       visible: false,
       loading: true,
@@ -108,7 +109,10 @@ export default {
         this.dataForm.parentName = PARENT_NAME_DEFAULT
         this.getMenuList().then(() => {
           if (this.dataForm.id) {
+            this.typeVisible = true
             this.getInfo()
+          } else {
+            this.typeVisible = false
           }
         })
       })
@@ -141,7 +145,6 @@ export default {
           ...this.dataForm,
           ...res.data
         }
-        console.log(this.dataForm)
         if (this.dataForm.parentId === '0') {
           this.menuListTreeSetDefaultHandle()
         }
