@@ -17,11 +17,11 @@
             </RadioGroup>
           </Form-item>
           <Form-item label="名称" prop="title">
-            <Input v-model="dataForm.title" type="text"  :maxlength="8"></Input>
+            <Input v-model="dataForm.title" type="text"  :maxlength="20"></Input>
           </Form-item>
           <Form-item label="上级菜单" prop="parentName">
             <Poptip trigger='click' v-model="popVisible" placement="bottom-start" >
-              <Input type="text" v-model="dataForm.parentName" :readonly='true' :maxlength="8"></Input>
+              <Input type="text" v-model="dataForm.parentName" :readonly='true' :maxlength="20"></Input>
               <div slot="content">
                 <Tree
                 :data='selectData'
@@ -32,16 +32,16 @@
             </Poptip>
           </Form-item>
           <Form-item label="路由地址" prop="url">
-            <Input v-model="dataForm.url" type="text"  :maxlength="8"></Input>
+            <Input v-model="dataForm.url" type="text"  :maxlength="20"></Input>
           </Form-item>
           <Form-item label="排序" prop="orderIndex">
-            <Input v-model="dataForm.orderIndex" type="number"  :maxlength="8"></Input>
+            <Input v-model="dataForm.orderIndex" type="number"  :maxlength="6"></Input>
           </Form-item>
           <Form-item label="授权标识" prop="permission">
-             <Input v-model="dataForm.permission" type="text"  :maxlength="8"></Input>
+             <Input v-model="dataForm.permission" type="text"  :maxlength="20"></Input>
           </Form-item>
           <Form-item label="图标" prop="icon">
-             <Input v-model="dataForm.icon" type="text"  :maxlength="8"></Input>
+             <Input v-model="dataForm.icon" type="text"  :maxlength="20"></Input>
           </Form-item>
         </Form>
       </Modal>

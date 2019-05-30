@@ -18,17 +18,24 @@
           prop="icon"
           label="图标"
           width="180">
+          <template slot-scope="scope">
+            <Icon :type="scope.row.icon" />
+          </template>
         </el-table-column>
         <el-table-column
           header-align="center"
           align="center"
           prop="type"
           label="类型">
+          <template slot-scope="scope">
+            <tag color="success" v-if="scope.row.type===0">菜单</tag>
+            <tag color="default" v-else>按钮</tag>
+          </template>
         </el-table-column>
         <el-table-column
           header-align="center"
           align="center"
-          prop="order"
+          prop="orderIndex"
           label="排序">
         </el-table-column>
         <el-table-column
@@ -60,7 +67,7 @@
 </template>
 <script>
 import AddOrUpdate from './meun-add-or-update'
-import { fetchList } from '@/api/menu'
+import { fetchList, deleteMunu } from '@/api/menu'
 export default {
   data() {
     return {
@@ -97,7 +104,12 @@ export default {
         title: '提示',
         content: '此操作为永久删除，是否继续？',
         onOk: () => {
-          this.$Message.info('Clicked ok')
+          deleteMunu(id).then(res => {
+            this.$Message.success('删除成功')
+            this.getList()
+          }).catch(error => {
+            this.$Message.error(error.msg)
+          })
         }
       })
     }
@@ -107,3 +119,14 @@ export default {
   }
 }
 </script>
+<style lang="less">
+    .vertical-center-modal{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .ivu-modal{
+            top: 0;
+        }
+    }
+</style>
