@@ -31,7 +31,7 @@
               </div>
             </Poptip>
           </Form-item>
-          <Form-item label="路由地址" prop="url">
+          <Form-item v-show="dataForm.type===0" label="路由地址" prop="url">
             <Input v-model="dataForm.url" type="text"  :maxlength="20"></Input>
           </Form-item>
           <Form-item label="排序" prop="orderIndex">
@@ -40,7 +40,7 @@
           <Form-item label="授权标识" prop="permission">
              <Input v-model="dataForm.permission" type="text"  :maxlength="20"></Input>
           </Form-item>
-          <Form-item label="图标" prop="icon">
+          <Form-item v-show="dataForm.type===0" label="图标" prop="icon">
              <Input v-model="dataForm.icon" type="text"  :maxlength="20"></Input>
           </Form-item>
         </Form>
@@ -68,7 +68,7 @@ export default {
         url: '', // 链接url
         permission: '', // 权限标识
         icon: '', // 图标
-        type: '', // 类型 0菜单 1按钮
+        type: 0, // 类型 0菜单 1按钮
         orderIndex: null, // 排序
         createBy: '', // 创建人
         modifyBy: '', // 修改人
