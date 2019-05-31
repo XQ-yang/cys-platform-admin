@@ -275,8 +275,7 @@ export default {
         pageNumber: 1,
         pageSize: 10,
         username: '',
-        realName: '',
-        name: this.$store.state.user.userName
+        realName: ''
       },
       userTemp: {
         id: undefined,
@@ -368,14 +367,14 @@ export default {
     if (this.isFirstEnter) {
       // 获取列表数据
       this.getList()
-      // 获取公司数据
-      this.getCompany()
-      // 获取部门数据
-      // this.getDepartment()
-      // 获取角色数据
-      this.getRole()
-      // 获取岗位
-      this.getPostion()
+      // // 获取公司数据
+      // this.getCompany()
+      // // 获取部门数据
+      // // this.getDepartment()
+      // // 获取角色数据
+      // this.getRole()
+      // // 获取岗位
+      // this.getPostion()
     }
   },
   // keep-alive 钩子函数 只有启用了keep-alive缓存 才存在此钩子函数
@@ -383,14 +382,14 @@ export default {
     if (!this.isFirstEnter) {
     // 获取列表数据
       this.getList()
-      // 获取公司数据
-      this.getCompany()
-      // 获取部门数据
-      // this.getDepartment()
-      // 获取角色数据
-      this.getRole()
-      // 获取岗位
-      this.getPostion()
+      // // 获取公司数据
+      // this.getCompany()
+      // // 获取部门数据
+      // // this.getDepartment()
+      // // 获取角色数据
+      // this.getRole()
+      // // 获取岗位
+      // this.getPostion()
     }
   },
   deactivated() {
@@ -401,20 +400,9 @@ export default {
     getList() {
       this.tableLoading = true
       fetchList(this.listQuery).then(res => {
-        // const username = this.$store.state.user.userName
-        this.list = res.data.list
-        // 判断是否是超级管理员
-        // if (username === 'superadmin') {
-        //   this.list = res.data.list
-        // } else {
-        //   // 如果不是超级管理员则移除 超级管理员的角色
-        //   // res.data.list.splice(res.data.list.findIndex(item => item.username === 'superadmin'), 1)
-        //   this.list = res.data.list
-        //   this.list = this.list.filter(item => {
-        //     return item.username !== 'superadmin'
-        //   })
-        // }
-        this.total = res.data.totalRow
+        debugger
+        this.list = res.data.records
+        this.total = res.data.total
         this.tableLoading = false
       }).catch(error => {
         this.$Message.error(error.msg)

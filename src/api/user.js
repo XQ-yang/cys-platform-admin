@@ -26,14 +26,14 @@ export const getUserInfo = (token) => {
 }
 export const logout = () => {
   return axios.request({
-    url: '/api/revokeToken',
+    url: '/loginInfo/revokeToken',
     method: 'post'
   })
 }
 
 export const fetchList = (query) => {
   return axios.request({
-    url: '/user/getPageList',
+    url: '/user/page',
     method: 'get',
     params: query
   })

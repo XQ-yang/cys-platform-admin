@@ -13,7 +13,7 @@ export const addOrUpdateMenu = (menuTemp) => {
 */
 export const fetchList = () => {
   return axios.request({
-    url: '/menu/',
+    url: '/menu/list',
     method: 'get'
   })
 }
