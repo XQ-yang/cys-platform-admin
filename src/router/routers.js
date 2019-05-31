@@ -17,63 +17,6 @@ import Main from '@/components/main'
  */
 // 需要权限控制动态加载的路由
 export const routerMap = [
-  {
-    path: '/system',
-    name: 'system',
-    meta: {
-      icon: 'md-settings',
-      title: '系统基础设置',
-      showAlways: true
-    },
-    component: Main,
-    children: [
-      {
-        path: 'user',
-        name: 'user',
-        meta: {
-          icon: 'md-contacts',
-          title: '用户管理'
-        },
-        component: () => import('@/view/system/user')
-      },
-      {
-        path: 'role',
-        name: 'role',
-        meta: {
-          icon: 'ios-lock-outline',
-          title: '角色管理'
-        },
-        component: () => import('@/view/system/role')
-      },
-      {
-        path: 'postion',
-        name: 'postion',
-        meta: {
-          icon: 'md-locate',
-          title: '岗位管理'
-        },
-        component: () => import('@/view/system/postion')
-      },
-      {
-        path: 'dept',
-        name: 'dept',
-        meta: {
-          icon: 'md-albums',
-          title: '部门管理'
-        },
-        component: () => import('@/view/system/dept/')
-      },
-      {
-        path: 'module',
-        name: 'module',
-        meta: {
-          icon: 'ios-document-outline',
-          title: '系统菜单'
-        },
-        component: () => import('@/view/system/module')
-      }
-    ]
-  }
 ]
 // 默认加载的 登陆页、首页等路由
 export const routes = [
@@ -214,7 +157,7 @@ export const routes = [
           icon: 'ios-document-outline',
           title: '系统菜单'
         },
-        component: () => import('@/view/system/menu')
+        component: () => import('@/view/system/menu/index.vue')
       }
     ]
   },

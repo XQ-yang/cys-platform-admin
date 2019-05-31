@@ -11,12 +11,12 @@
             header-align="center"
             prop="deptName"
             label="名称"
-            width="180">
+            >
           </el-table-column>
           <el-table-column
             header-align="center"
             align="center"
-            prop="orderIndex"
+            prop="orderNum"
             label="排序">
           </el-table-column>
           <el-table-column
@@ -52,13 +52,13 @@ export default {
     AddOrUpdate
   },
   created() {
-    this.getlist()
+    this.getList()
   },
   mounted() {},
   computed: {},
 
   methods: {
-    getlist() {
+    getList() {
       this.dataListLoading = true
       fetchList().then(res => {
         this.tableData = res.data

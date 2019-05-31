@@ -135,7 +135,6 @@ export default {
     },
     getMenuList() {
       return getTreeList('0').then(res => {
-        debugger
         this.selectData = res.data
       })
     },

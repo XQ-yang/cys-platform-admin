@@ -10,7 +10,7 @@
       width="960"
       >
         <Form ref="deptForm" :model="dataForm" :rules="rules" :label-width="100">
-          <Form-item label="名称" prop="title">
+          <Form-item label="名称" prop="deptName">
             <Input v-model="dataForm.deptName" type="text"  :maxlength="20"></Input>
           </Form-item>
           <Form-item label="上级部门" prop="parentName">
@@ -25,8 +25,8 @@
               </div>
             </Poptip>
           </Form-item>
-          <Form-item label="排序" prop="orderIndex">
-            <Input v-model="dataForm.orderIndex" type="number"  :maxlength="6"></Input>
+          <Form-item label="排序" prop="orderNum">
+            <Input v-model="dataForm.orderNum" type="number"  :maxlength="6"></Input>
           </Form-item>
         </Form>
       </Modal>
@@ -46,9 +46,10 @@ export default {
       visible: false,
       loading: true,
       dataForm: {
-        id: '', // 菜单/按钮id
+        id: '', // 住建
         parentId: '0', // 上级菜单id
         deptName: '', // 菜单/按钮名称
+        orderNum: '', // 排序
         parentName: ''// 父菜单名称
       },
       selectData: [],
@@ -78,9 +79,9 @@ export default {
     init() {
       this.visible = true
       this.$nextTick(() => {
-        this.$refs['menuForm'].resetFields()
+        this.$refs['deptForm'].resetFields()
         this.dataForm.parentName = PARENT_NAME_DEFAULT
-        this.getMenuList().then(() => {
+        this.getDeptList().then(() => {
           if (this.dataForm.id) {
             this.typeVisible = true
             this.getInfo()
@@ -107,9 +108,19 @@ export default {
         this.loading = true
       })
     },
-    getMenuList() {
+    getDeptList() {
       return fetchList().then(res => {
-        this.selectData = res.data
+        this.selectData = this.expandDeptTree(res.data)
+      })
+    },
+    // 把数据转换为tree组件的对应格式
+    expandDeptTree(treeData) {
+      return treeData.map(item => {
+        item.title = item.deptName
+        if (item.children && item.children.length) {
+          item.children = this.expandDeptTree(item.children)
+        }
+        return item
       })
     },
     getInfo() {
@@ -124,12 +135,11 @@ export default {
       })
     },
     dataFormSubmitHandle() {
-      this.$refs['menuForm'].validate(valid => {
+      this.$refs['deptForm'].validate(valid => {
         if (!valid) {
           return this.changeLoading()
         }
         addOrUpdateDept(this.dataForm).then(res => {
-          debugger
           this.changeLoading()
           this.visible = false
           // 触发刷新列表事件
