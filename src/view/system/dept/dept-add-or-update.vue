@@ -9,17 +9,11 @@
       :mask-closable="false"
       width="960"
       >
-        <Form ref="menuForm" :model="dataForm" :rules="rules" :label-width="100">
-          <Form-item label="类型" prop="type" >
-            <RadioGroup v-model="dataForm.type">
-              <Radio :label="0" v-bind:disabled="typeVisible">菜单</Radio>
-              <Radio :label="1" v-bind:disabled="typeVisible">按钮</Radio>
-            </RadioGroup>
-          </Form-item>
+        <Form ref="deptForm" :model="dataForm" :rules="rules" :label-width="100">
           <Form-item label="名称" prop="title">
-            <Input v-model="dataForm.title" type="text"  :maxlength="20"></Input>
+            <Input v-model="dataForm.deptName" type="text"  :maxlength="20"></Input>
           </Form-item>
-          <Form-item label="上级菜单" prop="parentName">
+          <Form-item label="上级部门" prop="parentName">
             <Poptip trigger='click' v-model="popVisible" placement="bottom-start" >
               <Input type="text" v-model="dataForm.parentName" :readonly='true' :maxlength="20"></Input>
               <div slot="content">
@@ -31,17 +25,8 @@
               </div>
             </Poptip>
           </Form-item>
-          <Form-item v-show="dataForm.type===0" label="路由地址" prop="url">
-            <Input v-model="dataForm.url" type="text"  :maxlength="20"></Input>
-          </Form-item>
           <Form-item label="排序" prop="orderIndex">
             <Input v-model="dataForm.orderIndex" type="number"  :maxlength="6"></Input>
-          </Form-item>
-          <Form-item label="授权标识" prop="permission">
-             <Input v-model="dataForm.permission" type="text"  :maxlength="20"></Input>
-          </Form-item>
-          <Form-item v-show="dataForm.type===0" label="图标" prop="icon">
-             <Input v-model="dataForm.icon" type="text"  :maxlength="20"></Input>
           </Form-item>
         </Form>
       </Modal>
@@ -49,8 +34,8 @@
 </template>
 
 <script>
-import { addOrUpdateMenu, getTreeList, getMenuInfo } from '@/api/menu'
-const PARENT_NAME_DEFAULT = '一级菜单'
+import { addOrUpdateDept, fetchList, getDeptInfo } from '@/api/dept'
+const PARENT_NAME_DEFAULT = '一级部门'
 export default {
   data() {
     return {
@@ -63,18 +48,7 @@ export default {
       dataForm: {
         id: '', // 菜单/按钮id
         parentId: '0', // 上级菜单id
-        title: '', // 菜单/按钮名称
-        url: '', // 链接url
-        permission: '', // 权限标识
-        icon: '', // 图标
-        type: 0, // 类型 0菜单 1按钮
-        orderIndex: null, // 排序
-        createBy: '', // 创建人
-        modifyBy: '', // 修改人
-        modifyTime: null, // 修改时间
-        createTime: null, // 创建时间
-        version: '', // 乐观锁版本号
-        isDeleted: '', // 删除标记（0未删除，1已删除）
+        deptName: '', // 菜单/按钮名称
         parentName: ''// 父菜单名称
       },
       selectData: [],
@@ -134,14 +108,12 @@ export default {
       })
     },
     getMenuList() {
-      return getTreeList('0').then(res => {
-        debugger
+      return fetchList().then(res => {
         this.selectData = res.data
       })
     },
     getInfo() {
-      getMenuInfo(this.dataForm.id).then(res => {
-        debugger
+      getDeptInfo(this.dataForm.id).then(res => {
         this.dataForm = {
           ...this.dataForm,
           ...res.data
@@ -156,7 +128,7 @@ export default {
         if (!valid) {
           return this.changeLoading()
         }
-        addOrUpdateMenu(this.dataForm).then(res => {
+        addOrUpdateDept(this.dataForm).then(res => {
           debugger
           this.changeLoading()
           this.visible = false

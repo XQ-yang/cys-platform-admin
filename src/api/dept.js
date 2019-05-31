@@ -1,6 +1,6 @@
 import axios from '@/libs/api.request'
 
-export const fetchList = (query) => {
+export const fetchList = () => {
   return axios.request({
     url: '/dept/list',
     method: 'get'

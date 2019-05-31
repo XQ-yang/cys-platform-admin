@@ -55,22 +55,13 @@ export const routerMap = [
         component: () => import('@/view/system/postion')
       },
       {
-        path: 'organize',
-        name: 'organize',
-        meta: {
-          icon: 'md-git-network',
-          title: '机构管理'
-        },
-        component: () => import('@/view/system/organize')
-      },
-      {
         path: 'dept',
-        name: 'department',
+        name: 'dept',
         meta: {
           icon: 'md-albums',
           title: '部门管理'
         },
-        component: () => import('@/view/system/organize/dept.vue')
+        component: () => import('@/view/system/dept/')
       },
       {
         path: 'module',
@@ -209,12 +200,12 @@ export const routes = [
       },
       {
         path: 'dept',
-        name: 'department',
+        name: 'dept',
         meta: {
           icon: 'md-albums',
           title: '部门管理'
         },
-        component: () => import('@/view/system/organize/dept.vue')
+        component: () => import('@/view/system/dept')
       },
       {
         path: 'module',

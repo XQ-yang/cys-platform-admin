@@ -1,22 +1,94 @@
 <!-- create by lester -->
 <template>
-  <div></div>
+  <div>
+    <Card>
+      <div class="search-con search-con-top">
+        <Button class="search-btn" @click="addOrUpdateHandle()">新增</Button>
+      </div>
+      <div class="table-dom">
+        <el-table :data="tableData" style="width: 100%;margin-bottom: 20px;" border row-key="id">
+          <el-table-column
+            header-align="center"
+            prop="deptName"
+            label="名称"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            header-align="center"
+            align="center"
+            prop="orderIndex"
+            label="排序">
+          </el-table-column>
+          <el-table-column
+            label="操作"
+            header-align="center"
+            align="center">
+            <template slot-scope="scope">
+              <el-button  size="mini" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
+              <el-button  size="mini" @click="deleteHandle(scope.row.id)" >删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <add-or-update v-if="addOrUpdateVisible" ref="addOrUpate" @refreshDataList="getList"></add-or-update>
+    </Card>
+  </div>
 </template>
 
 <script>
+import AddOrUpdate from './dept-add-or-update'
+import { fetchList, deleteDept } from '@/api/dept'
 export default {
-  name: '',
+  name: 'dept',
   data() {
     return {
+      tableData: [],
+      addOrUpdateVisible: true,
+      dataListLoading: false
     }
   },
 
-  components: {},
-
+  components: {
+    AddOrUpdate
+  },
+  created() {
+    this.getlist()
+  },
   mounted() {},
   computed: {},
 
-  methods: {}
+  methods: {
+    getlist() {
+      this.dataListLoading = true
+      fetchList().then(res => {
+        this.tableData = res.data
+        this.dataListLoading = false
+      }).catch(error => {
+        this.$Message.error(error.msg)
+      })
+    },
+    addOrUpdateHandle(id) {
+      this.addOrUpdateVisible = true
+      this.$nextTick(() => {
+        this.$refs.addOrUpate.dataForm.id = id
+        this.$refs.addOrUpate.init()
+      })
+    },
+    deleteHandle(id) {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '此操作为永久删除，是否继续？',
+        onOk: () => {
+          deleteDept(id).then(res => {
+            this.$Message.success(res.msg)
+            this.getList()
+          }).catch(error => {
+            this.$Message.error(error.msg)
+          })
+        }
+      })
+    }
+  }
 }
 
 </script>

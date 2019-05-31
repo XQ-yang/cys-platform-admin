@@ -69,6 +69,7 @@
 import AddOrUpdate from './meun-add-or-update'
 import { fetchList, deleteMunu } from '@/api/menu'
 export default {
+  name: 'menu',
   data() {
     return {
       tableData: [],
@@ -120,13 +121,4 @@ export default {
 }
 </script>
 <style lang="less">
-    .vertical-center-modal{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        .ivu-modal{
-            top: 0;
-        }
-    }
 </style>

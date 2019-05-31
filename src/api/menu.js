@@ -20,7 +20,7 @@ export const fetchList = () => {
 
 export const getTreeList = (type) => {
   return axios.request({
-    url: '/menu/',
+    url: '/menu/list',
     method: 'get',
     params: { type: type }
   })
