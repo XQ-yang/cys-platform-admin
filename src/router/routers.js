@@ -154,7 +154,7 @@ export const routes = [
         path: 'module',
         name: 'module',
         meta: {
-          icon: 'ios-document-outline',
+          icon: 'ios-menu',
           title: '系统菜单'
         },
         component: () => import('@/view/system/menu/index.vue')

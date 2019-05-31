@@ -54,10 +54,7 @@ export default {
       },
       selectData: [],
       rules: {
-        type: [
-          { type: 'number', required: true, message: '请选择', trigger: 'change' }
-        ],
-        title: [
+        deptName: [
           { required: true, message: '必填项，不能为空', trigger: 'blur' }
         ],
         parentName: [
