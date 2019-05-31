@@ -1,23 +1,29 @@
 import axios from '@/libs/api.request'
 
-/**
- * @param {*} companyId 根据公司Idh获取部门下拉框数据
- */
-export const getDepartmentdata = (id) => {
+export const fetchList = (query) => {
   return axios.request({
-    url: 'dept/getDepartmentList',
-    method: 'get',
-    params: {
-      companyId: id
-    }
+    url: '/dept/list',
+    method: 'get'
   })
 }
 
-export const getDepartmentPageList = (query) => {
+export const addOrUpdateDept = (detpTemp) => {
   return axios.request({
-    url: '/dept/getDepartmentPageList',
-    method: 'get',
-    params: query
+    url: '/dept/',
+    method: 'post',
+    data: detpTemp
   })
 }
 
+export const getDeptInfo = (id) => {
+  return axios.request({
+    url: '/dept/' + id,
+    method: 'get'
+  })
+}
+export const deleteDept = (id) => {
+  return axios.request({
+    url: '/dept/' + id,
+    method: 'delete'
+  })
+}

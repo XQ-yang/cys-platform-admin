@@ -367,14 +367,6 @@ export default {
     if (this.isFirstEnter) {
       // 获取列表数据
       this.getList()
-      // // 获取公司数据
-      // this.getCompany()
-      // // 获取部门数据
-      // // this.getDepartment()
-      // // 获取角色数据
-      // this.getRole()
-      // // 获取岗位
-      // this.getPostion()
     }
   },
   // keep-alive 钩子函数 只有启用了keep-alive缓存 才存在此钩子函数
@@ -382,14 +374,6 @@ export default {
     if (!this.isFirstEnter) {
     // 获取列表数据
       this.getList()
-      // // 获取公司数据
-      // this.getCompany()
-      // // 获取部门数据
-      // // this.getDepartment()
-      // // 获取角色数据
-      // this.getRole()
-      // // 获取岗位
-      // this.getPostion()
     }
   },
   deactivated() {
