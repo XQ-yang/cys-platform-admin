@@ -5,7 +5,7 @@
       <div class="search-con search-con-top">
         <Input @on-change="handleClear"  clearable placeholder="岗位名称" class="search-input" v-model="listQuery.postionName"/>
         <Button @click="handleSearch" class="search-btn">查询</Button>
-        <Button v-permission="{rule:'addPostion'}" @click="handleCreate" class="search-btn">新增</Button>
+        <Button @click="handleCreate" class="search-btn">新增</Button>
       </div>
       <!--列表 分页-->
       <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
@@ -34,23 +34,6 @@
             next-text="下一页"></Page>
         </div>
       </div>
-      <!--弹出层-->
-      <Modal
-      v-model="dialogFormVisible"
-      :title="textMap[dialogStatus]"
-      :loading="loading"
-      @on-ok="dialogStatus==='create'?createData():updateData()"
-      class-name="vertical-center-modal"
-      :mask-closable="false"
-      width="400"
-      ok-text="提交"
-      cancel-text="关闭">
-        <Form ref="postionForm" :model="postionTemp" :rules="rules" :label-width="100" style="padding-right:20px;">
-          <Form-item label="岗位名称" prop="postionName">
-            <Input type="text" v-model="postionTemp.postionName" :maxlength="10"></Input>
-          </Form-item>
-        </Form>
-      </Modal>
     </Card>
   </div>
 </template>
@@ -70,15 +53,11 @@ export default {
             return h('span', params.index + (this.listQuery.pageNumber - 1) * this.listQuery.pageSize + 1)
           }
         },
-        { title: '岗位名称', key: 'postionName' },
+        { title: '部门名称', key: 'deptName' },
+        { title: '岗位名称', key: 'name' },
         { title: '创建时间',
           key: 'createTime',
-          tooltip: true,
-          render: (h, params) => {
-            return h('div',
-              this.$formatDate(params.row.createTime, 'yyyy-MM-dd')
-            )
-          }
+          tooltip: true
         },
         {
           title: '操作',
@@ -98,7 +77,7 @@ export default {
       listQuery: {
         pageNumber: 1,
         pageSize: 10,
-        postionName: ''
+        name: ''
       },
       postionTemp: {
         id: undefined,
@@ -133,44 +112,20 @@ export default {
   // 此钩子函数中一般会做一些ajax请求获取数据进行数据初始化
   // mounted在整个实例中只执行一次
   mounted() {
-    if (this.isFirstEnter) {
-    // 获取列表数据
-      this.getList()
-    }
-  },
-  activated() {
-    if (!this.isFirstEnter) {
-    // 获取列表数据
-      this.getList()
-    }
-  },
-  deactivated() {
-    this.isFirstEnter = false
+    this.getList()
   },
   // 组件方法
   methods: {
     getList() {
       this.tableLoading = true
       fetchList(this.listQuery).then(res => {
-        this.list = res.data.list
-        this.total = res.data.totalRow
+        debugger
+        this.list = res.data.records
+        this.total = res.data.total
         this.tableLoading = false
       }).catch(error => {
         this.$Message.error(error.msg)
       })
-    },
-    // 重置表单页面赋值
-    resetPostionTemp() {
-      this.postionTemp = {
-        id: undefined,
-        postionCode: '',
-        postionName: '',
-        remark: '',
-        postionLevel: '',
-        createTime: new Date(),
-        updateTime: new Date(),
-        isDelete: 0
-      }
     },
     handleSearch() {
       this.listQuery.pageNumber = 1
