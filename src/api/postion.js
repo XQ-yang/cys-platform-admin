@@ -1,40 +1,29 @@
 import axios from '@/libs/api.request'
 
-export const getPostionList = () => {
-  return axios.request({
-    url: '/postion/getList',
-    method: 'get'
-  })
-}
-
 export const fetchList = (query) => {
   return axios.request({
-    url: '/postion/getPageList',
+    url: '/position/page',
     method: 'get',
     params: query
   })
 }
 
-export const editPostion = (postionTemp) => {
+export const addOrUpdatePosition = (positionTemp) => {
   return axios.request({
-    url: '/postion/edit',
+    url: '/position/',
     method: 'post',
-    data: postionTemp
+    data: positionTemp
   })
 }
-
-export const addPostion = (postionTemp) => {
+export const getPosition = (id) => {
   return axios.request({
-    url: '/postion/add',
-    method: 'post',
-    data: postionTemp
+    url: '/position/' + id,
+    method: 'get'
   })
 }
-
-export const deletePostion = (id) => {
+export const deletePosition = (id) => {
   return axios.request({
-    url: '/postion/delete',
-    method: 'post',
-    params: { id }
+    url: '/position/' + id,
+    method: 'delete'
   })
 }

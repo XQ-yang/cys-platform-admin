@@ -56,7 +56,7 @@
 </template>
 <script>
 import '@/assets/css/common.less'
-import { fetchList, addPostion, editPostion, deletePostion } from '@/api/postion'
+import { fetchList, addOrUpdatePosition, deletePostion } from '@/api/postion'
 export default {
   name: 'postion',
   data() {
@@ -194,7 +194,7 @@ export default {
         if (!valid) {
           return this.changeLoading()
         }
-        addPostion(this.postionTemp).then(res => {
+        addOrUpdatePosition(this.postionTemp).then(res => {
           this.changeLoading()
           this.dialogFormVisible = false
           this.$Message.success(res.msg)
@@ -214,21 +214,7 @@ export default {
       this.dialogFormVisible = true
     },
     updateData() {
-      this.$refs['postionForm'].validate(valid => {
-        if (!valid) {
-          return this.changeLoading()
-        }
-        editPostion(this.postionTemp).then(res => {
-          this.changeLoading()
-          this.dialogFormVisible = false
-          this.$Message.success(res.msg)
-          this.getList()
-        }).catch(error => {
-          this.changeLoading()
-          this.dialogFormVisible = true
-          this.$Message.error(error.msg)
-        })
-      })
+
     },
     handleDelete(id) {
       deletePostion(id).then(res => {
