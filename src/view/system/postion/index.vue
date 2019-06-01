@@ -3,21 +3,21 @@
     <Card>
       <!--查询条件及操作按钮-->
       <div class="search-con search-con-top">
-        <Input @on-change="handleClear"  clearable placeholder="岗位名称" class="search-input" v-model="listQuery.postionName"/>
+        <Input @on-change="handleClear"  clearable placeholder="岗位名称" class="search-input" v-model="listQuery.name"/>
         <Button @click="handleSearch" class="search-btn">查询</Button>
-        <Button @click="handleCreate" class="search-btn">新增</Button>
+        <Button @click="addOrUpdateHandle" class="search-btn">新增</Button>
       </div>
       <!--列表 分页-->
       <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
         <template slot-scope="{ row, index }" slot="action">
-            <Button v-permission="{rule:'editPostion'}" type="primary" size="small" style="margin: 5px" @click="handleUpdate(row)">编辑</Button>
+            <Button  type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(row.id)">编辑</Button>
             <Poptip
                 confirm
                 transfer
                 title="您确定要删除吗?"
-                @on-ok="handleDelete(row.id)"
+                @on-ok="deleteHandle(row.id)"
                 >
-               <Button v-permission="{rule:'deletePostion'}" type="error" size="small">删除</Button>
+               <Button type="error" size="small">删除</Button>
             </Poptip>
         </template>
       </Table>
@@ -34,12 +34,14 @@
             next-text="下一页"></Page>
         </div>
       </div>
+      <add-or-update v-if="addOrUpdateVisible" ref="addOrUpate" @refreshDataList="getList"></add-or-update>
     </Card>
   </div>
 </template>
 <script>
 import '@/assets/css/common.less'
-import { fetchList, addOrUpdatePosition, deletePostion } from '@/api/postion'
+import { fetchList, deletePostion } from '@/api/postion'
+import AddOrUpdate from './add-or-update'
 export default {
   name: 'postion',
   data() {
@@ -57,7 +59,12 @@ export default {
         { title: '岗位名称', key: 'name' },
         { title: '创建时间',
           key: 'createTime',
-          tooltip: true
+          tooltip: true,
+          render: (h, params) => {
+            return h('div',
+              this.$formatDate(params.row.createTime, 'yyyy-MM-dd  hh:mm:ss')
+            )
+          }
         },
         {
           title: '操作',
@@ -66,12 +73,6 @@ export default {
         }
       ],
       total: 0,
-      dialogFormVisible: false,
-      dialogStatus: '',
-      textMap: {
-        update: '编辑',
-        create: '新增'
-      },
       tableLoading: false,
       loading: true,
       listQuery: {
@@ -79,47 +80,29 @@ export default {
         pageSize: 10,
         name: ''
       },
-      postionTemp: {
-        id: undefined,
-        postionCode: '',
-        postionName: '',
-        remark: '',
-        postionLevel: '',
-        createTime: new Date(),
-        updateTime: new Date(),
-        isDelete: 0
-      },
-      rules: {
-        postionCode: [
-          { required: true, message: '必填项，不能为空', trigger: 'blur' }
-        ],
-        postionName: [
-          { required: true, message: '必填项，不能为空', trigger: 'blur' }
-        ],
-        isDelete: [
-          { required: true, type: 'number', message: '必填项，不能为空', trigger: 'change' }
-        ]
-      },
-      isFirstEnter: true
+      addOrUpdateVisible: true,
+      dataListLoading: false
     }
+  },
+  components: {
+    AddOrUpdate
   },
   // 一般ajaxajax请求数据放到created里面就可以了，这样可以及早发请求获取数据，
   // 如果有依赖dom必须存在的情况则需要放导 mounted
   created() {
-
+    this.getList()
   },
   // 编译好的HTML 挂载到页面完成后执行的事件钩子，
   // 此钩子函数中一般会做一些ajax请求获取数据进行数据初始化
   // mounted在整个实例中只执行一次
   mounted() {
-    this.getList()
+
   },
   // 组件方法
   methods: {
     getList() {
       this.tableLoading = true
       fetchList(this.listQuery).then(res => {
-        debugger
         this.list = res.data.records
         this.total = res.data.total
         this.tableLoading = false
@@ -138,42 +121,16 @@ export default {
         this.loading = true
       })
     },
-    handleCreate() {
-      this.dialogStatus = 'create'
-      this.dialogFormVisible = true
-      this.resetPostionTemp()
-      this.$refs['postionForm'].resetFields()
-    },
-    createData() {
-      this.$refs['postionForm'].validate(valid => {
-        if (!valid) {
-          return this.changeLoading()
-        }
-        addOrUpdatePosition(this.postionTemp).then(res => {
-          this.changeLoading()
-          this.dialogFormVisible = false
-          this.$Message.success(res.msg)
-          this.getList()
-        }).catch(error => {
-          this.changeLoading()
-          this.dialogFormVisible = true
-          this.$Message.error(error.msg)
-        })
+    addOrUpdateHandle(id) {
+      this.addOrUpdateVisible = true
+      this.$nextTick(() => {
+        this.$refs.addOrUpate.dataForm.id = id
+        this.$refs.addOrUpate.init()
       })
     },
-    handleUpdate(row) {
-      // 用assign 进行浅拷贝
-      this.postionTemp = Object.assign({}, row)
-      this.dialogStatus = 'update'
-      this.$refs['postionForm'].resetFields()
-      this.dialogFormVisible = true
-    },
-    updateData() {
-
-    },
-    handleDelete(id) {
+    deleteHandle(id) {
       deletePostion(id).then(res => {
-        this.$Message.success('删除成功')
+        this.$Message.success(res.msg)
         this.getList()
       }).catch(error => {
         this.$Message.error(error.msg)

@@ -220,6 +220,8 @@ export function formatDate(date, fmt) {
   if (date === null) {
     return ''
   }
+  // 先将utc格式转换为本地日期格式
+  date = changeDate(date)
   date = date.replace(new RegExp(/-/gm), '/')// 将所有的'-'转为'/'即可 兼容日期格式
   date = new Date(date)
   let o = {
@@ -273,4 +275,10 @@ export function getAge(birthday) {
       d.getDate() < birthdays.getDate())
       ? 1 : 0)
   return age
+}
+
+export function changeDate(dateA) {
+  var dateee = new Date(dateA).toJSON()
+  var date = new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+  return date
 }
