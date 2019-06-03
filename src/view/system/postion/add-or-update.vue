@@ -79,7 +79,7 @@ export default {
     init() {
       this.visible = true
       this.$nextTick(() => {
-        this.$refs['menuForm'].resetFields()
+        this.$refs['deptForm'].resetFields()
         this.getDeptList().then(() => {
           if (this.dataForm.id) {
             this.typeVisible = true
@@ -131,6 +131,7 @@ export default {
           return this.changeLoading()
         }
         addOrUpdatePosition(this.dataForm).then(res => {
+          debugger
           this.changeLoading()
           this.visible = false
           // 触发刷新列表事件
