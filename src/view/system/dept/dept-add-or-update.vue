@@ -25,6 +25,18 @@
               </div>
             </Poptip>
           </Form-item>
+          <Form-item label="所属机构" prop="orgName">
+            <Poptip trigger='click' v-model="orgVisible" placement="bottom-start" >
+              <Input type="text" v-model="dataForm.orgName" :readonly='true' :maxlength="20"></Input>
+              <div slot="content">
+                <Tree
+                :data='selectOrgData'
+                :multiple='false'
+                @on-select-change='handleOrgTreeSelectChange'
+                ></Tree>
+              </div>
+            </Poptip>
+          </Form-item>
           <Form-item label="排序" prop="orderNum">
             <Input v-model="dataForm.orderNum" type="number"  :maxlength="6"></Input>
           </Form-item>
@@ -35,14 +47,14 @@
 
 <script>
 import { addOrUpdateDept, fetchList, getDeptInfo } from '@/api/dept'
+import { fetchList as getOrgList } from '@/api/organization'
 const PARENT_NAME_DEFAULT = '一级部门'
 export default {
   data() {
     return {
       modalTitle: '',
       popVisible: false,
-      typeVisible: false,
-      treeSelected: '',
+      orgVisible: false,
       visible: false,
       loading: true,
       dataForm: {
@@ -50,14 +62,20 @@ export default {
         parentId: '0', // 上级菜单id
         deptName: '', // 菜单/按钮名称
         orderNum: '', // 排序
-        parentName: ''// 父菜单名称
+        parentName: '', // 父菜单名称
+        orgId: '0',
+        orgName: ''
       },
       selectData: [],
+      selectOrgData: [],
       rules: {
         deptName: [
           { required: true, message: '必填项，不能为空', trigger: 'blur' }
         ],
         parentName: [
+          { required: true, message: '必填项，不能为空', trigger: 'change' }
+        ],
+        orgName: [
           { required: true, message: '必填项，不能为空', trigger: 'change' }
         ]
       }
@@ -86,6 +104,7 @@ export default {
             this.typeVisible = false
           }
         })
+        this.getOrgList()
       })
     },
     // 初始化菜单下拉框的值
@@ -99,6 +118,11 @@ export default {
       this.dataForm.parentName = item.title
       this.popVisible = false
     },
+    handleOrgTreeSelectChange(selectArray, item) {
+      this.dataForm.orgId = item.id
+      this.dataForm.orgName = item.title
+      this.orgVisible = false
+    },
     changeLoading() {
       this.loading = false
       this.$nextTick(() => {
@@ -108,6 +132,21 @@ export default {
     getDeptList() {
       return fetchList().then(res => {
         this.selectData = this.expandDeptTree(res.data)
+      })
+    },
+    getOrgList() {
+      getOrgList().then(res => {
+        this.selectOrgData = this.expandOrgTree(res.data)
+      })
+    },
+    // 把数据转换为tree组件的对应格式
+    expandOrgTree(treeData) {
+      return treeData.map(item => {
+        item.title = item.orgName
+        if (item.children && item.children.length) {
+          item.children = this.expandOrgTree(item.children)
+        }
+        return item
       })
     },
     // 把数据转换为tree组件的对应格式

@@ -34,8 +34,8 @@
           <Form-item label="联系地址" prop="address">
              <Input v-model="dataForm.address" type="text"  :maxlength="20"></Input>
           </Form-item>
-          <Form-item label="排序" prop="sort">
-             <Input v-model="dataForm.sort" type="number"  :maxlength="20"></Input>
+          <Form-item label="排序" prop="orderNum">
+             <Input v-model="dataForm.orderNum" type="number"  :maxlength="20"></Input>
           </Form-item>
         </Form>
       </Modal>
@@ -62,7 +62,7 @@ export default {
         tel: '', // 联系电话
         address: '', // 联系地址
         parentName: '', // 父菜单名称
-        sort: ''// 排序
+        orderNum: ''// 排序
       },
       selectData: [],
       rules: {
@@ -123,7 +123,7 @@ export default {
       })
     },
     // 把数据转换为tree组件的对应格式
-    expandDeptTree(treeData) {
+    expandOrgTree(treeData) {
       return treeData.map(item => {
         item.title = item.orgName
         if (item.children && item.children.length) {
@@ -134,6 +134,7 @@ export default {
     },
     getInfo() {
       getOrgInfo(this.dataForm.id).then(res => {
+        debugger
         this.dataForm = {
           ...this.dataForm,
           ...res.data
