@@ -77,7 +77,8 @@ export default {
     getList() {
       this.dataListLoading = true
       fetchList().then(res => {
-        this.tableData = res.data
+        debugger
+        this.tableData = res.data.records
         this.dataListLoading = false
       }).catch(error => {
         this.$Message.error(error.msg)

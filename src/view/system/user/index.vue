@@ -139,7 +139,6 @@
 import '@/assets/css/common.less'
 import { fetchList, addUser, editUser, deleteUser } from '@/api/user'
 import { getDepartmentdata } from '@/api/dept'
-import { getCompanyList } from '@/api/organize'
 import { getRoleData } from '@/api/role'
 import { getPostionList } from '@/api/postion'
 export default {
@@ -396,13 +395,6 @@ export default {
     getDepartment() {
       getDepartmentdata(this.userTemp.companyId).then(res => {
         this.departmentList = res.data
-      }).catch(error => {
-        this.$Message.error(error.msg)
-      })
-    },
-    getCompany() {
-      getCompanyList().then(res => {
-        this.companyList = res.data
       }).catch(error => {
         this.$Message.error(error.msg)
       })

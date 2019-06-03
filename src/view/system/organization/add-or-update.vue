@@ -119,7 +119,7 @@ export default {
     },
     getOrgList() {
       return fetchList().then(res => {
-        this.selectData = this.expandDeptTree(res.data)
+        this.selectData = this.expandDeptTree(res.data.records)
       })
     },
     // 把数据转换为tree组件的对应格式
