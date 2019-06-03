@@ -29,7 +29,7 @@
             <Input v-model="dataForm.contacts" type="text"  :maxlength="20"></Input>
           </Form-item>
           <Form-item label="联系方式" prop="tel">
-            <Input v-model="dataForm.tel" type="text"  :maxlength="6"></Input>
+            <Input v-model="dataForm.tel" type="text"  :maxlength="11"></Input>
           </Form-item>
           <Form-item label="联系地址" prop="address">
              <Input v-model="dataForm.address" type="text"  :maxlength="20"></Input>
@@ -119,7 +119,7 @@ export default {
     },
     getOrgList() {
       return fetchList().then(res => {
-        this.selectData = this.expandDeptTree(res.data.records)
+        this.selectData = this.expandDeptTree(res.data)
       })
     },
     // 把数据转换为tree组件的对应格式

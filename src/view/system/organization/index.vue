@@ -60,8 +60,6 @@ export default {
       addOrUpdateVisible: false,
       dataListLoading: false,
       listQuery: {
-        pageNumber: 1,
-        pageSize: 10,
         orgName: '',
         contacts: ''
       }
@@ -76,9 +74,9 @@ export default {
   methods: {
     getList() {
       this.dataListLoading = true
-      fetchList().then(res => {
+      fetchList(this.listQuery).then(res => {
         debugger
-        this.tableData = res.data.records
+        this.tableData = res.data
         this.dataListLoading = false
       }).catch(error => {
         this.$Message.error(error.msg)

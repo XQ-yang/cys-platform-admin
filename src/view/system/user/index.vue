@@ -383,7 +383,7 @@ export default {
     getList() {
       this.tableLoading = true
       fetchList(this.listQuery).then(res => {
-        debugger
+        console.log(res.data)
         this.list = res.data.records
         this.total = res.data.total
         this.tableLoading = false
