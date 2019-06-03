@@ -13,7 +13,7 @@
           header-align="center"
           prop="orgName"
           label="机构名称"
-          width="180">
+          width="220">
         </el-table-column>
         <el-table-column
           header-align="center"
