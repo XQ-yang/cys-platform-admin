@@ -80,7 +80,7 @@ export default {
         pageSize: 10,
         name: ''
       },
-      addOrUpdateVisible: true,
+      addOrUpdateVisible: false,
       dataListLoading: false
     }
   },

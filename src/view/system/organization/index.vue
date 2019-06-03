@@ -2,53 +2,36 @@
 <div>
   <Card>
     <div class="search-con search-con-top">
+      <Input @on-change="handleClear"  clearable placeholder="机构名称" class="search-input" v-model="listQuery.orgName"/>
+      <Input @on-change="handleClear"  clearable placeholder="联系人" class="search-input" v-model="listQuery.contacts"/>
+      <Button @click="handleSearch" class="search-btn">查询</Button>
       <Button class="search-btn" @click="addOrUpdateHandle()">新增</Button>
     </div>
     <div class="table-dom">
       <el-table :data="tableData" style="width: 100%;margin-bottom: 20px;" border row-key="id">
         <el-table-column
           header-align="center"
-          prop="title"
-          label="名称"
+          prop="orgName"
+          label="机构名称"
           width="180">
         </el-table-column>
         <el-table-column
           header-align="center"
           align="center"
-          prop="icon"
-          label="图标"
-          width="180">
-          <template slot-scope="scope">
-            <Icon :type="scope.row.icon" />
-          </template>
+          prop="contacts"
+          label="联系人">
         </el-table-column>
         <el-table-column
           header-align="center"
           align="center"
-          prop="type"
-          label="类型">
-          <template slot-scope="scope">
-            <tag color="success" v-if="scope.row.type===0">菜单</tag>
-            <tag color="default" v-else>按钮</tag>
-          </template>
+          prop="tel"
+          label="联系电话">
         </el-table-column>
         <el-table-column
           header-align="center"
           align="center"
-          prop="orderIndex"
-          label="排序">
-        </el-table-column>
-        <el-table-column
-          header-align="center"
-          align="center"
-          prop="url"
-          label="路由">
-        </el-table-column>
-        <el-table-column
-          header-align="center"
-          align="center"
-          prop="permission"
-          label="授权标识">
+          prop="address"
+          label="联系地址">
         </el-table-column>
         <el-table-column
           label="操作"
@@ -66,15 +49,22 @@
 </div>
 </template>
 <script>
-import AddOrUpdate from './meun-add-or-update'
-import { fetchList, deleteMunu } from '@/api/menu'
+import '@/assets/css/common.less'
+import AddOrUpdate from './add-or-update'
+import { fetchList, deleteOrg } from '@/api/organization'
 export default {
-  name: 'menus',
+  name: 'organization',
   data() {
     return {
       tableData: [],
       addOrUpdateVisible: false,
-      dataListLoading: false
+      dataListLoading: false,
+      listQuery: {
+        pageNumber: 1,
+        pageSize: 10,
+        orgName: '',
+        contacts: ''
+      }
     }
   },
   created() {
@@ -96,6 +86,7 @@ export default {
     addOrUpdateHandle(id) {
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
+        debugger
         this.$refs.addOrUpate.dataForm.id = id
         this.$refs.addOrUpate.init()
       })
@@ -105,7 +96,7 @@ export default {
         title: '提示',
         content: '此操作为永久删除，是否继续？',
         onOk: () => {
-          deleteMunu(id).then(res => {
+          deleteOrg(id).then(res => {
             this.$Message.success('删除成功')
             this.getList()
           }).catch(error => {
@@ -113,6 +104,15 @@ export default {
           })
         }
       })
+    },
+    handleSearch() {
+      this.getList()
+    },
+    // 清空查询值的时候 重新加载列表数据
+    handleClear(e) {
+      if (e.target.value === '') {
+        this.getList()
+      }
     }
   },
   components: {

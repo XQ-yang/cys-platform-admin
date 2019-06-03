@@ -9,17 +9,11 @@
       :mask-closable="false"
       width="960"
       >
-        <Form ref="menuForm" :model="dataForm" :rules="rules" :label-width="100">
-          <Form-item label="类型" prop="type" >
-            <RadioGroup v-model="dataForm.type">
-              <Radio :label="0" v-bind:disabled="typeVisible">菜单</Radio>
-              <Radio :label="1" v-bind:disabled="typeVisible">按钮</Radio>
-            </RadioGroup>
+        <Form ref="orgForm" :model="dataForm" :rules="rules" :label-width="100">
+          <Form-item label="机构名称" prop="orgName">
+            <Input v-model="dataForm.orgName" type="text"  :maxlength="20"></Input>
           </Form-item>
-          <Form-item label="名称" prop="title">
-            <Input v-model="dataForm.title" type="text"  :maxlength="20"></Input>
-          </Form-item>
-          <Form-item label="上级菜单" prop="parentName">
+          <Form-item label="上级机构" prop="parentName">
             <Poptip trigger='click' v-model="popVisible" placement="bottom-start" >
               <Input type="text" v-model="dataForm.parentName" :readonly='true' :maxlength="20"></Input>
               <div slot="content">
@@ -31,17 +25,17 @@
               </div>
             </Poptip>
           </Form-item>
-          <Form-item v-show="dataForm.type===0" label="路由地址" prop="url">
-            <Input v-model="dataForm.url" type="text"  :maxlength="20"></Input>
+          <Form-item  label="联系人" prop="contacts">
+            <Input v-model="dataForm.contacts" type="text"  :maxlength="20"></Input>
           </Form-item>
-          <Form-item label="排序" prop="orderIndex">
-            <Input v-model="dataForm.orderIndex" type="number"  :maxlength="6"></Input>
+          <Form-item label="联系方式" prop="tel">
+            <Input v-model="dataForm.tel" type="text"  :maxlength="6"></Input>
           </Form-item>
-          <Form-item label="授权标识" prop="permission">
-             <Input v-model="dataForm.permission" type="text"  :maxlength="20"></Input>
+          <Form-item label="联系地址" prop="address">
+             <Input v-model="dataForm.address" type="text"  :maxlength="20"></Input>
           </Form-item>
-          <Form-item v-show="dataForm.type===0" label="图标" prop="icon">
-             <Input v-model="dataForm.icon" type="text"  :maxlength="20"></Input>
+          <Form-item label="排序" prop="sort">
+             <Input v-model="dataForm.sort" type="number"  :maxlength="20"></Input>
           </Form-item>
         </Form>
       </Modal>
@@ -49,8 +43,8 @@
 </template>
 
 <script>
-import { addOrUpdateMenu, getTreeList, getMenuInfo } from '@/api/menu'
-const PARENT_NAME_DEFAULT = '一级菜单'
+import { addOrUpdateOrg, fetchList, getOrgInfo } from '@/api/organization'
+const PARENT_NAME_DEFAULT = '一级机构'
 export default {
   data() {
     return {
@@ -61,28 +55,18 @@ export default {
       visible: false,
       loading: true,
       dataForm: {
-        id: '', // 菜单/按钮id
-        parentId: '0', // 上级菜单id
-        title: '', // 菜单/按钮名称
-        url: '', // 链接url
-        permission: '', // 权限标识
-        icon: '', // 图标
-        type: 0, // 类型 0菜单 1按钮
-        orderIndex: null, // 排序
-        createBy: '', // 创建人
-        modifyBy: '', // 修改人
-        modifyTime: null, // 修改时间
-        createTime: null, // 创建时间
-        version: '', // 乐观锁版本号
-        isDeleted: '', // 删除标记（0未删除，1已删除）
-        parentName: ''// 父菜单名称
+        id: '',
+        parentId: '0', // 上级机构id
+        orgName: '', // 机构名称
+        contacts: '', // 联系人
+        tel: '', // 联系电话
+        address: '', // 联系地址
+        parentName: '', // 父菜单名称
+        sort: ''// 排序
       },
       selectData: [],
       rules: {
-        type: [
-          { type: 'number', required: true, message: '请选择', trigger: 'change' }
-        ],
-        title: [
+        orgName: [
           { required: true, message: '必填项，不能为空', trigger: 'blur' }
         ],
         parentName: [
@@ -104,9 +88,9 @@ export default {
     init() {
       this.visible = true
       this.$nextTick(() => {
-        this.$refs['menuForm'].resetFields()
+        this.$refs['orgForm'].resetFields()
         this.dataForm.parentName = PARENT_NAME_DEFAULT
-        this.getMenuList().then(() => {
+        this.getOrgList().then(() => {
           if (this.dataForm.id) {
             this.typeVisible = true
             this.getInfo()
@@ -117,7 +101,7 @@ export default {
       })
     },
     // 初始化菜单下拉框的值
-    menuListTreeSetDefaultHandle() {
+    orgListTreeSetDefaultHandle() {
       this.dataForm.parentId = '0'
       this.dataForm.parentName = PARENT_NAME_DEFAULT
     },
@@ -133,28 +117,38 @@ export default {
         this.loading = true
       })
     },
-    getMenuList() {
-      return getTreeList('0').then(res => {
-        this.selectData = res.data
+    getOrgList() {
+      return fetchList().then(res => {
+        this.selectData = this.expandDeptTree(res.data)
+      })
+    },
+    // 把数据转换为tree组件的对应格式
+    expandDeptTree(treeData) {
+      return treeData.map(item => {
+        item.title = item.orgName
+        if (item.children && item.children.length) {
+          item.children = this.expandDeptTree(item.children)
+        }
+        return item
       })
     },
     getInfo() {
-      getMenuInfo(this.dataForm.id).then(res => {
+      getOrgInfo(this.dataForm.id).then(res => {
         this.dataForm = {
           ...this.dataForm,
           ...res.data
         }
         if (this.dataForm.parentId === '0') {
-          this.menuListTreeSetDefaultHandle()
+          this.orgListTreeSetDefaultHandle()
         }
       })
     },
     dataFormSubmitHandle() {
-      this.$refs['menuForm'].validate(valid => {
+      this.$refs['orgForm'].validate(valid => {
         if (!valid) {
           return this.changeLoading()
         }
-        addOrUpdateMenu(this.dataForm).then(res => {
+        addOrUpdateOrg(this.dataForm).then(res => {
           this.changeLoading()
           this.visible = false
           // 触发刷新列表事件

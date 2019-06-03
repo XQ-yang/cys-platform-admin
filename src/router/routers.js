@@ -133,13 +133,13 @@ export const routes = [
         component: () => import('@/view/system/postion')
       },
       {
-        path: 'organize',
-        name: 'organize',
+        path: 'organization',
+        name: 'organization',
         meta: {
           icon: 'md-git-network',
           title: '机构管理'
         },
-        component: () => import('@/view/system/organize')
+        component: () => import('@/view/system/organization')
       },
       {
         path: 'dept',
