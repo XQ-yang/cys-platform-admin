@@ -5,7 +5,7 @@
       <div class="search-con search-con-top">
         <Input @on-change="handleClear"  clearable placeholder="岗位名称" class="search-input" v-model="listQuery.name"/>
         <Button @click="handleSearch" class="search-btn">查询</Button>
-        <Button @click="addOrUpdateHandle" class="search-btn">新增</Button>
+        <Button @click="addOrUpdateHandle()" class="search-btn">新增</Button>
       </div>
       <!--列表 分页-->
       <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
@@ -15,7 +15,7 @@
                 confirm
                 transfer
                 title="您确定要删除吗?"
-                @on-ok="deleteHandle(row.id)"
+                @on-ok="deletePostion(row.id)"
                 >
                <Button type="error" size="small">删除</Button>
             </Poptip>
@@ -40,7 +40,7 @@
 </template>
 <script>
 import '@/assets/css/common.less'
-import { fetchList, deletePostion } from '@/api/postion'
+import { fetchList, removePosition } from '@/api/postion'
 import AddOrUpdate from './add-or-update'
 export default {
   name: 'postion',
@@ -122,14 +122,15 @@ export default {
       })
     },
     addOrUpdateHandle(id) {
+      debugger
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
         this.$refs.addOrUpate.dataForm.id = id
         this.$refs.addOrUpate.init()
       })
     },
-    deleteHandle(id) {
-      deletePostion(id).then(res => {
+    deletePostion(id) {
+      removePosition(id).then(res => {
         this.$Message.success(res.msg)
         this.getList()
       }).catch(error => {

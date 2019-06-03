@@ -21,7 +21,8 @@ export const getPosition = (id) => {
     method: 'get'
   })
 }
-export const deletePosition = (id) => {
+
+export const removePosition = (id) => {
   return axios.request({
     url: '/position/' + id,
     method: 'delete'
