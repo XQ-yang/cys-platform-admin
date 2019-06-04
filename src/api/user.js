@@ -49,9 +49,8 @@ export const addOrUpdateUser = (userTemp) => {
 
 export const deleteUser = (id) => {
   return axios.request({
-    url: 'user/delete',
-    method: 'get',
-    params: { id }
+    url: 'user/' + id,
+    method: 'delete'
   })
 }
 export const getUser = (id) => {

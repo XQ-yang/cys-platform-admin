@@ -29,7 +29,7 @@
             style="margin: 5px"
             @click="addOrUpdateHandle(row.id)"
           >编辑</Button>
-          <Poptip confirm transfer title="您确定要删除吗?" @on-ok="deleteUser(row.id)">
+          <Poptip confirm transfer title="您确定要删除吗?" @on-ok="handleDelete(row.id)">
             <Button type="error" size="small">删除</Button>
           </Poptip>
         </template>
