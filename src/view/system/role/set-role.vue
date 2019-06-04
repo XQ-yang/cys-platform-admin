@@ -10,7 +10,7 @@
           <Tree :data="treeList" show-checkbox ref="roleTree" ></Tree>
           <div class="demo-drawer-footer">
             <Button style="margin-right: 8px" @click="drawerVisible = false">取消</Button>
-            <Button type="primary" @click="setRole()">提交</Button>
+            <Button type="primary" @click="setRole">提交</Button>
           </div>
         </Drawer>
     </div>
@@ -51,12 +51,14 @@ export default {
       })
     },
     setRole() {
+      debugger
       this.roleMeunTemp.menuIds = []
       const data = this.$refs.roleTree.getCheckedAndIndeterminateNodes()
       data.map(item => {
         this.roleMeunTemp.menuIds.push(item.id)
       })
       setRoles(this.roleMeunTemp).then(res => {
+        debugger
         this.$emit('refreshDataList')
         this.drawerVisible = false
       }).catch(error => {

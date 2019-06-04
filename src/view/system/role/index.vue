@@ -126,7 +126,7 @@ export default {
     setRole(row) {
       this.setRoleVisible = true
       this.$nextTick(() => {
-        this.$refs.setRole.roleMeunTemp = row.id
+        this.$refs.setRole.roleMeunTemp.roleId = row.id
         this.$refs.setRole.roleName = row.roleName
         this.$refs.setRole.init()
       })
