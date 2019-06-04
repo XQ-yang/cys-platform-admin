@@ -5,10 +5,22 @@
       <div class="search-con search-con-top">
         <Input @on-change="handleClear"  clearable placeholder="角色名称" class="search-input" v-model="listQuery.roleName"/>
         <Button @click="handleSearch" class="search-btn">查询</Button>
-        <Button v-permission="{rule:'addRole'}" @click="handleCreate" class="search-btn">新增</Button>
+        <Button @click="addOrUpdateHandle()" class="search-btn">新增</Button>
       </div>
       <!--列表 分页-->
-      <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe></Table>
+      <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
+        <template slot-scope="{ row, index }" slot="action">
+            <Button  type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(row.id)">编辑</Button>
+            <Poptip
+                confirm
+                transfer
+                title="您确定要删除吗?"
+                @on-ok="deletePostion(row.id)"
+                >
+               <Button type="error" size="small">删除</Button>
+            </Poptip>
+        </template>
+      </Table>
       <div style="margin: 10px;overflow: hidden">
         <div style="float: right;">
           <Page
@@ -22,45 +34,14 @@
             next-text="下一页"></Page>
         </div>
       </div>
-      <!--弹出层-->
-      <Modal
-      v-model="dialogFormVisible"
-      :title="textMap[dialogStatus]"
-      :loading="loading"
-      @on-ok="dialogStatus==='create'?createData():updateData()"
-      class-name="vertical-center-modal"
-      :mask-closable="false"
-      width="400"
-       ok-text="提交"
-      cancel-text="关闭">
-        <Form ref="roleForm" :model="roleTemp" :rules="rules" :label-width="100" style="padding-right:20px;">
-          <Form-item label="角色名称" prop="name">
-            <Input type="text" v-model="roleTemp.name" :maxlength="10"></Input>
-          </Form-item>
-        </Form>
-      </Modal>
-      <Modal
-      v-model="roleDialogFormVisible"
-      :title="roleDialogTitle"
-      :loading="loading"
-      @on-ok="setRole"
-      class-name="vertical-center-modal"
-      :mask-closable="false"
-      :scrollable="true"
-      width="400"
-      ok-text="提交"
-      cancel-text="关闭">
-          <div style="height:400px;overflow-y:auto">
-            <Tree :data="treeList"  show-checkbox ref="roleTree" ></Tree>
-          </div>
-      </Modal>
+      <add-or-update v-if="addOrUpdateVisible" ref="addOrUpate" @refreshDataList="getList"></add-or-update>
     </Card>
   </div>
 </template>
 <script>
 import '@/assets/css/common.less'
-import { fetchList, editRole, addRole, deleteRole, rolePermTree, updateRolePerm } from '@/api/role'
-import { expandTree } from '@/libs/util'
+import { fetchList, deleteRole } from '@/api/role'
+import AddOrUpdate from './add-or-update'
 export default {
   name: 'role',
   data() {
@@ -74,7 +55,7 @@ export default {
             return h('span', params.index + (this.listQuery.pageNumber - 1) * this.listQuery.pageSize + 1)
           }
         },
-        { title: '角色名称', key: 'name' },
+        { title: '角色名称', key: 'roleName' },
         { title: '创建时间',
           key: 'createTime',
           tooltip: true,
@@ -86,121 +67,22 @@ export default {
         },
         {
           title: '操作',
-          key: 'action',
-          align: 'center',
-          render: (h, params, vm) => {
-            return h('div', [
-              h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                directives: [
-                  {
-                    name: 'permission',
-                    value: { rule: 'editRole' }
-                  }
-                ],
-                on: {
-                  click: () => {
-                    this.handleUpdate(params.row)
-                  }
-                }
-              }, '编辑'),
-              h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                directives: [
-                  {
-                    name: 'permission',
-                    value: { rule: 'setRole' }
-                  }
-                ],
-                on: {
-                  click: () => {
-                    this.handleSetRole(params.row)
-                  }
-                }
-              }, '分配权限'),
-              h('Poptip', {
-                props: {
-                  confirm: true,
-                  transfer: true,
-                  title: '您确定要删除吗'
-                },
-                on: {
-                  'on-ok': () => {
-                    this.handleDelete(params.row.id)
-                  }
-                }
-              }, [
-                h('Button', {
-                  props: {
-                    type: 'error',
-                    size: 'small'
-                  },
-                  directives: [
-                    {
-                      name: 'permission',
-                      value: { rule: 'deleteRole' }
-                    }
-                  ]
-                }, '删除')
-              ])
-            ])
-          }
+          slot: 'action',
+          align: 'center'
         }
       ],
       total: 0,
-      dialogFormVisible: false,
-      // 角色弹出层控制属性
-      roleDialogFormVisible: false,
-      dialogStatus: '',
-      textMap: {
-        update: '编辑',
-        create: '新增'
-      },
       tableLoading: false,
-      loading: true,
       listQuery: {
         pageNumber: 1,
         pageSize: 10,
         roleName: ''
       },
-      roleTemp: {
-        id: undefined,
-        name: '',
-        code: '',
-        description: '',
-        createTime: new Date(),
-        updateTime: new Date(),
-        isDelete: 0
-      },
-      rules: {
-        name: [
-          { required: true, message: '必填项，不能为空', trigger: 'blur' }
-        ],
-        code: [
-          { required: true, message: '必填项，不能为空', trigger: 'blur' }
-        ]
-      },
-      treeList: [],
-      // 定义设置权限提交的对象
-      permTemp: {
-        roleId: '',
-        permIds: []
-      },
-      roleDialogTitle: '',
-      isFirstEnter: true
+      addOrUpdateVisible: false
     }
+  },
+  components: {
+    AddOrUpdate
   },
   // 一般ajaxajax请求数据放到created里面就可以了，这样可以及早发请求获取数据，
   // 如果有依赖dom必须存在的情况则需要放导 mounted
@@ -213,92 +95,27 @@ export default {
   // mounted在整个实例中只执行一次
   mounted() {
   },
-  activated() {
-  },
-  deactivated() {
-    this.isFirstEnter = false
-  },
   // 组件方法
   methods: {
     getList() {
       this.tableLoading = true
       fetchList(this.listQuery).then(res => {
-        debugger
-        this.list = res.data.list
-        this.total = res.data.totalRow
+        this.list = res.data.records
+        this.total = res.data.total
         this.tableLoading = false
       }).catch(error => {
         this.$Message.error(error.msg)
       })
     },
-    // 重置表单页面赋值
-    resetRoleTemp() {
-      this.roleTemp = {
-        id: undefined,
-        name: '',
-        code: '',
-        description: '',
-        createTime: new Date(),
-        updateTime: new Date(),
-        status: 0
-      }
-    },
     handleSearch() {
       this.listQuery.pageNumber = 1
       this.getList()
     },
-    // 重置loading状态 防止重复提交
-    changeLoading() {
-      this.loading = false
+    addOrUpdateHandle(id) {
+      this.addOrUpdateVisible = true
       this.$nextTick(() => {
-        this.loading = true
-      })
-    },
-    handleCreate() {
-      this.dialogStatus = 'create'
-      this.dialogFormVisible = true
-      this.resetRoleTemp()
-      this.$refs['roleForm'].resetFields()
-    },
-    createData() {
-      this.$refs['roleForm'].validate(valid => {
-        if (!valid) {
-          return this.changeLoading()
-        }
-        addRole(this.roleTemp).then(res => {
-          this.changeLoading()
-          this.dialogFormVisible = false
-          this.$Message.success(res.msg)
-          this.getList()
-        }).catch(error => {
-          this.changeLoading()
-          this.dialogFormVisible = true
-          this.$Message.error(error.msg)
-        })
-      })
-    },
-    handleUpdate(row) {
-      // 用assign 进行浅拷贝
-      this.roleTemp = Object.assign({}, row)
-      this.dialogStatus = 'update'
-      this.$refs['roleForm'].resetFields()
-      this.dialogFormVisible = true
-    },
-    updateData() {
-      this.$refs['roleForm'].validate(valid => {
-        if (!valid) {
-          return this.changeLoading()
-        }
-        editRole(this.roleTemp).then(res => {
-          this.changeLoading()
-          this.dialogFormVisible = false
-          this.$Message.success(res.msg)
-          this.getList()
-        }).catch(error => {
-          this.changeLoading()
-          this.dialogFormVisible = true
-          this.$Message.error(error.msg)
-        })
+        this.$refs.addOrUpate.dataForm.id = id
+        this.$refs.addOrUpate.init()
       })
     },
     handleDelete(id) {
@@ -314,35 +131,6 @@ export default {
       if (e.target.value === '') {
         this.getList()
       }
-    },
-    handleSetRole(row) {
-      this.$Spin.show()
-      this.permTemp.roleId = row.id
-      this.roleDialogTitle = '角色权限设置：' + row.name
-      this.roleDialogFormVisible = true
-      this.treeList = []
-      rolePermTree(this.permTemp.roleId).then(res => {
-        this.treeList = expandTree(res.data)
-        this.$Spin.hide()
-      }).catch(error => {
-        this.$Message.error(error.msg)
-      })
-    },
-    setRole() {
-      this.permTemp.permIds = []
-      const data = this.$refs.roleTree.getCheckedAndIndeterminateNodes()
-      data.map(item => {
-        this.permTemp.permIds.push(item.id)
-      })
-      updateRolePerm(this.permTemp).then(res => {
-        this.changeLoading()
-        this.roleDialogFormVisible = false
-        this.$Message.success(res.msg)
-      }).catch(error => {
-        this.changeLoading()
-        this.roleDialogFormVisible = true
-        this.$Message.error(error.msg)
-      })
     }
 
   }
