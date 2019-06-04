@@ -173,8 +173,7 @@ export default {
       listQuery: {
         pageNumber: 1,
         pageSize: 10,
-        roleName: '',
-        name: this.$store.state.user.userName
+        roleName: ''
       },
       roleTemp: {
         id: undefined,
@@ -206,21 +205,15 @@ export default {
   // 一般ajaxajax请求数据放到created里面就可以了，这样可以及早发请求获取数据，
   // 如果有依赖dom必须存在的情况则需要放导 mounted
   created() {
-
+  // 获取列表数据
+    this.getList()
   },
   // 编译好的HTML 挂载到页面完成后执行的事件钩子，
   // 此钩子函数中一般会做一些ajax请求获取数据进行数据初始化
   // mounted在整个实例中只执行一次
   mounted() {
-    if (this.isFirstEnter) {
-      // 获取列表数据
-      this.getList()
-    }
   },
   activated() {
-    if (!this.isFirstEnter) {
-      this.getList()
-    }
   },
   deactivated() {
     this.isFirstEnter = false
@@ -230,20 +223,8 @@ export default {
     getList() {
       this.tableLoading = true
       fetchList(this.listQuery).then(res => {
-        // const username = this.$store.state.user.userName
+        debugger
         this.list = res.data.list
-        // // 判断是否是超级管理员
-        // if (username === 'superadmin') {
-        //   this.list = res.data.list
-        // } else {
-        //   // 如果不是超级管理员则移除 超级管理员的角色
-        //   // res.data.list.splice(res.data.list.findIndex(item => item.name === '超级管理员'), 1)
-        //   this.list = res.data.list
-        //   this.list = this.list.filter(item => {
-        //     return item.name !== '超级管理员'
-        //   })
-        // }
-
         this.total = res.data.totalRow
         this.tableLoading = false
       }).catch(error => {

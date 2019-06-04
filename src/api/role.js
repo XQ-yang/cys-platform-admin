@@ -23,7 +23,9 @@ export const addOrUpdateRole = (role) => {
     data: role
   })
 }
-// 删除角色
+/**
+ * @description 根据id删除角色
+ */
 export const deleteRole = (id) => {
   return axios.request({
     url: '/role/' + id,
