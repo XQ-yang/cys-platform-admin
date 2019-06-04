@@ -59,7 +59,7 @@ export default {
       })
       setRoles(this.roleMeunTemp).then(res => {
         this.$emit('refreshDataList')
-        this.$Message.error(res.msg)
+        this.$Message.success(res.msg)
         this.drawerVisible = false
       }).catch(error => {
         this.$Message.error(error.msg)
