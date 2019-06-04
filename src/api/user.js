@@ -39,17 +39,9 @@ export const fetchList = (query) => {
   })
 }
 
-export const editUser = (userTemp) => {
+export const addOrUpdateUser = (userTemp) => {
   return axios.request({
-    url: '/user/edit',
-    method: 'post',
-    data: userTemp
-  })
-}
-
-export const addUser = (userTemp) => {
-  return axios.request({
-    url: '/user/add',
+    url: '/user/',
     method: 'post',
     data: userTemp
   })
@@ -62,7 +54,12 @@ export const deleteUser = (id) => {
     params: { id }
   })
 }
-
+export const getUser = (id) => {
+  return axios.request({
+    url: 'user/' + id,
+    method: 'get'
+  })
+}
 // 获取所有用户
 export const getUserList = () => {
   return axios.request({
