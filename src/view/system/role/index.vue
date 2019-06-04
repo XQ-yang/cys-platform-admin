@@ -11,7 +11,7 @@
       <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
         <template slot-scope="{ row, index }" slot="action">
             <Button  type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(row.id)">编辑</Button>
-            <Button  type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(row.id)">分配权限</Button>
+            <Button  type="primary" size="small" style="margin: 5px" @click="setRole(row.id)">分配权限</Button>
             <Poptip
                 confirm
                 transfer
@@ -36,6 +36,7 @@
         </div>
       </div>
       <add-or-update v-if="addOrUpdateVisible" ref="addOrUpate" @refreshDataList="getList"></add-or-update>
+      <set-role v-if="setRoleVisible" ref="setRole"></set-role>
     </Card>
   </div>
 </template>
@@ -43,6 +44,7 @@
 import '@/assets/css/common.less'
 import { fetchList, deleteRole } from '@/api/role'
 import AddOrUpdate from './add-or-update'
+import SetRole from './set-role'
 export default {
   name: 'role',
   data() {
@@ -79,11 +81,13 @@ export default {
         pageSize: 10,
         roleName: ''
       },
-      addOrUpdateVisible: false
+      addOrUpdateVisible: false,
+      setRoleVisible: false
     }
   },
   components: {
-    AddOrUpdate
+    AddOrUpdate,
+    SetRole
   },
   // 一般ajaxajax请求数据放到created里面就可以了，这样可以及早发请求获取数据，
   // 如果有依赖dom必须存在的情况则需要放导 mounted
@@ -117,6 +121,12 @@ export default {
       this.$nextTick(() => {
         this.$refs.addOrUpate.dataForm.id = id
         this.$refs.addOrUpate.init()
+      })
+    },
+    setRole(id) {
+      this.setRoleVisible = true
+      this.$nextTick(() => {
+        this.$refs.setRole.init()
       })
     },
     handleDelete(id) {
