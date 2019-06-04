@@ -10,13 +10,13 @@
           <Tree :data="treeList" show-checkbox ref="roleTree" ></Tree>
           <div class="demo-drawer-footer">
             <Button style="margin-right: 8px" @click="drawerVisible = false">取消</Button>
-            <Button type="primary" @click="drawerVisible = false">提交</Button>
+            <Button type="primary" @click="setRole()">提交</Button>
           </div>
         </Drawer>
     </div>
 </template>
 <script>
-import { fetchList as getMenuList } from '@/api/menu'
+import { fetchList as getMenuList, setRoles } from '@/api/menu'
 export default {
   data() {
     return {
@@ -48,6 +48,20 @@ export default {
     getTreeList() {
       getMenuList().then(res => {
         this.treeList = res.data
+      })
+    },
+    setRole() {
+      this.roleMeunTemp.menuIds = []
+      const data = this.$refs.roleTree.getCheckedAndIndeterminateNodes()
+      data.map(item => {
+        this.roleMeunTemp.menuIds.push(item.id)
+      })
+      setRoles(this.roleMeunTemp).then(res => {
+        this.$emit('refreshDataList')
+        this.drawerVisible = false
+      }).catch(error => {
+        this.$Message.error(error.msg)
+        // this.drawerVisible = true
       })
     }
   }
