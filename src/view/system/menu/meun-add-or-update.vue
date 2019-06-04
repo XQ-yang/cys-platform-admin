@@ -35,7 +35,7 @@
             <Input v-model="dataForm.url" type="text"  :maxlength="20"></Input>
           </Form-item>
           <Form-item label="排序" prop="sort">
-            <Input v-model="dataForm.orderIndex" type="sort"  :maxlength="6"></Input>
+            <Input v-model="dataForm.sort" type="number"  :maxlength="6"></Input>
           </Form-item>
           <Form-item label="授权标识" prop="permission">
              <Input v-model="dataForm.permission" type="text"  :maxlength="20"></Input>
