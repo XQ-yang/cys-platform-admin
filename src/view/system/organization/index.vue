@@ -95,7 +95,7 @@ export default {
         content: '此操作为永久删除，是否继续？',
         onOk: () => {
           deleteOrg(id).then(res => {
-            this.$Message.success('删除成功')
+            this.$Message.success(res.msg)
             this.getList()
           }).catch(error => {
             this.$Message.error(error.msg)

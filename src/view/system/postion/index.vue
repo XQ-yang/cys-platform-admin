@@ -84,6 +84,7 @@ export default {
       dataListLoading: false
     }
   },
+  // 组件注册
   components: {
     AddOrUpdate
   },
@@ -122,7 +123,6 @@ export default {
       })
     },
     addOrUpdateHandle(id) {
-      debugger
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
         this.$refs.addOrUpate.dataForm.id = id

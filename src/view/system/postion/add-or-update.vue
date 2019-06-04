@@ -40,7 +40,7 @@ export default {
   data() {
     return {
       modalTitle: '',
-      popVisible: false,
+      popVisible: false, // Poptip 显示隐藏
       typeVisible: false,
       treeSelected: '',
       visible: false,
@@ -82,10 +82,7 @@ export default {
         this.$refs['deptForm'].resetFields()
         this.getDeptList().then(() => {
           if (this.dataForm.id) {
-            this.typeVisible = true
             this.getInfo()
-          } else {
-            this.typeVisible = false
           }
         })
       })
@@ -131,12 +128,11 @@ export default {
           return this.changeLoading()
         }
         addOrUpdatePosition(this.dataForm).then(res => {
-          debugger
           this.changeLoading()
           this.visible = false
           // 触发刷新列表事件
           this.$emit('refreshDataList')
-          this.$Message.success('新增成功')
+          this.$Message.success(res.msg)
         }).catch(error => {
           this.changeLoading()
           this.visible = true
