@@ -132,7 +132,7 @@ export default {
           this.visible = false
           // 触发刷新列表事件
           this.$emit('refreshDataList')
-          this.$Message.success('新增成功')
+          this.$Message.success(res.msg)
         }).catch(error => {
           this.changeLoading()
           this.visible = true

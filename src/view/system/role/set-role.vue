@@ -4,10 +4,10 @@
             :title="title"
             v-model="drawerVisible"
             width="420"
-            :mask-closable="false"
+            :mask-closable="true"
             :styles="styles"
         >
-          <Tree :data="treeList" show-checkbox ref="roleTree" ></Tree>
+          <Tree :data="treeList" show-checkbox ref="roleTree"></Tree>
           <div class="demo-drawer-footer">
             <Button style="margin-right: 8px" @click="drawerVisible = false">取消</Button>
             <Button type="primary" @click="setRole">提交</Button>
