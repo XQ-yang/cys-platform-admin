@@ -35,7 +35,7 @@
         <el-table-column
           header-align="center"
           align="center"
-          prop="orderIndex"
+          prop="sort"
           label="排序">
         </el-table-column>
         <el-table-column

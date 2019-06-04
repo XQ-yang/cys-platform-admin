@@ -37,8 +37,8 @@
               </div>
             </Poptip>
           </Form-item>
-          <Form-item label="排序" prop="orderNum">
-            <Input v-model="dataForm.orderNum" type="number"  :maxlength="6"></Input>
+          <Form-item label="排序" prop="sort">
+            <Input v-model="dataForm.sort" type="number"  :maxlength="6"></Input>
           </Form-item>
         </Form>
       </Modal>
@@ -61,7 +61,7 @@ export default {
         id: '', // 住建
         parentId: '0', // 上级菜单id
         deptName: '', // 菜单/按钮名称
-        orderNum: '', // 排序
+        sort: '', // 排序
         parentName: '', // 父菜单名称
         orgId: '0',
         orgName: ''

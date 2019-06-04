@@ -34,8 +34,8 @@
           <Form-item v-show="dataForm.type===0" label="路由地址" prop="url">
             <Input v-model="dataForm.url" type="text"  :maxlength="20"></Input>
           </Form-item>
-          <Form-item label="排序" prop="orderIndex">
-            <Input v-model="dataForm.orderIndex" type="number"  :maxlength="6"></Input>
+          <Form-item label="排序" prop="sort">
+            <Input v-model="dataForm.orderIndex" type="sort"  :maxlength="6"></Input>
           </Form-item>
           <Form-item label="授权标识" prop="permission">
              <Input v-model="dataForm.permission" type="text"  :maxlength="20"></Input>
@@ -68,7 +68,7 @@ export default {
         permission: '', // 权限标识
         icon: '', // 图标
         type: 0, // 类型 0菜单 1按钮
-        orderIndex: null, // 排序
+        sort: null, // 排序
         createBy: '', // 创建人
         modifyBy: '', // 修改人
         modifyTime: null, // 修改时间
@@ -135,6 +135,7 @@ export default {
     },
     getMenuList() {
       return getTreeList('0').then(res => {
+        debugger
         this.selectData = res.data
       })
     },

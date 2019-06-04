@@ -16,7 +16,7 @@
           <el-table-column
             header-align="center"
             align="center"
-            prop="orderNum"
+            prop="sort"
             label="排序">
           </el-table-column>
           <el-table-column
