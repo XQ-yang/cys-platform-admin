@@ -16,7 +16,8 @@
     </div>
 </template>
 <script>
-import { fetchList as getMenuList, setRoles } from '@/api/menu'
+import { fetchList as getMenuList } from '@/api/menu'
+import { setRoles } from '@/api/role'
 export default {
   data() {
     return {
@@ -51,12 +52,13 @@ export default {
       })
     },
     setRole() {
-      debugger
       this.roleMeunTemp.menuIds = []
       const data = this.$refs.roleTree.getCheckedAndIndeterminateNodes()
       data.map(item => {
         this.roleMeunTemp.menuIds.push(item.id)
       })
+      debugger
+      console.log(this.roleMeunTemp)
       setRoles(this.roleMeunTemp).then(res => {
         debugger
         this.$emit('refreshDataList')
