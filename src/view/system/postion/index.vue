@@ -84,6 +84,7 @@ export default {
       dataListLoading: false
     }
   },
+  // 组件注册
   components: {
     AddOrUpdate
   },

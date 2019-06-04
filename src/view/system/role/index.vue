@@ -11,6 +11,7 @@
       <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
         <template slot-scope="{ row, index }" slot="action">
             <Button  type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(row.id)">编辑</Button>
+            <Button  type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(row.id)">分配权限</Button>
             <Poptip
                 confirm
                 transfer
@@ -119,9 +120,7 @@ export default {
       })
     },
     handleDelete(id) {
-      debugger
       deleteRole(id).then(res => {
-        debugger
         this.$Message.success(res.msg)
         this.getList()
       }).catch(error => {
