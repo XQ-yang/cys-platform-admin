@@ -57,10 +57,7 @@ export default {
       data.map(item => {
         this.roleMeunTemp.menuIds.push(item.id)
       })
-      debugger
-      console.log(this.roleMeunTemp)
       setRoles(this.roleMeunTemp).then(res => {
-        debugger
         this.$emit('refreshDataList')
         this.$Message.error(res.msg)
         this.drawerVisible = false
