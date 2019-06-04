@@ -11,7 +11,7 @@
       <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
         <template slot-scope="{ row, index }" slot="action">
             <Button  type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(row.id)">编辑</Button>
-            <Button  type="primary" size="small" style="margin: 5px" @click="setRole(row.id)">分配权限</Button>
+            <Button  type="primary" size="small" style="margin: 5px" @click="setRole(row)">分配权限</Button>
             <Poptip
                 confirm
                 transfer
@@ -123,9 +123,11 @@ export default {
         this.$refs.addOrUpate.init()
       })
     },
-    setRole(id) {
+    setRole(row) {
       this.setRoleVisible = true
       this.$nextTick(() => {
+        this.$refs.setRole.roleMeunTemp = row.id
+        this.$refs.setRole.roleName = row.roleName
         this.$refs.setRole.init()
       })
     },

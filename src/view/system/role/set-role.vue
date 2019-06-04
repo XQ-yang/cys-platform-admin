@@ -1,21 +1,22 @@
 <template>
     <div>
         <Drawer
-            title="角色分配权限"
+            :title="title"
             v-model="drawerVisible"
             width="420"
             :mask-closable="false"
             :styles="styles"
         >
-          <Tree :data="treeList" ></Tree>
-            <div class="demo-drawer-footer">
-                <Button style="margin-right: 8px" @click="drawerVisible = false">取消</Button>
-                <Button type="primary" @click="drawerVisible = false">提交</Button>
-            </div>
+          <Tree :data="treeList" show-checkbox ref="roleTree" ></Tree>
+          <div class="demo-drawer-footer">
+            <Button style="margin-right: 8px" @click="drawerVisible = false">取消</Button>
+            <Button type="primary" @click="drawerVisible = false">提交</Button>
+          </div>
         </Drawer>
     </div>
 </template>
 <script>
+import { fetchList as getMenuList } from '@/api/menu'
 export default {
   data() {
     return {
@@ -27,17 +28,32 @@ export default {
         paddingBottom: '53px',
         position: 'static'
       },
-      treeList: []
+      treeList: [],
+      roleId: '', // 角色id
+      roleName: '', // 角色名称
+      roleMeunTemp: {
+        roleId: '',
+        menuIds: []
+      }
     }
   },
   methods: {
     init() {
       this.drawerVisible = true
+      this.$nextTick(() => {
+        this.title = `角色权限设置:${this.roleName}`
+        this.getTreeList()
+      })
+    },
+    getTreeList() {
+      getMenuList().then(res => {
+        this.treeList = res.data
+      })
     }
   }
 }
 </script>
-<style>
+<style scoped>
     .demo-drawer-footer{
         width: 100%;
         position: absolute;
