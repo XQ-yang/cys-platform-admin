@@ -15,7 +15,7 @@
                 confirm
                 transfer
                 title="您确定要删除吗?"
-                @on-ok="deletePostion(row.id)"
+                @on-ok="handleDelete(row.id)"
                 >
                <Button type="error" size="small">删除</Button>
             </Poptip>
@@ -119,7 +119,9 @@ export default {
       })
     },
     handleDelete(id) {
+      debugger
       deleteRole(id).then(res => {
+        debugger
         this.$Message.success(res.msg)
         this.getList()
       }).catch(error => {
