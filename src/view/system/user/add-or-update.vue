@@ -141,7 +141,6 @@ export default {
       popDeptVisible: false,
       popPositionVisible: false,
       popRoleVisible: false,
-      treeSelected: '',
       visible: false,
       loading: true,
       dataForm: {
@@ -214,15 +213,6 @@ export default {
           }
         ],
         email: [{ type: 'email', message: '邮箱格式错误', trigger: 'blur' }],
-        password: [
-          { required: true, message: '必填项，不能为空', trigger: 'blur' },
-          {
-            type: 'string',
-            min: 6,
-            message: '长度必须大于等于6',
-            trigger: 'blur'
-          }
-        ],
         status: [
           {
             type: 'number',
@@ -245,6 +235,7 @@ export default {
         return '编辑'
       }
     },
+
     // 用于下拉框的数据源
     orgData() {
       return this.expandOrgTree(this.orgList)
@@ -277,6 +268,7 @@ export default {
         })
       })
     },
+
     // 重置下拉选框的选中项
     resetDept() {
       this.dataForm.deptId = ''
@@ -349,6 +341,7 @@ export default {
       this.dataForm.roleName = names.join(',')
       this.popRoleVisible = false
     },
+
     // list数据转成tree形的数据结构
     expandOrgTree(treeData) {
       return treeData.map(item => {
