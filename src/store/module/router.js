@@ -27,6 +27,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       try {
         let routerList = []
+        debugger
         routerList = getAccesRouterList(routerMap, rules)
         commit('CONCAT_ROUTES', routerList)
         commit('setHasGetRules', true)

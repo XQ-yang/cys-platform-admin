@@ -8,7 +8,8 @@ export default {
     userId: '',
     token: getToken(),
     hasGetInfo: false,
-    btnRules: [],
+    btnRules: [], // 按钮权限
+    routerRules: [], // 路由菜单权限
     roleIds: []
   },
   mutations: {
@@ -28,11 +29,14 @@ export default {
     setHasGetInfo(state, status) {
       state.hasGetInfo = status
     },
-    setRules(state, rules) {
+    setBtnRules(state, rules) {
       state.btnRules = rules
     },
     setRoleIds(state, roleIds) {
       state.roleIds = roleIds
+    },
+    setRouterRules(state, routesName) {
+      state.routerRules = routesName
     }
   },
   actions: {
@@ -75,6 +79,19 @@ export default {
             commit('setUserName', data.username)
             commit('setRealName', data.realName)
             commit('setHasGetInfo', true)
+            // if (res.data.ownerMenuList) {
+
+            // }
+            // 只筛选菜单选项,并只返回permission 字段
+            const dataRoutesNames = res.data.ownerMenuList.filter(item => item.type === 0).map(item => {
+              return item.permission
+            })
+            // 筛选按钮权限字段
+            const dataBtnRules = res.data.ownerMenuList.filter(item => item.type === 1).map(item => {
+              return item.permission
+            })
+            commit('setRouterRules', dataRoutesNames)
+            commit('setBtnRules', dataBtnRules)
             resolve(data)
           }).catch(err => {
             reject(err)
@@ -90,7 +107,7 @@ export default {
           const data = res.data.map(item => {
             return item.code
           })
-          commit('setRules', data)
+          commit('setBtnRules', data)
           resolve(data)
         }).catch(error => {
           reject(error)

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import { routes } from './routers'
+import { routes, page404 } from './routers'
 import store from '@/store'
 import iView from 'iview'
 import { setToken, getToken } from '@/libs/util'
@@ -17,16 +17,14 @@ const LOGIN_PAGE_NAME = 'login'
 router.beforeEach((to, from, next) => {
   iView.LoadingBar.start()
   const token = getToken()
-  // if (token) {
-  //   if (!store.state.router.hasGetRules) {
-  //     store.dispatch('authorization').then(rules => {
-  //       store.dispatch('concatRouters', rules).then(routers => {
-  //         router.addRoutes(routers.concat(page404))
-  //         next({ ...to, replace: true })
-  //       })
-  //     })
-  //   }
-  // }
+  if (token) {
+    if (!store.state.router.hasGetRules) {
+      store.dispatch('concatRouters', store.state.user.routerRules).then(routers => {
+        router.addRoutes(routers.concat(page404))
+        next({ ...to, replace: true })
+      })
+    }
+  }
   if (!token && to.name !== LOGIN_PAGE_NAME) {
     // 未登录且要跳转的页面不是登录页
     next({

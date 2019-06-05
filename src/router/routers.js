@@ -17,6 +17,72 @@ import Main from '@/components/main'
  */
 // 需要权限控制动态加载的路由
 export const routerMap = [
+  {
+    path: '/system',
+    name: 'system',
+    meta: {
+      icon: 'md-settings',
+      title: '系统设置',
+      showAlways: true
+    },
+    component: Main,
+    children: [
+      {
+        path: 'user',
+        name: 'user',
+        meta: {
+          icon: 'md-contacts',
+          title: '用户管理'
+        },
+        component: () => import('@/view/system/user')
+      },
+      {
+        path: 'role',
+        name: 'role',
+        meta: {
+          icon: 'ios-lock-outline',
+          title: '角色管理'
+        },
+        component: () => import('@/view/system/role')
+      },
+      {
+        path: 'postion',
+        name: 'postion',
+        meta: {
+          icon: 'md-locate',
+          title: '岗位管理'
+        },
+        component: () => import('@/view/system/postion')
+      },
+      {
+        path: 'org',
+        name: 'org',
+        meta: {
+          icon: 'md-git-network',
+          title: '机构管理'
+        },
+        component: () => import('@/view/system/organization')
+      },
+      {
+        path: 'dept',
+        name: 'dept',
+        meta: {
+          icon: 'md-albums',
+          title: '部门管理'
+        },
+        component: () => import('@/view/system/dept')
+      },
+      {
+        path: 'menu',
+        name: 'menu',
+        meta: {
+          icon: 'ios-menu',
+          title: '系统菜单'
+        },
+        component: () => import('@/view/system/menu/index.vue')
+      }
+    ]
+  }
 ]
 // 默认加载的 登陆页、首页等路由
 export const routes = [
@@ -94,96 +160,6 @@ export const routes = [
         component: () => import('@/view/single-page/message')
       }
     ]
-  },
-  {
-    path: '/system',
-    name: 'system',
-    meta: {
-      icon: 'md-settings',
-      title: '系统设置',
-      showAlways: true
-    },
-    component: Main,
-    children: [
-      {
-        path: 'user',
-        name: 'user',
-        meta: {
-          icon: 'md-contacts',
-          title: '用户管理'
-        },
-        component: () => import('@/view/system/user')
-      },
-      {
-        path: 'role',
-        name: 'role',
-        meta: {
-          icon: 'ios-lock-outline',
-          title: '角色管理'
-        },
-        component: () => import('@/view/system/role')
-      },
-      {
-        path: 'postion',
-        name: 'postion',
-        meta: {
-          icon: 'md-locate',
-          title: '岗位管理'
-        },
-        component: () => import('@/view/system/postion')
-      },
-      {
-        path: 'organization',
-        name: 'organization',
-        meta: {
-          icon: 'md-git-network',
-          title: '机构管理'
-        },
-        component: () => import('@/view/system/organization')
-      },
-      {
-        path: 'dept',
-        name: 'dept',
-        meta: {
-          icon: 'md-albums',
-          title: '部门管理'
-        },
-        component: () => import('@/view/system/dept')
-      },
-      {
-        path: 'module',
-        name: 'module',
-        meta: {
-          icon: 'ios-menu',
-          title: '系统菜单'
-        },
-        component: () => import('@/view/system/menu/index.vue')
-      }
-    ]
-  },
-  {
-    path: '/401',
-    name: 'error_401',
-    meta: {
-      hideInMenu: true
-    },
-    component: () => import('@/view/error-page/401.vue')
-  },
-  {
-    path: '/500',
-    name: 'error_500',
-    meta: {
-      hideInMenu: true
-    },
-    component: () => import('@/view/error-page/500.vue')
-  },
-  {
-    path: '*',
-    name: 'error_404',
-    meta: {
-      hideInMenu: true
-    },
-    component: () => import('@/view/error-page/404.vue')
   }
 ]
 // 错误处理页面
