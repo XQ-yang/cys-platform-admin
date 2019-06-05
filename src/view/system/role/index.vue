@@ -11,7 +11,7 @@
       <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
         <template slot-scope="{ row, index }" slot="action">
             <Button  type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(row.id)">编辑</Button>
-            <Button  type="primary" size="small" style="margin: 5px" @click="setRole(row)">分配权限</Button>
+            <!-- <Button  type="primary" size="small" style="margin: 5px" @click="setRole(row)">分配权限</Button> -->
             <Poptip
                 confirm
                 transfer
@@ -26,8 +26,8 @@
                 <Icon type="ios-arrow-down"></Icon>
               </Button>
               <DropdownMenu slot="list">
-                <DropdownItem name="setRole" @click="addOrUpdateHandle(row.id)">权限</DropdownItem>
-                <DropdownItem name="deleteRole">删除</DropdownItem>
+                <DropdownItem name="setRole">权限</DropdownItem>
+                <!-- <DropdownItem name="deleteRole">删除</DropdownItem> -->
               </DropdownMenu>
             </Dropdown>
         </template>
@@ -157,8 +157,10 @@ export default {
     },
     dropDownClick(e, row) {
       console.log(row)
+      console.log(e)
       switch (e) {
         case 'setRole':
+          this.setRole(row)
           break
         case 'deleteRole':
           break
