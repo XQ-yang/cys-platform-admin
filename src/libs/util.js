@@ -380,3 +380,20 @@ export const expandTree = (treeData) => {
   })
 }
 
+export const expandMenuList = (treeData, roleMenuData) => {
+  return treeData.map(item => {
+    // item.expand = true
+    roleMenuData.forEach((val) => {
+      debugger
+      if (item.id === val.menuId && item.children && item.children.length) {
+        // item.checked = false
+        expandMenuList(item.children, roleMenuData)
+      }
+      if (item.id === val.menuId && item.children.length === 0) {
+        item.checked = true
+      }
+    })
+    return item
+  })
+}
+

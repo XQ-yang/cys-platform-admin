@@ -47,3 +47,10 @@ export const setRoles = (roleMenus) => {
     data: roleMenus
   })
 }
+export const getRoleMenuById = (id) => {
+  return axios.request({
+    url: '/role/getRoleMenuByRoleId',
+    method: 'get',
+    params: { roleId: id }
+  })
+}

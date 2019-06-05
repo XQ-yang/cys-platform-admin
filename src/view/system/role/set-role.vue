@@ -17,7 +17,8 @@
 </template>
 <script>
 import { fetchList as getMenuList } from '@/api/menu'
-import { setRoles } from '@/api/role'
+import { setRoles, getRoleMenuById } from '@/api/role'
+import { expandMenuList } from '@/libs/util'
 export default {
   data() {
     return {
@@ -32,10 +33,11 @@ export default {
       treeList: [],
       roleId: '', // 角色id
       roleName: '', // 角色名称
-      roleMeunTemp: {
+      roleMenuTemp: {
         roleId: '',
         menuIds: []
-      }
+      },
+      roleMenuList: []
     }
   },
   methods: {
@@ -43,21 +45,31 @@ export default {
       this.drawerVisible = true
       this.$nextTick(() => {
         this.title = `角色权限设置:${this.roleName}`
-        this.getTreeList()
+        this.getTreeList().then(() => {
+          this.getRoleMenuById(this.roleMenuTemp.roleId)
+        })
       })
     },
     getTreeList() {
-      getMenuList().then(res => {
+      return getMenuList().then(res => {
         this.treeList = res.data
       })
     },
-    setRole() {
-      this.roleMeunTemp.menuIds = []
-      const data = this.$refs.roleTree.getCheckedAndIndeterminateNodes()
-      data.map(item => {
-        this.roleMeunTemp.menuIds.push(item.id)
+    getRoleMenuById(id) {
+      getRoleMenuById(id).then(res => {
+        this.roleMenuList = res.data
+        let testData = expandMenuList(this.treeList, this.roleMenuList)
+        this.treeList = testData
       })
-      setRoles(this.roleMeunTemp).then(res => {
+    },
+    setRole() {
+      this.roleMenuTemp.menuIds = []
+      const data = this.$refs.roleTree.getCheckedAndIndeterminateNodes()
+      debugger
+      data.map(item => {
+        this.roleMenuTemp.menuIds.push(item.id)
+      })
+      setRoles(this.roleeMenuTemp).then(res => {
         this.$emit('refreshDataList')
         this.$Message.success(res.msg)
         this.drawerVisible = false

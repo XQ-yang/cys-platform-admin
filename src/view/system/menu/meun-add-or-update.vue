@@ -85,6 +85,9 @@ export default {
         title: [
           { required: true, message: '必填项，不能为空', trigger: 'blur' }
         ],
+        permission: [
+          { required: true, message: '必填项，不能为空', trigger: 'blur' }
+        ],
         parentName: [
           { required: true, message: '必填项，不能为空', trigger: 'change' }
         ]
@@ -135,7 +138,6 @@ export default {
     },
     getMenuList() {
       return getTreeList('0').then(res => {
-        debugger
         this.selectData = res.data
       })
     },
