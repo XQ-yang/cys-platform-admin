@@ -6,7 +6,7 @@
         <Input
           @on-change="handleClear"
           clearable
-          placeholder="账号"
+          placeholder="用户名"
           class="search-input"
           v-model="listQuery.username"
         />

@@ -19,7 +19,12 @@
         <Row>
           <Col span="12">
             <Form-item label="用户名" prop="username">
-              <Input type="text" v-model="dataForm.username" :maxlength="10"></Input>
+              <Input
+                type="text"
+                v-model="dataForm.username"
+                :maxlength="10"
+                :readonly="dataForm.id!=''&&dataForm.is!=undefined"
+              ></Input>
             </Form-item>
           </Col>
           <Col span="12">
@@ -390,13 +395,14 @@ export default {
         if (!valid) {
           return this.changeLoading()
         }
+        this.dataForm.birthday = new Date(this.dataForm.birthday)
         addOrUpdateUser(this.dataForm)
           .then(res => {
             this.changeLoading()
             this.visible = false
             // 触发刷新列表事件
             this.$emit('refreshDataList')
-            this.$Message.success('新增成功')
+            this.$Message.success(res.msg)
           })
           .catch(error => {
             this.changeLoading()

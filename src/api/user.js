@@ -88,6 +88,13 @@ export const editPassword = (editPasswordForm) => {
     data: editPasswordForm
   })
 }
+export const resetPassword = (params) => {
+  return axios.request({
+    url: '/user/resetPassword',
+    method: 'post',
+    data: params
+  })
+}
 
 // 获取角色为“质检”的用户
 export const getQualityUserList = () => {
