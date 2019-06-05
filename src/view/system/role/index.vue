@@ -20,6 +20,16 @@
                 >
                <Button type="error" size="small">删除</Button>
             </Poptip>
+            <Dropdown @on-click="dropDownClick($event,row)" transfer>
+              <Button type="primary" size="small" style="margin: 10px">
+                更多
+                <Icon type="ios-arrow-down"></Icon>
+              </Button>
+              <DropdownMenu slot="list">
+                <DropdownItem name="setRole" @click="addOrUpdateHandle(row.id)">权限</DropdownItem>
+                <DropdownItem name="deleteRole">删除</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
         </template>
       </Table>
       <div style="margin: 10px;overflow: hidden">
@@ -144,8 +154,22 @@ export default {
       if (e.target.value === '') {
         this.getList()
       }
+    },
+    dropDownClick(e, row) {
+      console.log(row)
+      switch (e) {
+        case 'setRole':
+          break
+        case 'deleteRole':
+          break
+      }
     }
 
   }
 }
 </script>
+<style>
+.ivu-dropdown-item{
+  z-index: 8888
+}
+</style>
