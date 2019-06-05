@@ -4,7 +4,7 @@
       v-model="visible"
       :title="returnModalTitle"
       :loading="loading"
-      @on-ok="dataFormSubmitHandle()"
+      @on-ok="onSubmit()"
       class-name="vertical-center-modal"
       :mask-closable="false"
       width="960"
@@ -40,9 +40,9 @@
             </Form-item>
           </Col>
           <Col span="12">
-            <Form-item label="部门" prop="departmentName ">
+            <Form-item label="部门" prop="deptName ">
               <Poptip trigger="click" v-model="popDeptVisible" placement="bottom-start">
-                <Input type="text" v-model="dataForm.departmentName" :readonly="true" :maxlength="20"></Input>
+                <Input type="text" v-model="dataForm.deptName" :readonly="true" :maxlength="20"></Input>
                 <div slot="content">
                   <Tree :data="deptData" :multiple="false" @on-select-change="selectDept"></Tree>
                 </div>
@@ -141,7 +141,6 @@ export default {
       popDeptVisible: false,
       popPositionVisible: false,
       popRoleVisible: false,
-      treeSelected: '',
       visible: false,
       loading: true,
       dataForm: {
@@ -158,7 +157,7 @@ export default {
         orgId: '',
         orgName: '',
         deptId: '',
-        departmentName: '',
+        deptName: '',
         roleId: '',
         roleName: '',
         positionId: '',
@@ -170,7 +169,7 @@ export default {
       // 组织
       orgList: [],
       // 部门
-      departmentList: [],
+      deptList: [],
       // 岗位
       positionList: [],
       // 角色
@@ -192,7 +191,7 @@ export default {
         orgName: [
           { required: true, message: '必填项，不能为空', trigger: 'change' }
         ],
-        departmentName: [
+        deptName: [
           { required: true, message: '必填项，不能为空', trigger: 'change' }
         ],
         positionName: [
@@ -214,15 +213,6 @@ export default {
           }
         ],
         email: [{ type: 'email', message: '邮箱格式错误', trigger: 'blur' }],
-        password: [
-          { required: true, message: '必填项，不能为空', trigger: 'blur' },
-          {
-            type: 'string',
-            min: 6,
-            message: '长度必须大于等于6',
-            trigger: 'blur'
-          }
-        ],
         status: [
           {
             type: 'number',
@@ -245,12 +235,13 @@ export default {
         return '编辑'
       }
     },
+
     // 用于下拉框的数据源
     orgData() {
       return this.expandOrgTree(this.orgList)
     },
     deptData() {
-      return this.expandDeptTree(this.departmentList)
+      return this.expandDeptTree(this.deptList)
     },
     positionData() {
       return this.expandPositionTree(this.positionList)
@@ -277,9 +268,11 @@ export default {
         })
       })
     },
+
+    // 重置下拉选框的选中项
     resetDept() {
       this.dataForm.deptId = ''
-      this.dataForm.departmentName = ''
+      this.dataForm.deptName = ''
       this.resetPosition()
     },
     resetPosition() {
@@ -292,7 +285,7 @@ export default {
       this.dataForm.roleName = ''
     },
 
-    // select选择项改变触发事件
+    // 响应下拉框change事件
     selectOrg(selectArray, item) {
       this.dataForm.orgId = item.id
       this.dataForm.orgName = item.title
@@ -301,7 +294,7 @@ export default {
 
       getDeptList(item.id)
         .then(res => {
-          this.departmentList = res.data
+          this.deptList = res.data
         })
         .catch(error => {
           this.$Message.error(error.msg)
@@ -309,7 +302,7 @@ export default {
     },
     selectDept(selectArray, item) {
       this.dataForm.deptId = item.id
-      this.dataForm.departmentName = item.title
+      this.dataForm.deptName = item.title
       this.popDeptVisible = false
       this.resetPosition()
 
@@ -335,8 +328,9 @@ export default {
           this.$Message.error(error.msg)
         })
     },
-    // 角色可以多选
+
     selectRole(selectArray, item) {
+      // 角色可以多选，逗号分隔处理
       var ids = []
       var names = []
       selectArray.forEach(function(item) {
@@ -347,6 +341,8 @@ export default {
       this.dataForm.roleName = names.join(',')
       this.popRoleVisible = false
     },
+
+    // list数据转成tree形的数据结构
     expandOrgTree(treeData) {
       return treeData.map(item => {
         item.title = item.orgName
@@ -389,7 +385,7 @@ export default {
         this.loading = true
       })
     },
-    dataFormSubmitHandle() {
+    onSubmit() {
       this.$refs['userForm'].validate(valid => {
         if (!valid) {
           return this.changeLoading()
