@@ -93,8 +93,9 @@ export default {
         },
         { title: '手机', key: 'mobile', tooltip: true },
         { title: '组织', key: 'orgName', tooltip: true },
-        { title: '部门', key: 'departmentName', tooltip: true },
-        { title: '岗位', key: 'postionName', tooltip: true },
+        { title: '部门', key: 'deptName', tooltip: true },
+        { title: '岗位', key: 'positionName', tooltip: true },
+        { title: '角色', key: 'roleName', tooltip: true },
         {
           title: '创建时间',
           key: 'createTime',

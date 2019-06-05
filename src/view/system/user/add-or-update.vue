@@ -260,6 +260,9 @@ export default {
       this.visible = true
       this.$nextTick(() => {
         this.$refs['userForm'].resetFields()
+        getRoleList().then(res => {
+          this.roleList = res.data.records
+        })
         getOrgList().then(res => {
           this.orgList = res.data
           if (this.dataForm.id !== '' && this.dataForm.id !== undefined) {
@@ -283,11 +286,6 @@ export default {
     resetPosition() {
       this.dataForm.positionId = ''
       this.dataForm.positionName = ''
-      this.resetRole()
-    },
-    resetRole() {
-      this.dataForm.roleId = ''
-      this.dataForm.roleName = ''
     },
 
     // 响应下拉框change事件
@@ -323,15 +321,6 @@ export default {
       this.dataForm.positionId = item.id
       this.dataForm.positionName = item.title
       this.popPositionVisible = false
-      this.resetRole()
-
-      getRoleList(item.id)
-        .then(res => {
-          this.roleList = res.data.records
-        })
-        .catch(error => {
-          this.$Message.error(error.msg)
-        })
     },
 
     selectRole(selectArray, item) {
