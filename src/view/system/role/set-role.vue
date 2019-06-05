@@ -59,16 +59,27 @@ export default {
       getRoleMenuById(id).then(res => {
         this.roleMenuList = res.data
         let testData = expandMenuList(this.treeList, this.roleMenuList)
-        this.treeList = testData
+        this.treeList = testData.map(item => {
+          if (item.children && item.children.length) {
+            this.$set(item, 'expand', true)
+            item.children.map(child => {
+              if (child.children && child.children.length) {
+                this.$set(child, 'expand', true)
+                return child
+              }
+            })
+          }
+          return item
+        })
       })
     },
     setRole() {
       this.roleMenuTemp.menuIds = []
       const data = this.$refs.roleTree.getCheckedAndIndeterminateNodes()
-      debugger
       data.map(item => {
         this.roleMenuTemp.menuIds.push(item.id)
       })
+      console.log(this.roleMenuTemp)
       setRoles(this.roleeMenuTemp).then(res => {
         this.$emit('refreshDataList')
         this.$Message.success(res.msg)

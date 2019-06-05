@@ -368,7 +368,6 @@ export const localRead = (key) => {
 export const expandTree = (treeData) => {
   return treeData.map(item => {
     item.expand = true
-    item.title = item.name
     // 判断是否有子项
     if (item.children && item.children.length) {
       if (!item.children.checked) {
@@ -382,11 +381,8 @@ export const expandTree = (treeData) => {
 
 export const expandMenuList = (treeData, roleMenuData) => {
   return treeData.map(item => {
-    // item.expand = true
     roleMenuData.forEach((val) => {
-      debugger
       if (item.id === val.menuId && item.children && item.children.length) {
-        // item.checked = false
         expandMenuList(item.children, roleMenuData)
       }
       if (item.id === val.menuId && item.children.length === 0) {

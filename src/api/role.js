@@ -44,9 +44,10 @@ export const setRoles = (roleMenus) => {
   return axios.request({
     url: '/role/saveRoleMenu',
     method: 'post',
-    data: roleMenus
+    data: { roleMenuQuery: roleMenus }
   })
 }
+
 export const getRoleMenuById = (id) => {
   return axios.request({
     url: '/role/getRoleMenuByRoleId',
