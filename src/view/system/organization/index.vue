@@ -38,8 +38,8 @@
           header-align="center"
           align="center">
           <template slot-scope="scope">
-            <el-button  size="mini" @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
-            <el-button  size="mini" @click="deleteHandle(scope.row.id)" >删除</el-button>
+            <Button  type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(scope.row.id)">编辑</Button>
+            <Button  type="error" size="small" @click="deleteHandle(scope.row.id)" >删除</Button>
           </template>
         </el-table-column>
       </el-table>
