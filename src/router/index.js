@@ -17,11 +17,14 @@ const LOGIN_PAGE_NAME = 'login'
 router.beforeEach((to, from, next) => {
   iView.LoadingBar.start()
   const token = getToken()
+  debugger
   if (token) {
     if (!store.state.router.hasGetRules) {
-      store.dispatch('concatRouters', store.state.user.routerRules).then(routers => {
-        router.addRoutes(routers.concat(page404))
-        next({ ...to, replace: true })
+      store.dispatch('authorization').then(rules => {
+        store.dispatch('concatRouters', rules).then(routers => {
+          router.addRoutes(routers.concat(page404))
+          next({ ...to, replace: true })
+        })
       })
     }
   }

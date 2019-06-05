@@ -46,8 +46,8 @@ export const routerMap = [
         component: () => import('@/view/system/role')
       },
       {
-        path: 'postion',
-        name: 'postion',
+        path: 'position',
+        name: 'position',
         meta: {
           icon: 'md-locate',
           title: '岗位管理'

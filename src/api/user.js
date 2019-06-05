@@ -69,7 +69,7 @@ export const getUserList = () => {
 // 获取登陆用户所拥有的权限
 export const authorization = () => {
   return axios.request({
-    url: '/perm/curUserPerm',
+    url: '/user/current',
     method: 'get'
   })
 }
