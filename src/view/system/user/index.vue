@@ -92,7 +92,7 @@ export default {
           }
         },
         { title: '手机', key: 'mobile', tooltip: true },
-        { title: '公司', key: 'companyName', tooltip: true },
+        { title: '组织', key: 'orgName', tooltip: true },
         { title: '部门', key: 'departmentName', tooltip: true },
         { title: '岗位', key: 'postionName', tooltip: true },
         {
@@ -164,7 +164,6 @@ export default {
       this.tableLoading = true
       fetchList(this.listQuery)
         .then(res => {
-          console.log(res.data)
           this.list = res.data.records
           this.total = res.data.total
           this.tableLoading = false
