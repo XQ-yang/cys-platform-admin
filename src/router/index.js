@@ -17,7 +17,6 @@ const LOGIN_PAGE_NAME = 'login'
 router.beforeEach((to, from, next) => {
   iView.LoadingBar.start()
   const token = getToken()
-  debugger
   if (token) {
     if (!store.state.router.hasGetRules) {
       store.dispatch('authorization').then(rules => {
