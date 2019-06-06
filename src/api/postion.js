@@ -7,7 +7,13 @@ export const fetchList = (query) => {
     params: query
   })
 }
-
+export const getList = (query) => {
+  return axios.request({
+    url: '/position/getPositionListByDeptId',
+    method: 'get',
+    params: query
+  })
+}
 export const addOrUpdatePosition = (positionTemp) => {
   return axios.request({
     url: '/position/',

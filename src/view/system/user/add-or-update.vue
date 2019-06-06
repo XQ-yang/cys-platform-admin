@@ -135,7 +135,7 @@
 import { fetchList as getOrgList } from '@/api/organization'
 import { fetchList as getDeptList } from '@/api/dept'
 import { fetchList as getRoleList } from '@/api/role'
-import { fetchList as getPositionList } from '@/api/postion'
+import { getList as getPositionList } from '@/api/postion'
 import { addOrUpdateUser, getUser } from '@/api/user'
 
 export default {
@@ -309,9 +309,9 @@ export default {
       this.popDeptVisible = false
       this.resetPosition()
 
-      getPositionList(item.id)
+      getPositionList({ deptId: item.id })
         .then(res => {
-          this.positionList = res.data.records
+          this.positionList = res.data
         })
         .catch(error => {
           this.$Message.error(error.msg)
