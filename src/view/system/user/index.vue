@@ -32,6 +32,9 @@
           <Poptip confirm transfer title="您确定要删除吗?" @on-ok="handleDelete(row.id)">
             <Button type="error" size="small">删除</Button>
           </Poptip>
+          <Poptip confirm transfer title="您确定要重置该用户的密码吗?" @on-ok="onResetPwd(row.id)" v-if="row.username!='admin'">
+            <Button type="error" size="small">重置密码</Button>
+          </Poptip>
         </template>
       </Table>
       <div style="margin: 10px;overflow: hidden">
@@ -54,7 +57,7 @@
 </template>
 <script>
 import '@/assets/css/common.less'
-import { fetchList, deleteUser } from '@/api/user'
+import { fetchList, deleteUser, resetPassword } from '@/api/user'
 import AddOrUpdate from './add-or-update'
 export default {
   name: 'user',
@@ -193,6 +196,16 @@ export default {
     },
     handleDelete(id) {
       deleteUser(id)
+        .then(res => {
+          this.$Message.success(res.msg)
+          this.getList()
+        })
+        .catch(error => {
+          this.$Message.error(error.msg)
+        })
+    },
+    onResetPwd(id) {
+      resetPassword({ userId: id })
         .then(res => {
           this.$Message.success(res.msg)
           this.getList()
