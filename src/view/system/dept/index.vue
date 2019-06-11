@@ -38,6 +38,7 @@
 <script>
 import AddOrUpdate from './dept-add-or-update'
 import { fetchList, deleteDept } from '@/api/dept'
+import '@/assets/css/common.less'
 export default {
   name: 'dept',
   data() {

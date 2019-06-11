@@ -9,10 +9,10 @@
       :mask-closable="false"
       width="960"
       >
-        <Form ref="deptForm" :model="dataForm" :rules="rules" :label-width="100">
+        <Form ref="deptForm" :model="dataForm" :rules="rules" :label-width="100" class="editForm">
           <Form-item label="部门" prop="deptName">
             <Poptip trigger='click' v-model="popVisible" placement="bottom-start" >
-              <Input type="text" v-model="dataForm.deptName" :readonly='true' :maxlength="20"></Input>
+              <Input type="text" v-model="dataForm.deptName" :readonly='true' style="width:100%" :maxlength="20"></Input>
               <div slot="content">
                 <Tree
                 :data='selectData'
@@ -146,13 +146,5 @@ export default {
 
 </script>
 <style>
-.ivu-poptip{
-  display:inline-block;
-  width:100%
-}
-.ivu-poptip-rel{
-  display:inline-block;
-  position:relative;
-  width:100%;
-}
+
 </style>

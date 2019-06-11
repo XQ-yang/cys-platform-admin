@@ -8,6 +8,7 @@
       class-name="vertical-center-modal"
       :mask-closable="false"
       width="960"
+      class="editForm"
       >
         <Form ref="orgForm" :model="dataForm" :rules="rules" :label-width="100">
           <Form-item label="机构名称" prop="orgName">
@@ -168,14 +169,5 @@ export default {
 
 </script>
 <style>
-.ivu-poptip{
-  display:inline-block;
-  width:100%
-}
-.ivu-poptip-rel{
-  display:inline-block;
-  position:relative;
-  width:100%;
-}
 </style>
 

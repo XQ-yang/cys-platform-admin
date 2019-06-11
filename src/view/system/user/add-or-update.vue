@@ -15,6 +15,7 @@
         :rules="rules"
         :label-width="90"
         style="padding-right:20px;"
+        class="editForm"
       >
         <Row>
           <Col span="12">
@@ -405,13 +406,5 @@ export default {
 }
 </script>
 <style>
-  .ivu-poptip{
-    display:inline-block;
-    width:100%
-  }
-  .ivu-poptip-rel{
-    display:inline-block;
-    position:relative;
-    width:100%;
-  }
+
 </style>

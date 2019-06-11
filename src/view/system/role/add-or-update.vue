@@ -8,6 +8,7 @@
       class-name="vertical-center-modal"
       :mask-closable="false"
       width="460"
+      class="editForm"
       >
         <Form ref="roleForm" :model="dataForm" :rules="rules" :label-width="100">
           <Form-item label="角色名称" prop="roleName">
@@ -96,14 +97,5 @@ export default {
 
 </script>
 <style>
-.ivu-poptip{
-  display:inline-block;
-  width:100%
-}
-.ivu-poptip-rel{
-  display:inline-block;
-  position:relative;
-  width:100%;
-}
 </style>
 
