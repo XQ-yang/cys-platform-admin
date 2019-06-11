@@ -92,7 +92,10 @@ export const resetPassword = (id) => {
   return axios.request({
     url: '/user/resetPassword',
     method: 'post',
-    data: { userId: id }
+    headers: {
+      'Content-type': 'application/json;charset=UTF-8'
+    },
+    data: id
   })
 }
 

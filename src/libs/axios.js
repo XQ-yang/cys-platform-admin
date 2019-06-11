@@ -11,8 +11,7 @@ class HttpRequest {
     const config = {
       baseURL: this.baseUrl,
       headers: {
-        'X-URL-PATH': location.pathname,
-        'Content-type': 'application/json;charset=UTF-8'
+        'X-URL-PATH': location.pathname
       }
     }
     return config
@@ -38,9 +37,7 @@ class HttpRequest {
       if (!Object.keys(this.queue).length) {
         // Spin.show()
       }
-      if (request.method.toUpperCase() === 'POST') {
-        request.headers['Content-type'] = 'application/json;charset=UTF-8'
-      }
+
       this.queue[url] = true
       return request
     }, error => {
