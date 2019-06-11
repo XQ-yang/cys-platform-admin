@@ -11,14 +11,7 @@
       <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
         <template slot-scope="{ row, index }" slot="action">
             <Button  type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(row.id)">编辑</Button>
-            <Poptip
-                confirm
-                transfer
-                title="您确定要删除吗?"
-                @on-ok="deletePostion(row.id)"
-                >
-               <Button type="error" size="small">删除</Button>
-            </Poptip>
+            <Button type="error" size="small" @click="deletePostion(row.id)">删除</Button>
         </template>
       </Table>
       <div style="margin: 10px;overflow: hidden">
@@ -129,11 +122,17 @@ export default {
       })
     },
     deletePostion(id) {
-      removePosition(id).then(res => {
-        this.$Message.success(res.msg)
-        this.getList()
-      }).catch(error => {
-        this.$Message.error(error.msg)
+      this.$Modal.confirm({
+        title: '提示',
+        content: '确认要删除该数据吗？',
+        onOk: () => {
+          removePosition(id).then(res => {
+            this.$Message.success(res.msg)
+            this.getList()
+          }).catch(error => {
+            this.$Message.error(error.msg)
+          })
+        }
       })
     },
     // 清空查询值的时候 重新加载列表数据

@@ -77,7 +77,7 @@ export default {
     deleteHandle(id) {
       this.$Modal.confirm({
         title: '提示',
-        content: '此操作为永久删除，是否继续？',
+        content: '确认要删除该数据吗？',
         onOk: () => {
           deleteDept(id).then(res => {
             this.$Message.success(res.msg)
