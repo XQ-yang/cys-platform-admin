@@ -39,7 +39,6 @@
   </div>
 </template>
 <script>
-import '@/assets/css/common.less'
 import { fetchList, removePosition } from '@/api/postion'
 import AddOrUpdate from './add-or-update'
 export default {

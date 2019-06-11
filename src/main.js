@@ -10,6 +10,7 @@ import importDirective from '@/directive'
 import installPlugin from '@/plugin'
 import '@/assets/theme/index.less'
 import '@/assets/icons/iconfont.css'
+import '@/assets/css/common.less'
 import { formatDate } from '@/libs/tools.js'
 // 引入element的table 作一些简单尝试
 import { Table, TableColumn } from 'element-ui'

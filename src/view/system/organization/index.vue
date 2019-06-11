@@ -49,7 +49,6 @@
 </div>
 </template>
 <script>
-import '@/assets/css/common.less'
 import AddOrUpdate from './add-or-update'
 import { fetchList, deleteOrg } from '@/api/organization'
 export default {

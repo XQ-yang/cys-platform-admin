@@ -68,7 +68,6 @@
 <script>
 import AddOrUpdate from './meun-add-or-update'
 import { fetchList, deleteMunu } from '@/api/menu'
-import '@/assets/css/common.less'
 export default {
   name: 'menus',
   data() {
