@@ -204,7 +204,7 @@ export default {
         })
     },
     onResetPwd(id) {
-      resetPassword({ userId: id })
+      resetPassword(id)
         .then(res => {
           this.$Message.success(res.msg)
           this.getList()

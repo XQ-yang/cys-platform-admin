@@ -37,6 +37,9 @@ class HttpRequest {
       if (!Object.keys(this.queue).length) {
         // Spin.show()
       }
+      if (config.method.toUpperCase() === 'POST') {
+        config.headers['Content-type'] = 'application/json;charset=UTF-8'
+      }
       this.queue[url] = true
       return config
     }, error => {
