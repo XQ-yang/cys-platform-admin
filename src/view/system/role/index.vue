@@ -50,7 +50,6 @@
   </div>
 </template>
 <script>
-import '@/assets/css/common.less'
 import { fetchList, deleteRole } from '@/api/role'
 import AddOrUpdate from './add-or-update'
 import SetRole from './set-role'

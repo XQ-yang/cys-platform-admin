@@ -56,7 +56,6 @@
   </div>
 </template>
 <script>
-import '@/assets/css/common.less'
 import { fetchList, deleteUser, resetPassword } from '@/api/user'
 import AddOrUpdate from './add-or-update'
 export default {
