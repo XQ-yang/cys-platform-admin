@@ -69,12 +69,9 @@
           </Col>
           <Col span="12">
             <Form-item label="角色" prop="roleName">
-              <Poptip trigger="click" v-model="popRoleVisible" placement="bottom-start">
-                <Input type="text" v-model="dataForm.roleName" :readonly="true" :maxlength="20"></Input>
-                <div slot="content">
-                  <Tree :data="roleData" :multiple="true" @on-select-change="selectRole"></Tree>
-                </div>
-              </Poptip>
+              <Select v-model="dataForm.roleIds" multiple filterable placeholder="请选择" @on-change="selectRole">
+                <Option v-for="item in roleList" :value="item.id" :key="item.id">{{ item.roleName }}</Option>
+              </Select>
             </Form-item>
           </Col>
         </Row>
@@ -146,7 +143,6 @@ export default {
       popOrgVisible: false,
       popDeptVisible: false,
       popPositionVisible: false,
-      popRoleVisible: false,
       visible: false,
       loading: true,
       dataForm: {
@@ -164,8 +160,8 @@ export default {
         orgName: '',
         deptId: '',
         deptName: '',
+        roleIds: [],
         roleId: '',
-        roleName: '',
         positionId: '',
         positionName: '',
         createTime: new Date(),
@@ -204,8 +200,8 @@ export default {
         positionName: [
           { required: true, message: '必填项，不能为空', trigger: 'change' }
         ],
-        roleName: [
-          { required: true, message: '必填项，不能为空', trigger: 'change' }
+        roleIds: [
+          { type: 'array', required: true, message: '必填项，不能为空' }
         ],
         sex: [
           { required: true, message: '必填项，不能为空', trigger: 'change' }
@@ -252,9 +248,6 @@ export default {
     },
     positionData() {
       return this.expandPositionTree(this.positionList)
-    },
-    roleData() {
-      return this.expandRoleTree(this.roleList)
     }
   },
   methods: {
@@ -325,17 +318,8 @@ export default {
       this.popPositionVisible = false
     },
 
-    selectRole(selectArray, item) {
-      // 角色可以多选，逗号分隔处理
-      var ids = []
-      var names = []
-      selectArray.forEach(function(item) {
-        ids.push(item.id)
-        names.push(item.title)
-      })
-      this.dataForm.roleId = ids.join(',')
-      this.dataForm.roleName = names.join(',')
-      this.popRoleVisible = false
+    selectRole(e) {
+      this.dataForm.roleId = e.join(',')
     },
 
     // list数据转成tree形的数据结构
@@ -362,15 +346,6 @@ export default {
         item.title = item.name
         if (item.children && item.children.length) {
           item.children = this.expandPositionTree(item.children)
-        }
-        return item
-      })
-    },
-    expandRoleTree(treeData) {
-      return treeData.map(item => {
-        item.title = item.roleName
-        if (item.children && item.children.length) {
-          item.children = this.expandRoleTree(item.children)
         }
         return item
       })
@@ -406,5 +381,4 @@ export default {
 }
 </script>
 <style>
-
 </style>
