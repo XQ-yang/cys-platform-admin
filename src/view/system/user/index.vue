@@ -29,12 +29,15 @@
             style="margin: 5px"
             @click="addOrUpdateHandle(row.id)"
           >编辑</Button>
-          <Poptip confirm transfer title="您确定要删除吗?" @on-ok="handleDelete(row.id)">
-            <Button type="error" style="margin: 5px" size="small">删除</Button>
-          </Poptip>
-          <Poptip confirm transfer title="您确定要重置该用户的密码吗?" @on-ok="onResetPwd(row.id)" v-if="row.username!='admin'">
-            <Button type="error"  style="margin: 5px" size="small">重置密码</Button>
-          </Poptip>
+          <Dropdown @on-click="dropDownClick($event,row)" transfer>
+            <Button type="warning" size="small" style="margin: 5px" >更多
+              <Icon type="ios-arrow-down"></Icon>
+            </Button>
+            <DropdownMenu slot="list">
+              <DropdownItem name="resetPwd">重置密码</DropdownItem>
+              <DropdownItem name="delete">删除</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </template>
       </Table>
       <div style="margin: 10px;overflow: hidden">
@@ -194,29 +197,54 @@ export default {
       this.getList()
     },
     handleDelete(id) {
-      deleteUser(id)
-        .then(res => {
-          this.$Message.success(res.msg)
-          this.getList()
-        })
-        .catch(error => {
-          this.$Message.error(error.msg)
-        })
+      this.$Modal.confirm({
+        title: '提示',
+        content: '确认要删除该数据吗？',
+        onOk: () => {
+          deleteUser(id)
+            .then(res => {
+              this.$Message.success(res.msg)
+              this.getList()
+            })
+            .catch(error => {
+              this.$Message.error(error.msg)
+            })
+        }
+      })
     },
     onResetPwd(id) {
-      resetPassword({ userId: id })
-        .then(res => {
-          this.$Message.success(res.msg)
-          this.getList()
-        })
-        .catch(error => {
-          this.$Message.error(error.msg)
-        })
+      this.$Modal.confirm({
+        title: '提示',
+        content: '您确定要重置该用户的密码吗?',
+        onOk: () => {
+          resetPassword(id)
+            .then(res => {
+              this.$Message.success(res.msg)
+              this.getList()
+            })
+            .catch(error => {
+              this.$Message.error(error.msg)
+            })
+        }
+      })
     },
     // 清空查询值的时候 重新加载列表数据
     handleClear(e) {
       if (e.target.value === '') {
         this.getList()
+      }
+    },
+    dropDownClick(e, row) {
+      switch (e) {
+        case 'resetPwd':
+          this.onResetPwd(row.id)
+          break
+        case 'setDataRole':
+          alert('setDataRole')
+          break
+        case 'delete':
+          this.handleDelete(row.id)
+          break
       }
     }
   }

@@ -11,7 +11,8 @@ class HttpRequest {
     const config = {
       baseURL: this.baseUrl,
       headers: {
-        'X-URL-PATH': location.pathname
+        'X-URL-PATH': location.pathname,
+        'Content-type': 'application/json;charset=UTF-8'
       }
     }
     return config
