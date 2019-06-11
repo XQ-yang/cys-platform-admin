@@ -51,7 +51,7 @@ export default {
         name: '', // 岗位名称
         deptId: '', // 部门id
         deptName: '', // 部门编号
-        versionL: ''
+        versionL: '1'
       },
       selectData: [],
       rules: {
