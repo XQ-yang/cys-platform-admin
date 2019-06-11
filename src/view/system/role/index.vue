@@ -26,8 +26,8 @@
                 <Icon type="ios-arrow-down"></Icon>
               </Button>
               <DropdownMenu slot="list">
-                <DropdownItem name="setRole">权限</DropdownItem>
-                <!-- <DropdownItem name="deleteRole">删除</DropdownItem> -->
+                <DropdownItem name="setRole">角色权限</DropdownItem>
+                <DropdownItem name="setDataRole">数据权限</DropdownItem>
               </DropdownMenu>
             </Dropdown>
         </template>
@@ -162,7 +162,8 @@ export default {
         case 'setRole':
           this.setRole(row)
           break
-        case 'deleteRole':
+        case 'setDataRole':
+          alert('setDataRole')
           break
       }
     }

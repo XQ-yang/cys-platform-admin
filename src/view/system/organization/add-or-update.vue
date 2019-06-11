@@ -62,7 +62,8 @@ export default {
         tel: '', // 联系电话
         address: '', // 联系地址
         parentName: '', // 父菜单名称
-        sort: ''// 排序
+        sort: '', // 排序
+        version: ''
       },
       selectData: [],
       rules: {

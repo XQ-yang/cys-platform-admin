@@ -64,7 +64,8 @@ export default {
         sort: '', // 排序
         parentName: '', // 父菜单名称
         orgId: '0',
-        orgName: ''
+        orgName: '',
+        version: '1'
       },
       selectData: [],
       selectOrgData: [],

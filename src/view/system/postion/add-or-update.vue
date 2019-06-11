@@ -50,7 +50,8 @@ export default {
         code: '', // 岗位编码
         name: '', // 岗位名称
         deptId: '', // 部门id
-        deptName: ''// 部门编号
+        deptName: '', // 部门编号
+        versionL: ''
       },
       selectData: [],
       rules: {

@@ -30,10 +30,10 @@
             @click="addOrUpdateHandle(row.id)"
           >编辑</Button>
           <Poptip confirm transfer title="您确定要删除吗?" @on-ok="handleDelete(row.id)">
-            <Button type="error" size="small">删除</Button>
+            <Button type="error" style="margin: 5px" size="small">删除</Button>
           </Poptip>
           <Poptip confirm transfer title="您确定要重置该用户的密码吗?" @on-ok="onResetPwd(row.id)" v-if="row.username!='admin'">
-            <Button type="error" size="small">重置密码</Button>
+            <Button type="error"  style="margin: 5px" size="small">重置密码</Button>
           </Poptip>
         </template>
       </Table>
@@ -133,7 +133,7 @@ export default {
           title: '操作',
           key: 'action',
           align: 'center',
-          width: 200,
+          width: 250,
           slot: 'action'
         }
       ],

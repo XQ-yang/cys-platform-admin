@@ -169,7 +169,8 @@ export default {
         positionName: '',
         createTime: new Date(),
         updateTime: new Date(),
-        isDelete: 0
+        isDelete: 0,
+        version: '1'
       },
       // 组织
       orgList: [],

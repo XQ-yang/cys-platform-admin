@@ -29,7 +29,8 @@ export default {
       loading: true, // 提交确认按钮控制
       dataForm: {
         id: '', // 主键
-        roleName: ''// 角色名称
+        roleName: '', // 角色名称
+        version: '1'
       },
       rules: {
         roleName: [
