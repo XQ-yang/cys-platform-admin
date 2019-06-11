@@ -88,11 +88,11 @@ export const editPassword = (editPasswordForm) => {
     data: editPasswordForm
   })
 }
-export const resetPassword = (params) => {
+export const resetPassword = (id) => {
   return axios.request({
     url: '/user/resetPassword',
     method: 'post',
-    data: params
+    data: { userId: id }
   })
 }
 
