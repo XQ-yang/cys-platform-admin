@@ -25,10 +25,10 @@ class HttpRequest {
   }
   interceptors(instance, url) {
     // 请求拦截
-    instance.interceptors.request.use(config => {
-      if (!config.url.includes('/oauth/token')) {
+    instance.interceptors.request.use(request => {
+      if (!request.url.includes('/oauth/token')) {
         if (getToken()) {
-          config.headers['Authorization'] = 'Bearer ' + getToken()
+          request.headers['Authorization'] = 'Bearer ' + getToken()
         } else {
           // 如果token过期或者不存在则跳转到登录页面
           window.location.href = '/login'
@@ -38,11 +38,11 @@ class HttpRequest {
       if (!Object.keys(this.queue).length) {
         // Spin.show()
       }
-      if (config.method.toUpperCase() === 'POST') {
-        config.headers['Content-type'] = 'application/json;charset=UTF-8'
+      if (request.method.toUpperCase() === 'POST') {
+        request.headers['Content-type'] = 'application/json;charset=UTF-8'
       }
       this.queue[url] = true
-      return config
+      return request
     }, error => {
       this.destroy(url)
       return Promise.reject(error)
