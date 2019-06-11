@@ -20,7 +20,7 @@
             <Input v-model="dataForm.title" type="text"  :maxlength="20"></Input>
           </Form-item>
           <Form-item label="上级菜单" prop="parentName">
-            <Poptip trigger='click' v-model="popVisible" placement="bottom-start" >
+            <Poptip trigger='click' v-model="popVisible" placement="bottom-start" transfer class="">
               <Input type="text" v-model="dataForm.parentName" :readonly='true' :maxlength="20"></Input>
               <div slot="content">
                 <Tree
@@ -175,4 +175,13 @@ export default {
 
 </script>
 <style>
+.ivu-poptip{
+  display:inline-block;
+  width:100%
+}
+.ivu-poptip-rel{
+  display:inline-block;
+  position:relative;
+  width:100%;
+}
 </style>
