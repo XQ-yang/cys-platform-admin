@@ -68,7 +68,7 @@
             </Form-item>
           </Col>
           <Col span="12">
-            <Form-item label="角色" prop="roleName">
+            <Form-item label="角色" prop="roleId">
               <Select v-model="dataForm.roleIds" multiple filterable placeholder="请选择" @on-change="selectRole">
                 <Option v-for="item in roleList" :value="item.id" :key="item.id">{{ item.roleName }}</Option>
               </Select>
@@ -200,8 +200,8 @@ export default {
         positionName: [
           { required: true, message: '必填项，不能为空', trigger: 'change' }
         ],
-        roleIds: [
-          { type: 'array', required: true, message: '必填项，不能为空' }
+        roleId: [
+          { required: true, message: '必填项，不能为空', trigger: 'blur' }
         ],
         sex: [
           { required: true, message: '必填项，不能为空', trigger: 'change' }
