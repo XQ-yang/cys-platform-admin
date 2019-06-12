@@ -391,7 +391,6 @@ export const setExpandState = (data, state) => {
 
 // 全选反选功能
 export const setCheckState = (data, state) => {
-  debugger
   return data.map(item => {
     item.checked = state
     if (item.children && item.children.length) {
