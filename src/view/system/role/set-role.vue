@@ -16,9 +16,8 @@
     </div>
 </template>
 <script>
-import { fetchList as getMenuList } from '@/api/menu'
 import { setRoles, getRoleMenuById } from '@/api/role'
-import { expandMenuList } from '@/libs/util'
+import { expandTree } from '@/libs/util'
 export default {
   data() {
     return {
@@ -45,34 +44,12 @@ export default {
       this.drawerVisible = true
       this.$nextTick(() => {
         this.title = `角色权限设置:${this.roleName}`
-        this.getTreeList().then(() => {
-          debugger
-          this.getRoleMenuById(this.roleMenuTemp.roleId)
-        })
+        this.getRoleMenuByRoleId(this.roleMenuTemp.roleId)
       })
     },
-    getTreeList() {
-      return getMenuList().then(res => {
-        debugger
-        this.treeList = res.data
-      })
-    },
-    getRoleMenuById(id) {
+    getRoleMenuByRoleId(id) {
       getRoleMenuById(id).then(res => {
-        this.roleMenuList = res.data
-        let testData = expandMenuList(this.treeList, this.roleMenuList)
-        this.treeList = testData.map(item => {
-          if (item.children && item.children.length) {
-            this.$set(item, 'expand', true)
-            item.children.map(child => {
-              if (child.children && child.children.length) {
-                this.$set(child, 'expand', true)
-                return child
-              }
-            })
-          }
-          return item
-        })
+        this.treeList = expandTree(res.data)
       })
     },
     setRole() {
