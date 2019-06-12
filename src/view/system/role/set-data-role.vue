@@ -7,8 +7,20 @@
             :mask-closable="true"
             :styles="styles"
         >
-          <Tree :data="treeList" show-checkbox ref="roleTree"></Tree>
+          <Tree :data="treeList" show-checkbox ref="roleDeptTree"></Tree>
           <div class="demo-drawer-footer">
+            <Dropdown @on-click="dropDownClick($event)" transfer >
+                <Button style="margin: 8px">
+                  树操作
+                  <Icon type="ios-arrow-up"></Icon>
+                </Button>
+                <DropdownMenu slot="list">
+                  <DropdownItem name="expandAll">合并所有</DropdownItem>
+                  <DropdownItem name="mergeAll">展开所有</DropdownItem>
+                  <!-- <DropdownItem name="checkAll">全部勾选</DropdownItem>
+                  <DropdownItem name="uncheckAll">取消全选</DropdownItem> -->
+                </DropdownMenu>
+              </Dropdown>
             <Button style="margin-right: 8px" @click="drawerVisible = false">取消</Button>
             <Button type="primary" @click="setRole">提交</Button>
           </div>
@@ -17,7 +29,7 @@
 </template>
 <script>
 import { setDeptRoles, getRoleDeptById } from '@/api/role'
-import { expandTree } from '@/libs/util'
+import { expandTree, setExpandState } from '@/libs/util'
 export default {
   data() {
     return {
@@ -54,7 +66,7 @@ export default {
     },
     setRole() {
       this.roleDeptTemp.deptIds = []
-      const data = this.$refs.roleTree.getCheckedAndIndeterminateNodes()
+      const data = this.$refs.roleDeptTree.getCheckedAndIndeterminateNodes()
       data.map(item => {
         this.roleDeptTemp.deptIds.push(item.id)
       })
@@ -65,6 +77,22 @@ export default {
       }).catch(error => {
         this.$Message.error(error.msg)
       })
+    },
+    dropDownClick(name) {
+      switch (name) {
+        case 'expandAll':// 合并所有
+          this.treeList = setExpandState(this.treeList, false)
+          break
+        case 'mergeAll':// 展开所有
+          this.treeList = setExpandState(this.treeList, true)
+          break
+        // case 'checkAll':// 全部勾选
+        //   this.treeList = setCheckState(this.treeList, true)
+        //   break
+        // case 'uncheckAll':// 取消全选
+        //   this.treeList = setCheckState(this.treeList, false)
+        //   break
+      }
     }
   }
 }

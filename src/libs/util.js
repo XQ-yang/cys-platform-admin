@@ -378,3 +378,24 @@ export const expandTree = (treeData) => {
     return item
   })
 }
+
+export const setExpandState = (data, state) => {
+  return data.map(item => {
+    if (item.children && item.children.length) {
+      item.expand = state
+      item.children = setExpandState(item.children, state)
+    }
+    return item
+  })
+}
+
+// 全选反选功能
+export const setCheckState = (data, state) => {
+  return data.map(item => {
+    item.checked = state
+    if (item.children && item.children.length) {
+      item.children = setCheckState(item.children, state)
+    }
+    return item
+  })
+}
