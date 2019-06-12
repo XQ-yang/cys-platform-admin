@@ -16,9 +16,9 @@
     </div>
 </template>
 <script>
-import { fetchList as getMenuList } from '@/api/menu'
-import { setRoles, getRoleMenuById } from '@/api/role'
-import { expandMenuList } from '@/libs/util'
+import { fetchList as getDeptTreeList } from '@/api/dept'
+import { setDeptRoles, getRoleDeptById } from '@/api/role'
+import { expandDeptList, expandDeptTree } from '@/libs/util'
 export default {
   data() {
     return {
@@ -33,55 +33,43 @@ export default {
       treeList: [],
       roleId: '', // 角色id
       roleName: '', // 角色名称
-      roleMenuTemp: {
+      roleDeptTemp: {
         roleId: '',
-        menuIds: []
+        deptIds: []
       },
-      roleMenuList: []
+      roleDeptList: []
     }
   },
   methods: {
     init() {
       this.drawerVisible = true
       this.$nextTick(() => {
-        this.title = `角色权限设置:${this.roleName}`
+        this.title = `数据权限设置:${this.roleName}`
         this.getTreeList().then(() => {
-          debugger
-          this.getRoleMenuById(this.roleMenuTemp.roleId)
+          this.getDeptRoleById(this.roleDeptTemp.roleId)
         })
       })
     },
     getTreeList() {
-      return getMenuList().then(res => {
-        debugger
-        this.treeList = res.data
+      return getDeptTreeList().then(res => {
+        this.treeList = expandDeptTree(res.data)
       })
     },
-    getRoleMenuById(id) {
-      getRoleMenuById(id).then(res => {
-        this.roleMenuList = res.data
-        let testData = expandMenuList(this.treeList, this.roleMenuList)
-        this.treeList = testData.map(item => {
-          if (item.children && item.children.length) {
-            this.$set(item, 'expand', true)
-            item.children.map(child => {
-              if (child.children && child.children.length) {
-                this.$set(child, 'expand', true)
-                return child
-              }
-            })
-          }
-          return item
-        })
+    getDeptRoleById(id) {
+      getRoleDeptById(id).then(res => {
+        debugger
+        this.roleDeptList = res.data
+        let testData = expandDeptList(this.treeList, this.roleDeptList)
+        this.treeList = testData
       })
     },
     setRole() {
       this.roleMenuTemp.menuIds = []
       const data = this.$refs.roleTree.getCheckedAndIndeterminateNodes()
       data.map(item => {
-        this.roleMenuTemp.menuIds.push(item.id)
+        this.roleDeptTemp.deptIds.push(item.id)
       })
-      setRoles(this.roleMenuTemp).then(res => {
+      setDeptRoles(this.roleDeptTemp).then(res => {
         this.$emit('refreshDataList')
         this.$Message.success(res.msg)
         this.drawerVisible = false

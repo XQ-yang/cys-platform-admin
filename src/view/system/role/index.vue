@@ -39,6 +39,7 @@
       </div>
       <add-or-update v-if="addOrUpdateVisible" ref="addOrUpate" @refreshDataList="getList"></add-or-update>
       <set-role v-if="setRoleVisible" ref="setRole"></set-role>
+      <set-data-role v-if="setDataRoleVisible" ref="setDataRole"></set-data-role>
     </Card>
   </div>
 </template>
@@ -46,6 +47,7 @@
 import { fetchList, deleteRole } from '@/api/role'
 import AddOrUpdate from './add-or-update'
 import SetRole from './set-role'
+import SetDataRole from './set-data-role'
 export default {
   name: 'role',
   data() {
@@ -83,12 +85,14 @@ export default {
         roleName: ''
       },
       addOrUpdateVisible: false,
-      setRoleVisible: false
+      setRoleVisible: false,
+      setDataRoleVisible: false
     }
   },
   components: {
     AddOrUpdate,
-    SetRole
+    SetRole,
+    SetDataRole
   },
   // 一般ajaxajax请求数据放到created里面就可以了，这样可以及早发请求获取数据，
   // 如果有依赖dom必须存在的情况则需要放导 mounted
@@ -132,6 +136,14 @@ export default {
         this.$refs.setRole.init()
       })
     },
+    setDataRole(row) {
+      this.setDataRoleVisible = true
+      this.$nextTick(() => {
+        this.$refs.setDataRole.roleDeptTemp.roleId = row.id
+        this.$refs.setDataRole.roleName = row.roleName
+        this.$refs.setDataRole.init()
+      })
+    },
     handleDelete(id) {
       this.$Modal.confirm({
         title: '提示',
@@ -158,7 +170,7 @@ export default {
           this.setRole(row)
           break
         case 'setDataRole':
-          alert('setDataRole')
+          this.setDataRole(row)
           break
         case 'delete':
           this.handleDelete(row.id)

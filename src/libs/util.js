@@ -392,4 +392,28 @@ export const expandMenuList = (treeData, roleMenuData) => {
     return item
   })
 }
+// 由于名称不一致导致方法不能重用！！！
+export const expandDeptTree = (treeData) => {
+  return treeData.map(item => {
+    item.title = item.deptName
+    if (item.children && item.children.length) {
+      item.expand = true
+      item.children = expandDeptTree(item.children)
+    }
+    return item
+  })
+}
 
+export const expandDeptList = (treeData, roleDeptData) => {
+  return treeData.map(item => {
+    roleDeptData.forEach((val) => {
+      if (item.id === val.deptId && item.children && item.children.length) {
+        expandDeptList(item.children, roleDeptData)
+      }
+      if (item.id === val.deptId && item.children.length === 0) {
+        item.checked = true
+      }
+    })
+    return item
+  })
+}
