@@ -16,9 +16,8 @@
     </div>
 </template>
 <script>
-import { fetchList as getDeptTreeList } from '@/api/dept'
 import { setDeptRoles, getRoleDeptById } from '@/api/role'
-import { expandDeptList, expandDeptTree } from '@/libs/util'
+import { expandTree } from '@/libs/util'
 export default {
   data() {
     return {
@@ -45,26 +44,16 @@ export default {
       this.drawerVisible = true
       this.$nextTick(() => {
         this.title = `数据权限设置:${this.roleName}`
-        this.getTreeList().then(() => {
-          this.getDeptRoleById(this.roleDeptTemp.roleId)
-        })
-      })
-    },
-    getTreeList() {
-      return getDeptTreeList().then(res => {
-        this.treeList = expandDeptTree(res.data)
+        this.getDeptRoleById(this.roleDeptTemp.roleId)
       })
     },
     getDeptRoleById(id) {
       getRoleDeptById(id).then(res => {
-        debugger
-        this.roleDeptList = res.data
-        let testData = expandDeptList(this.treeList, this.roleDeptList)
-        this.treeList = testData
+        this.treeList = expandTree(res.data)
       })
     },
     setRole() {
-      this.roleMenuTemp.menuIds = []
+      this.roleDeptTemp.deptIds = []
       const data = this.$refs.roleTree.getCheckedAndIndeterminateNodes()
       data.map(item => {
         this.roleDeptTemp.deptIds.push(item.id)

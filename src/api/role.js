@@ -65,9 +65,8 @@ export const getRoleDeptById = (id) => {
   })
 }
 export const setDeptRoles = (deptRoles) => {
-  console.log(deptRoles)
   return axios.request({
-    url: '/role/saveRoleMenu',
+    url: '/role/saveRoleDept',
     method: 'post',
     data: deptRoles
   })
