@@ -30,7 +30,8 @@
             @click="addOrUpdateHandle(row.id)"
           >编辑</Button>
           <Dropdown @on-click="dropDownClick($event,row)" transfer>
-            <Button type="warning" size="small" style="margin: 5px" >更多
+            <Button type="warning" size="small" style="margin: 5px">
+              更多
               <Icon type="ios-arrow-down"></Icon>
             </Button>
             <DropdownMenu slot="list">
