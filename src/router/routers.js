@@ -46,15 +46,6 @@ export const routerMap = [
         component: () => import('@/view/system/role')
       },
       {
-        path: 'position',
-        name: 'position',
-        meta: {
-          icon: 'md-locate',
-          title: '岗位管理'
-        },
-        component: () => import('@/view/system/postion')
-      },
-      {
         path: 'org',
         name: 'org',
         meta: {
@@ -71,6 +62,15 @@ export const routerMap = [
           title: '部门管理'
         },
         component: () => import('@/view/system/dept')
+      },
+      {
+        path: 'position',
+        name: 'position',
+        meta: {
+          icon: 'md-locate',
+          title: '岗位管理'
+        },
+        component: () => import('@/view/system/postion')
       },
       {
         path: 'menu',
