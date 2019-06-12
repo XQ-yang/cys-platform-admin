@@ -7,7 +7,7 @@
             :mask-closable="true"
             :styles="styles"
         >
-          <Tree :data="treeList" show-checkbox ref="roleTree"></Tree>
+          <Tree :data="treeList" show-checkbox ref="roleDeptTree"></Tree>
           <div class="demo-drawer-footer">
             <Button style="margin-right: 8px" @click="drawerVisible = false">取消</Button>
             <Button type="primary" @click="setRole">提交</Button>
@@ -54,7 +54,7 @@ export default {
     },
     setRole() {
       this.roleDeptTemp.deptIds = []
-      const data = this.$refs.roleTree.getCheckedAndIndeterminateNodes()
+      const data = this.$refs.roleDeptTree.getCheckedAndIndeterminateNodes()
       data.map(item => {
         this.roleDeptTemp.deptIds.push(item.id)
       })
