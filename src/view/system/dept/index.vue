@@ -9,6 +9,12 @@
         <el-table :data="tableData" style="width: 100%;margin-bottom: 20px;" border row-key="id">
           <el-table-column
             header-align="center"
+            prop="orgName"
+            label="机构名称"
+            >
+          </el-table-column>
+          <el-table-column
+            header-align="center"
             prop="deptName"
             label="名称"
             >
