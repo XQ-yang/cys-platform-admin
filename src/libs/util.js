@@ -393,9 +393,8 @@ export const setExpandState = (data, state) => {
 export const setCheckState = (data, state) => {
   debugger
   return data.map(item => {
-    debugger
     item.checked = state
-    if (item.children) {
+    if (item.children && item.children.length) {
       item.children = setCheckState(item.children, state)
     }
     return item

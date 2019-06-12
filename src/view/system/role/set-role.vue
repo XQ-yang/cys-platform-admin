@@ -17,8 +17,8 @@
               <DropdownMenu slot="list">
                 <DropdownItem name="expandAll">合并所有</DropdownItem>
                 <DropdownItem name="mergeAll">展开所有</DropdownItem>
-                <DropdownItem name="checkAll">全部勾选</DropdownItem>
-                <DropdownItem name="uncheckAll">取消全选</DropdownItem>
+                <!-- <DropdownItem name="checkAll">全部勾选</DropdownItem>
+                <DropdownItem name="uncheckAll">取消全选</DropdownItem> -->
               </DropdownMenu>
             </Dropdown>
             <Button style="margin-right: 8px" @click="drawerVisible = false">取消</Button>
@@ -29,7 +29,7 @@
 </template>
 <script>
 import { setRoles, getRoleMenuById } from '@/api/role'
-import { expandTree, setExpandState, setCheckState } from '@/libs/util'
+import { expandTree, setExpandState } from '@/libs/util'
 export default {
   data() {
     return {
@@ -61,7 +61,6 @@ export default {
     },
     getRoleMenuByRoleId(id) {
       getRoleMenuById(id).then(res => {
-        console.log(res.data)
         this.treeList = expandTree(res.data)
       })
     },
@@ -87,13 +86,12 @@ export default {
         case 'mergeAll':// 展开所有
           this.treeList = setExpandState(this.treeList, true)
           break
-        case 'checkAll':// 全部勾选
-          this.treeList = setCheckState(this.treeList, true)
-          break
-        case 'uncheckAll':// 取消全选
-          this.treeList = setCheckState(this.treeList, false)
-
-          break
+        // case 'checkAll':// 全部勾选
+        //   this.treeList = setCheckState(this.treeList, true)
+        //   break
+        // case 'uncheckAll':// 取消全选
+        //   this.treeList = setCheckState(this.treeList, false)
+        //   break
       }
     }
   }
