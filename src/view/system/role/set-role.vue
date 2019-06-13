@@ -7,7 +7,7 @@
             :mask-closable="true"
             :styles="styles"
         >
-          <Tree :data="treeList" show-checkbox ref="roleTree"></Tree>
+          <Tree :data="treeList" show-checkbox  check-directly ref="roleTree"></Tree>
           <div class="demo-drawer-footer">
              <Dropdown @on-click="dropDownClick($event)" transfer >
               <Button style="margin: 8px">
