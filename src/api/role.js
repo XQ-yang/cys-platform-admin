@@ -43,7 +43,7 @@ export const getRoleInfo = (id) => {
 export const setRoles = (roleMenus) => {
   console.log(roleMenus)
   return axios.request({
-    url: '/role/saveRoleMenu',
+    url: '/role/roleMenu',
     method: 'post',
     data: roleMenus
   })
@@ -51,22 +51,20 @@ export const setRoles = (roleMenus) => {
 
 export const getRoleMenuById = (id) => {
   return axios.request({
-    url: '/role/getRoleMenuByRoleId',
-    method: 'get',
-    params: { roleId: id }
+    url: '/role/roleMenu/' + id,
+    method: 'get'
   })
 }
 
 export const getRoleDeptById = (id) => {
   return axios.request({
-    url: '/role/getRoleDeptByRoleId',
-    method: 'get',
-    params: { roleId: id }
+    url: '/role/roleDept/' + id,
+    method: 'get'
   })
 }
 export const setDeptRoles = (deptRoles) => {
   return axios.request({
-    url: '/role/saveRoleDept',
+    url: '/role/roleDept',
     method: 'post',
     data: deptRoles
   })

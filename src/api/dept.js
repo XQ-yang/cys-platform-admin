@@ -30,7 +30,7 @@ export const deleteDept = (id) => {
 }
 export const getPositionsByDeptId = (id) => {
   return axios.request({
-    url: '/dept/' + id + '/positions',
+    url: '/dept/depts/' + id,
     method: 'get'
   })
 }

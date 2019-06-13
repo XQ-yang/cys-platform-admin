@@ -13,7 +13,7 @@ export const addOrUpdateOrg = (dataForm) => {
 */
 export const fetchList = (query) => {
   return axios.request({
-    url: '/org/getOrgTree',
+    url: '/org/orgTree',
     method: 'get',
     params: query
   })

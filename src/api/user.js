@@ -26,7 +26,7 @@ export const getUserInfo = (token) => {
 }
 export const logout = () => {
   return axios.request({
-    url: '/loginInfo/revokeToken',
+    url: '/loginInfo/token-revoke',
     method: 'post'
   })
 }
@@ -83,7 +83,7 @@ export const importUserData = (userImport) => {
 }
 export const editPassword = (editPasswordForm) => {
   return axios.request({
-    url: '/user/editPassword',
+    url: '/user/password-edit',
     method: 'post',
     data: editPasswordForm
   })
