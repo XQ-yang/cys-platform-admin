@@ -69,7 +69,13 @@
           </Col>
           <Col span="12">
             <Form-item label="角色" prop="roleId">
-              <Select v-model="dataForm.roleIds" multiple filterable placeholder="请选择" @on-change="selectRole">
+              <Select
+                v-model="dataForm.roleIds"
+                multiple
+                filterable
+                placeholder="请选择"
+                @on-change="selectRole"
+              >
                 <Option v-for="item in roleList" :value="item.id" :key="item.id">{{ item.roleName }}</Option>
               </Select>
             </Form-item>
@@ -290,7 +296,7 @@ export default {
       this.popOrgVisible = false
       this.resetDept()
 
-      getDeptList(item.id)
+      getDeptList({ orgId: item.id })
         .then(res => {
           this.deptList = res.data
         })

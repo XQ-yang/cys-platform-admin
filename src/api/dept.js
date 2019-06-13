@@ -1,9 +1,10 @@
 import axios from '@/libs/api.request'
 
-export const fetchList = () => {
+export const fetchList = (query) => {
   return axios.request({
     url: '/dept/list',
-    method: 'get'
+    method: 'get',
+    params: query
   })
 }
 
