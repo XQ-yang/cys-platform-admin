@@ -2,8 +2,8 @@
 <div>
   <Card>
     <div class="search-con search-con-top">
-      <Input @on-change="handleClear"  clearable placeholder="机构名称" class="search-input" v-model="listQuery.orgName"/>
-      <Input @on-change="handleClear"  clearable placeholder="联系人" class="search-input" v-model="listQuery.contacts"/>
+      机构名称：<Input @on-change="handleClear"  clearable placeholder="机构名称" class="search-input" v-model="listQuery.orgName"/>
+      联系人：<Input @on-change="handleClear"  clearable placeholder="联系人" class="search-input" v-model="listQuery.contacts"/>
       <Button @click="handleSearch" class="search-btn">查询</Button>
       <Button class="search-btn" @click="addOrUpdateHandle()">新增</Button>
     </div>

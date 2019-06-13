@@ -3,6 +3,7 @@
     <Card>
       <!--查询条件及操作按钮-->
       <div class="search-con search-con-top">
+        用户名：
         <Input
           @on-change="handleClear"
           clearable
@@ -10,6 +11,7 @@
           class="search-input"
           v-model="listQuery.username"
         />
+        姓名：
         <Input
           @on-change="handleClear"
           clearable

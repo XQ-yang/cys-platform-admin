@@ -311,7 +311,6 @@ export default {
       this.dataForm.deptName = item.title
       this.popDeptVisible = false
       this.resetPosition()
-
       getPositionList(item.id)
         .then(res => {
           this.positionList = res.data
