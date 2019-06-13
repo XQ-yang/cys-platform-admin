@@ -11,6 +11,18 @@
       class="editForm"
       >
         <Form ref="deptForm" :model="dataForm" :rules="rules" :label-width="100">
+          <Form-item label="所属机构" prop="orgName">
+            <Poptip trigger='click' v-model="orgVisible" placement="bottom-start" >
+              <Input type="text" v-model="dataForm.orgName" :readonly='true' :maxlength="20"></Input>
+              <div slot="content">
+                <Tree
+                :data='selectOrgData'
+                :multiple='false'
+                @on-select-change='handleOrgTreeSelectChange'
+                ></Tree>
+              </div>
+            </Poptip>
+          </Form-item>
           <Form-item label="名称" prop="deptName">
             <Input v-model="dataForm.deptName" type="text"  :maxlength="20"></Input>
           </Form-item>
@@ -26,18 +38,6 @@
               </div>
             </Poptip>
           </Form-item>
-          <Form-item label="所属机构" prop="orgName">
-            <Poptip trigger='click' v-model="orgVisible" placement="bottom-start" >
-              <Input type="text" v-model="dataForm.orgName" :readonly='true' :maxlength="20"></Input>
-              <div slot="content">
-                <Tree
-                :data='selectOrgData'
-                :multiple='false'
-                @on-select-change='handleOrgTreeSelectChange'
-                ></Tree>
-              </div>
-            </Poptip>
-          </Form-item>
           <Form-item label="排序" prop="sort">
             <Input v-model="dataForm.sort" type="number"  :maxlength="6"></Input>
           </Form-item>
@@ -48,7 +48,7 @@
 
 <script>
 import { addOrUpdateDept, fetchList, getDeptInfo } from '@/api/dept'
-import { fetchList as getOrgList } from '@/api/organization'
+import { fetchList as getOrgList, getDeptsByOrgId } from '@/api/organization'
 const PARENT_NAME_DEFAULT = '一级部门'
 export default {
   data() {
@@ -98,7 +98,8 @@ export default {
       this.$nextTick(() => {
         this.$refs['deptForm'].resetFields()
         this.dataForm.parentName = PARENT_NAME_DEFAULT
-        this.getDeptList().then(() => {
+        getOrgList().then(res => {
+          this.selectOrgData = this.expandOrgTree(res.data)
           if (this.dataForm.id) {
             this.typeVisible = true
             this.getInfo()
@@ -106,7 +107,6 @@ export default {
             this.typeVisible = false
           }
         })
-        this.getOrgList()
       })
     },
     // 初始化菜单下拉框的值
@@ -120,10 +120,20 @@ export default {
       this.dataForm.parentName = item.title
       this.popVisible = false
     },
+    resetDept() {
+      this.dataForm.parentId = '0'
+      this.dataForm.parentName = PARENT_NAME_DEFAULT
+    },
     handleOrgTreeSelectChange(selectArray, item) {
       this.dataForm.orgId = item.id
       this.dataForm.orgName = item.title
       this.orgVisible = false
+      this.menuListTreeSetDefaultHandle()
+      getDeptsByOrgId(item.id).then(res => {
+        this.selectData = this.expandDeptTree(res.data)
+      }).catch(error => {
+        this.$Message.error(error.msg)
+      })
     },
     changeLoading() {
       this.loading = false
@@ -134,11 +144,6 @@ export default {
     getDeptList() {
       return fetchList().then(res => {
         this.selectData = this.expandDeptTree(res.data)
-      })
-    },
-    getOrgList() {
-      getOrgList().then(res => {
-        this.selectOrgData = this.expandOrgTree(res.data)
       })
     },
     // 把数据转换为tree组件的对应格式
