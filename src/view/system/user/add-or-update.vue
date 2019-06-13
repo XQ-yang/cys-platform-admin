@@ -57,16 +57,7 @@
           </Col>
         </Row>
         <Row>
-          <Col span="12">
-            <Form-item label="岗位" prop="positionName">
-              <Poptip trigger="click" v-model="popPositionVisible" placement="bottom-start">
-                <Input type="text" v-model="dataForm.positionName" :readonly="true" :maxlength="20"></Input>
-                <div slot="content">
-                  <Tree :data="positionData" :multiple="false" @on-select-change="selectPosition"></Tree>
-                </div>
-              </Poptip>
-            </Form-item>
-          </Col>
+
           <Col span="12">
             <Form-item label="角色" prop="roleId">
               <Select
@@ -77,6 +68,14 @@
                 @on-change="selectRole"
               >
                 <Option v-for="item in roleList" :value="item.id" :key="item.id">{{ item.roleName }}</Option>
+              </Select>
+            </Form-item>
+          </Col>
+          <Col span="12">
+            <Form-item label="是否启用" prop="status">
+              <Select v-model="dataForm.status" clearable placeholder="请选择">
+                <Option :value="0">启用</Option>
+                <Option :value="1">禁用</Option>
               </Select>
             </Form-item>
           </Col>
@@ -121,14 +120,7 @@
               <Input type="text" v-model="dataForm.email" :maxlength="20"></Input>
             </Form-item>
           </Col>
-          <Col span="12">
-            <Form-item label="是否启用" prop="status">
-              <Select v-model="dataForm.status" clearable placeholder="请选择">
-                <Option :value="0">启用</Option>
-                <Option :value="1">禁用</Option>
-              </Select>
-            </Form-item>
-          </Col>
+
         </Row>
       </Form>
     </Modal>
@@ -140,7 +132,6 @@ import {
   fetchList as getOrgList,
   getDeptsByOrgId as getDeptList
 } from '@/api/organization'
-import { getPositionsByDeptId as getPositionList } from '@/api/dept'
 import { fetchList as getRoleList } from '@/api/role'
 import { addOrUpdateUser, getUser } from '@/api/user'
 
@@ -284,12 +275,12 @@ export default {
     resetDept() {
       this.dataForm.deptId = ''
       this.dataForm.deptName = ''
-      this.resetPosition()
+      // this.resetPosition()
     },
-    resetPosition() {
-      this.dataForm.positionId = ''
-      this.dataForm.positionName = ''
-    },
+    // resetPosition() {
+    //   this.dataForm.positionId = ''
+    //   this.dataForm.positionName = ''
+    // },
 
     // 响应下拉框change事件
     selectOrg(selectArray, item) {
@@ -310,20 +301,20 @@ export default {
       this.dataForm.deptId = item.id
       this.dataForm.deptName = item.title
       this.popDeptVisible = false
-      this.resetPosition()
-      getPositionList(item.id)
-        .then(res => {
-          this.positionList = res.data
-        })
-        .catch(error => {
-          this.$Message.error(error.msg)
-        })
+      // this.resetPosition()
+      // getPositionList(item.id)
+      //   .then(res => {
+      //     this.positionList = res.data
+      //   })
+      //   .catch(error => {
+      //     this.$Message.error(error.msg)
+      //   })
     },
-    selectPosition(selectArray, item) {
-      this.dataForm.positionId = item.id
-      this.dataForm.positionName = item.title
-      this.popPositionVisible = false
-    },
+    // selectPosition(selectArray, item) {
+    //   this.dataForm.positionId = item.id
+    //   this.dataForm.positionName = item.title
+    //   this.popPositionVisible = false
+    // },
 
     selectRole(e) {
       this.dataForm.roleId = e.join(',')
