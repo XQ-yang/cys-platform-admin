@@ -190,8 +190,8 @@ export default {
           { required: true, message: '必填项，不能为空', trigger: 'blur' },
           {
             type: 'string',
-            min: 6,
-            message: '长度必须大于等于6',
+            min: 5,
+            message: '长度必须大于等于5',
             trigger: 'blur'
           }
         ],
