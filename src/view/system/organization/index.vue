@@ -83,7 +83,6 @@ export default {
     addOrUpdateHandle(id) {
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
-        debugger
         this.$refs.addOrUpate.dataForm.id = id
         this.$refs.addOrUpate.init()
       })

@@ -67,7 +67,6 @@ export default {
     getList() {
       this.dataListLoading = true
       fetchList().then(res => {
-        debugger
         this.tableData = res.data
         this.dataListLoading = false
       }).catch(error => {
