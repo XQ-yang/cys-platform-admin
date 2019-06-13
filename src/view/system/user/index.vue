@@ -20,12 +20,13 @@
           v-model="listQuery.realName"
         />
         <Button @click="handleSearch" class="search-btn">查询</Button>
-        <Button @click="addOrUpdateHandle()" class="search-btn">新增</Button>
+        <Button v-permission="{rule:'user:add'}"  @click="addOrUpdateHandle()" class="search-btn">新增</Button>
       </div>
       <!--列表 分页-->
       <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
         <template slot-scope="{ row, index }" slot="action">
           <Button
+            v-permission="{rule:'user:edit'}"
             type="primary"
             size="small"
             style="margin: 5px"
@@ -37,8 +38,8 @@
               <Icon type="ios-arrow-down"></Icon>
             </Button>
             <DropdownMenu slot="list">
-              <DropdownItem name="resetPwd">重置密码</DropdownItem>
-              <DropdownItem name="delete">删除</DropdownItem>
+              <DropdownItem v-permission="{rule:'user:resetPass'}"  name="resetPwd">重置密码</DropdownItem>
+              <DropdownItem v-permission="{rule:'user:del'}" name="delete">删除</DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </template>

@@ -3,7 +3,7 @@
   <div>
     <Card>
       <div class="search-con search-con-top">
-        <Button class="search-btn" @click="addOrUpdateHandle()">新增</Button>
+        <Button v-permission="{rule:'dept:add'}" class="search-btn" @click="addOrUpdateHandle()">新增</Button>
       </div>
       <div class="table-dom">
         <el-table :data="tableData" style="width: 100%;margin-bottom: 20px;" border row-key="id">
@@ -30,8 +30,8 @@
             header-align="center"
             align="center">
             <template slot-scope="scope">
-              <Button  type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(scope.row.id)">编辑</Button>
-              <Button  type="error" size="small" @click="deleteHandle(scope.row.id)" >删除</Button>
+              <Button v-permission="{rule:'dept:edit'}"  type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(scope.row.id)">编辑</Button>
+              <Button v-permission="{rule:'dept:del'}"  type="error" size="small" @click="deleteHandle(scope.row.id)" >删除</Button>
             </template>
           </el-table-column>
         </el-table>

@@ -5,7 +5,7 @@
       机构名称：<Input @on-change="handleClear"  clearable placeholder="机构名称" class="search-input" v-model="listQuery.orgName"/>
       联系人：<Input @on-change="handleClear"  clearable placeholder="联系人" class="search-input" v-model="listQuery.contacts"/>
       <Button @click="handleSearch" class="search-btn">查询</Button>
-      <Button class="search-btn" @click="addOrUpdateHandle()">新增</Button>
+      <Button v-permission="{rule:'org:add'}" class="search-btn" @click="addOrUpdateHandle()">新增</Button>
     </div>
     <div class="table-dom">
       <el-table :data="tableData" style="width: 100%;margin-bottom: 20px;" border row-key="id">
@@ -38,8 +38,8 @@
           header-align="center"
           align="center">
           <template slot-scope="scope">
-            <Button  type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(scope.row.id)">编辑</Button>
-            <Button  type="error" size="small" @click="deleteHandle(scope.row.id)" >删除</Button>
+            <Button v-permission="{rule:'org:edit'}" type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(scope.row.id)">编辑</Button>
+            <Button v-permission="{rule:'org:del'}" type="error" size="small" @click="deleteHandle(scope.row.id)" >删除</Button>
           </template>
         </el-table-column>
       </el-table>

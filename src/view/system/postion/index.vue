@@ -3,15 +3,15 @@
     <Card>
       <!--查询条件及操作按钮-->
       <div class="search-con search-con-top">
-        <Input @on-change="handleClear"  clearable placeholder="岗位名称" class="search-input" v-model="listQuery.name"/>
+        岗位名称：<Input @on-change="handleClear"  clearable placeholder="岗位名称" class="search-input" v-model="listQuery.name"/>
         <Button @click="handleSearch" class="search-btn">查询</Button>
-        <Button @click="addOrUpdateHandle()" class="search-btn">新增</Button>
+        <Button v-permission="{rule:'position:add'}" @click="addOrUpdateHandle()" class="search-btn">新增</Button>
       </div>
       <!--列表 分页-->
       <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
         <template slot-scope="{ row, index }" slot="action">
-            <Button  type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(row.id)">编辑</Button>
-            <Button type="error" size="small" @click="deletePostion(row.id)">删除</Button>
+            <Button v-permission="{rule:'position:edit'}"  type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(row.id)">编辑</Button>
+            <Button v-permission="{rule:'position:del'}" type="error" size="small" @click="deletePostion(row.id)">删除</Button>
         </template>
       </Table>
       <div style="margin: 10px;overflow: hidden">
