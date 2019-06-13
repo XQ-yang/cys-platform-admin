@@ -32,3 +32,12 @@ export const deleteOrg = (id) => {
     method: 'delete'
   })
 }
+/**
+ * 根据组织id获取部门
+ */
+export const getDeptsByOrgId = (id) => {
+  return axios.request({
+    url: '/org/' + id + '/depts',
+    method: 'get'
+  })
+}

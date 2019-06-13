@@ -28,3 +28,9 @@ export const deleteDept = (id) => {
     method: 'delete'
   })
 }
+export const getPositionsByDeptId = (id) => {
+  return axios.request({
+    url: '/dept/' + id + '/positions',
+    method: 'get'
+  })
+}

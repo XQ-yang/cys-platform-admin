@@ -136,10 +136,12 @@
 </template>
 
 <script>
-import { fetchList as getOrgList } from '@/api/organization'
-import { fetchList as getDeptList } from '@/api/dept'
+import {
+  fetchList as getOrgList,
+  getDeptsByOrgId as getDeptList
+} from '@/api/organization'
+import { getPositionsByDeptId as getPositionList } from '@/api/dept'
 import { fetchList as getRoleList } from '@/api/role'
-import { getList as getPositionList } from '@/api/postion'
 import { addOrUpdateUser, getUser } from '@/api/user'
 
 export default {
