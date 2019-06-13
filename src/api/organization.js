@@ -37,7 +37,8 @@ export const deleteOrg = (id) => {
  */
 export const getDeptsByOrgId = (id) => {
   return axios.request({
-    url: '/org/' + id + '/depts',
-    method: 'get'
+    url: '/dept/list',
+    method: 'get',
+    params: { orgId: id }
   })
 }

@@ -298,7 +298,7 @@ export default {
       this.popOrgVisible = false
       this.resetDept()
 
-      getDeptList({ orgId: item.id })
+      getDeptList(item.id)
         .then(res => {
           this.deptList = res.data
         })
@@ -312,7 +312,7 @@ export default {
       this.popDeptVisible = false
       this.resetPosition()
 
-      getPositionList({ deptId: item.id })
+      getPositionList(item.id)
         .then(res => {
           this.positionList = res.data
         })

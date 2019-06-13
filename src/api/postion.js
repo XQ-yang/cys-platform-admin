@@ -7,11 +7,11 @@ export const fetchList = (query) => {
     params: query
   })
 }
-export const getList = (query) => {
+// 根据部门id获取岗位列表
+export const getList = (id) => {
   return axios.request({
-    url: '/position/getPositionListByDeptId',
-    method: 'get',
-    params: query
+    url: '/position/positions/' + id,
+    method: 'get'
   })
 }
 export const addOrUpdatePosition = (positionTemp) => {

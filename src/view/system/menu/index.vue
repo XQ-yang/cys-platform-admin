@@ -2,7 +2,7 @@
 <div>
   <Card>
     <div class="search-con search-con-top">
-      <Button v-permission="{rule:'addMenu'}" class="search-btn" @click="addOrUpdateHandle()">新增</Button>
+      <Button v-permission="{rule:'menu:add'}" class="search-btn" @click="addOrUpdateHandle()">新增</Button>
     </div>
     <div class="table-dom">
       <el-table :data="tableData" style="width: 100%;margin-bottom: 20px;" border row-key="id">
@@ -55,8 +55,8 @@
           header-align="center"
           align="center">
           <template slot-scope="scope">
-            <Button v-permission="{rule:'editMenu'}" type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(scope.row.id)">编辑</Button>
-            <Button v-permission="{rule:'delMenu'}" type="error" size="small" style="margin: 5px" @click="deleteHandle(scope.row.id)" >删除</Button>
+            <Button v-permission="{rule:'menu:edit'}" type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(scope.row.id)">编辑</Button>
+            <Button v-permission="{rule:'menu:del'}" type="error" size="small" style="margin: 5px" @click="deleteHandle(scope.row.id)" >删除</Button>
           </template>
         </el-table-column>
       </el-table>
