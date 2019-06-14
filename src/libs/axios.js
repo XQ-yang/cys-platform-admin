@@ -26,6 +26,7 @@ class HttpRequest {
     // 请求拦截
     instance.interceptors.request.use(request => {
       if (!request.url.includes('/oauth/token')) {
+        request.headers['Content-type'] = 'application/json;charset=UTF-8'
         if (getToken()) {
           request.headers['Authorization'] = 'Bearer ' + getToken()
         } else {

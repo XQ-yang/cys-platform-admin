@@ -2,7 +2,7 @@ import axios from '@/libs/api.request'
 
 export const fetchList = (query) => {
   return axios.request({
-    url: '/dept/list',
+    url: '/dept/get_list',
     method: 'get',
     params: query
   })
@@ -26,7 +26,7 @@ export const getDeptInfo = (id) => {
 export const deleteDept = (id) => {
   return axios.request({
     url: '/dept/remove',
-    method: 'delete',
+    method: 'post',
     data: id
   })
 }
