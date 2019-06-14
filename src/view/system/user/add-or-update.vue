@@ -207,7 +207,7 @@ export default {
           {
             type: 'string',
             required: true,
-            pattern: /^1[34578]\d{9}$/,
+            pattern: /^1[345789]\d{9}$/,
             message: '手机号格式不正确',
             trigger: 'blur'
           }
