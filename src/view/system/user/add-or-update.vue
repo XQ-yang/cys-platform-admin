@@ -61,11 +61,10 @@
           <Col span="12">
             <Form-item label="角色" prop="roleId">
               <Select
-                v-model="dataForm.roleIds"
+                v-model="dataForm.roleId"
                 multiple
                 filterable
                 placeholder="请选择"
-                @on-change="selectRole"
               >
                 <Option v-for="item in roleList" :value="item.id" :key="item.id">{{ item.roleName }}</Option>
               </Select>
@@ -159,7 +158,6 @@ export default {
         orgName: '',
         deptId: '',
         deptName: '',
-        roleIds: [],
         roleId: '',
         positionId: '',
         positionName: '',
@@ -200,7 +198,7 @@ export default {
           { required: true, message: '必填项，不能为空', trigger: 'change' }
         ],
         roleId: [
-          { required: true, message: '必填项，不能为空', trigger: 'blur' }
+          { type: 'array', required: true, message: '必填项，不能为空', trigger: 'blur' }
         ],
         sex: [
           { required: true, message: '必填项，不能为空', trigger: 'change' }
@@ -261,9 +259,13 @@ export default {
           this.orgList = res.data
           if (this.dataForm.id !== '' && this.dataForm.id !== undefined) {
             getUser(this.dataForm.id).then(res => {
+              debugger
               this.dataForm = {
                 ...this.dataForm,
                 ...res.data
+              }
+              if (this.dataForm.roleId) {
+                this.dataForm.roleId = this.dataForm.roleId.split(',')
               }
             })
           }
