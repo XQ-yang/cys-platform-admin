@@ -88,7 +88,6 @@
           <Col span="12">
             <Form-item label="性别">
               <RadioGroup v-model="dataForm.sex">
-                <Radio :label="0">未知</Radio>
                 <Radio :label="1">男</Radio>
                 <Radio :label="2">女</Radio>
               </RadioGroup>
