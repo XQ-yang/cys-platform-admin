@@ -259,6 +259,7 @@ export default {
           this.orgList = res.data
           if (this.dataForm.id !== '' && this.dataForm.id !== undefined) {
             getUser(this.dataForm.id).then(res => {
+              debugger
               this.dataForm = {
                 ...this.dataForm,
                 ...res.data

@@ -58,7 +58,7 @@ export const getUser = (id) => {
   return axios.request({
     url: '/user/get_info',
     method: 'get',
-    params: id
+    params: { id }
   })
 }
 
