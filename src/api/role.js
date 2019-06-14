@@ -6,7 +6,7 @@ import axios from '@/libs/api.request'
  */
 export const fetchList = (query) => {
   return axios.request({
-    url: '/role/page',
+    url: '/role/get_page',
     method: 'get',
     params: query
   })
@@ -18,7 +18,7 @@ export const fetchList = (query) => {
  */
 export const addOrUpdateRole = (role) => {
   return axios.request({
-    url: '/role/',
+    url: '/role/save',
     method: 'post',
     data: role
   })
@@ -28,22 +28,24 @@ export const addOrUpdateRole = (role) => {
  */
 export const deleteRole = (id) => {
   return axios.request({
-    url: '/role/' + id,
-    method: 'delete'
+    url: '/role/remove',
+    method: 'post',
+    data: id
   })
 }
 
 export const getRoleInfo = (id) => {
   return axios.request({
-    url: '/role/' + id,
-    method: 'get'
+    url: '/role/get_info',
+    method: 'get',
+    params: id
   })
 }
 
 export const setRoles = (roleMenus) => {
   console.log(roleMenus)
   return axios.request({
-    url: '/role/roleMenu',
+    url: '/role/save_role_menu',
     method: 'post',
     data: roleMenus
   })
@@ -51,20 +53,22 @@ export const setRoles = (roleMenus) => {
 
 export const getRoleMenuById = (id) => {
   return axios.request({
-    url: '/role/roleMenu/' + id,
-    method: 'get'
+    url: '/role/get_menus_by_role_id',
+    method: 'get',
+    params: { roleId: id }
   })
 }
-
+// 根据角色id获取全部的部门标记已选权限
 export const getRoleDeptById = (id) => {
   return axios.request({
-    url: '/role/roleDept/' + id,
-    method: 'get'
+    url: '/role/get_depts_by_role_id',
+    method: 'get',
+    params: { roleId: id }
   })
 }
 export const setDeptRoles = (deptRoles) => {
   return axios.request({
-    url: '/role/roleDept',
+    url: '/role/save_role_dept',
     method: 'post',
     data: deptRoles
   })

@@ -33,7 +33,7 @@ export const logout = () => {
 
 export const fetchList = (query) => {
   return axios.request({
-    url: '/user/page',
+    url: '/user/get_page',
     method: 'get',
     params: query
   })
@@ -49,23 +49,19 @@ export const addOrUpdateUser = (userTemp) => {
 
 export const deleteUser = (id) => {
   return axios.request({
-    url: 'user/' + id,
-    method: 'delete'
+    url: '/user/remove',
+    method: 'post',
+    data: id
   })
 }
 export const getUser = (id) => {
   return axios.request({
-    url: 'user/' + id,
-    method: 'get'
+    url: '/user/get_info',
+    method: 'get',
+    params: id
   })
 }
-// 获取所有用户
-export const getUserList = () => {
-  return axios.request({
-    url: '/user/getUserList',
-    method: 'get'
-  })
-}
+
 // 获取登陆用户所拥有的权限
 export const authorization = () => {
   return axios.request({
@@ -74,35 +70,20 @@ export const authorization = () => {
   })
 }
 
-export const importUserData = (userImport) => {
-  return axios.request({
-    url: '/user/importData',
-    method: 'post',
-    data: userImport
-  })
-}
 export const editPassword = (editPasswordForm) => {
   return axios.request({
-    url: '/user/password-edit',
+    url: '/user/edit_password',
     method: 'post',
     data: editPasswordForm
   })
 }
 export const resetPassword = (id) => {
   return axios.request({
-    url: '/user/resetPassword',
+    url: '/user/reset_password',
     method: 'post',
     headers: {
       'Content-type': 'application/json;charset=UTF-8'
     },
     data: id
-  })
-}
-
-// 获取角色为“质检”的用户
-export const getQualityUserList = () => {
-  return axios.request({
-    url: '/user/getQualityUserList',
-    method: 'get'
   })
 }

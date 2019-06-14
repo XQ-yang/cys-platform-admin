@@ -2,7 +2,7 @@ import axios from '@/libs/api.request'
 
 export const addOrUpdateOrg = (dataForm) => {
   return axios.request({
-    url: '/org/',
+    url: '/org/save',
     method: 'post',
     data: dataForm
   })
@@ -13,7 +13,7 @@ export const addOrUpdateOrg = (dataForm) => {
 */
 export const fetchList = (query) => {
   return axios.request({
-    url: '/org/orgTree',
+    url: '/org/get_org_tree',
     method: 'get',
     params: query
   })
@@ -21,15 +21,17 @@ export const fetchList = (query) => {
 
 export const getOrgInfo = (id) => {
   return axios.request({
-    url: '/org/' + id,
-    method: 'get'
+    url: '/org/get_info',
+    method: 'get',
+    params: id
   })
 }
 
 export const deleteOrg = (id) => {
   return axios.request({
-    url: '/org/' + id,
-    method: 'delete'
+    url: '/org/remove',
+    method: 'post',
+    data: id
   })
 }
 /**
@@ -37,7 +39,7 @@ export const deleteOrg = (id) => {
  */
 export const getDeptsByOrgId = (id) => {
   return axios.request({
-    url: '/dept/list',
+    url: '/dept/get_list',
     method: 'get',
     params: { orgId: id }
   })

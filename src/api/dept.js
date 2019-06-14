@@ -10,7 +10,7 @@ export const fetchList = (query) => {
 
 export const addOrUpdateDept = (detpTemp) => {
   return axios.request({
-    url: '/dept/',
+    url: '/dept/save',
     method: 'post',
     data: detpTemp
   })
@@ -18,19 +18,16 @@ export const addOrUpdateDept = (detpTemp) => {
 
 export const getDeptInfo = (id) => {
   return axios.request({
-    url: '/dept/' + id,
-    method: 'get'
+    url: '/dept/get_info',
+    method: 'get',
+    params: id
   })
 }
 export const deleteDept = (id) => {
   return axios.request({
-    url: '/dept/' + id,
-    method: 'delete'
+    url: '/dept/remove',
+    method: 'delete',
+    data: id
   })
 }
-export const getPositionsByDeptId = (id) => {
-  return axios.request({
-    url: '/position/positions/' + id,
-    method: 'get'
-  })
-}
+

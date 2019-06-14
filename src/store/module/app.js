@@ -14,7 +14,6 @@ import {
   routeNameEqual
 } from '@/libs/util'
 import beforeClose from '@/router/before-close'
-import { saveErrorLogger } from '@/api/data'
 import router from '@/router'
 import config from '@/config'
 const { homeName } = config
@@ -108,19 +107,6 @@ export default {
     }
   },
   actions: {
-    addErrorLog({ commit, rootState }, info) {
-      if (!window.location.href.includes('error_logger_page')) commit('setHasReadErrorLoggerStatus', false)
-      const { user: { token, userId, userName }} = rootState
-      let data = {
-        ...info,
-        time: Date.parse(new Date()),
-        token,
-        userId,
-        userName
-      }
-      saveErrorLogger(info).then(() => {
-        commit('addError', data)
-      })
-    }
+
   }
 }
