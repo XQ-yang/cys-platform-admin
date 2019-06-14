@@ -197,7 +197,7 @@ export default {
         positionName: [
           { required: true, message: '必填项，不能为空', trigger: 'change' }
         ],
-        roleIds: [
+        roleId: [
           { type: 'array', required: true, message: '必填项，不能为空', trigger: 'blur' }
         ],
         sex: [

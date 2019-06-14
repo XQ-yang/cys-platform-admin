@@ -7,7 +7,7 @@
       @on-ok="dataFormSubmitHandle()"
       class-name="vertical-center-modal"
       :mask-closable="false"
-      width="960"
+      width="700"
       >
         <Form ref="menuForm" :model="dataForm" :rules="rules" :label-width="100" class="editForm">
           <Form-item label="类型" prop="type" >
