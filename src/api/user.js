@@ -41,7 +41,7 @@ export const fetchList = (query) => {
 
 export const addOrUpdateUser = (userTemp) => {
   return axios.request({
-    url: '/user/',
+    url: '/user/save',
     method: 'post',
     data: userTemp
   })
