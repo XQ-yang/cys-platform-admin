@@ -197,7 +197,7 @@ export default {
         positionName: [
           { required: true, message: '必填项，不能为空', trigger: 'change' }
         ],
-        roleId: [
+        roleIds: [
           { type: 'array', required: true, message: '必填项，不能为空', trigger: 'blur' }
         ],
         sex: [
@@ -259,13 +259,9 @@ export default {
           this.orgList = res.data
           if (this.dataForm.id !== '' && this.dataForm.id !== undefined) {
             getUser(this.dataForm.id).then(res => {
-              debugger
               this.dataForm = {
                 ...this.dataForm,
                 ...res.data
-              }
-              if (this.dataForm.roleId) {
-                this.dataForm.roleId = this.dataForm.roleId.split(',')
               }
             })
           }
@@ -277,13 +273,7 @@ export default {
     resetDept() {
       this.dataForm.deptId = ''
       this.dataForm.deptName = ''
-      // this.resetPosition()
     },
-    // resetPosition() {
-    //   this.dataForm.positionId = ''
-    //   this.dataForm.positionName = ''
-    // },
-
     // 响应下拉框change事件
     selectOrg(selectArray, item) {
       this.dataForm.orgId = item.id
@@ -303,23 +293,6 @@ export default {
       this.dataForm.deptId = item.id
       this.dataForm.deptName = item.title
       this.popDeptVisible = false
-      // this.resetPosition()
-      // getPositionList(item.id)
-      //   .then(res => {
-      //     this.positionList = res.data
-      //   })
-      //   .catch(error => {
-      //     this.$Message.error(error.msg)
-      //   })
-    },
-    // selectPosition(selectArray, item) {
-    //   this.dataForm.positionId = item.id
-    //   this.dataForm.positionName = item.title
-    //   this.popPositionVisible = false
-    // },
-
-    selectRole(e) {
-      this.dataForm.roleId = e.join(',')
     },
 
     // list数据转成tree形的数据结构
