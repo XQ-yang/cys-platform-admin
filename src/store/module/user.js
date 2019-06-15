@@ -10,7 +10,8 @@ export default {
     hasGetInfo: false,
     btnRules: [], // 按钮权限
     routerRules: [], // 路由菜单权限
-    roleIds: []
+    roleIds: [],
+    refreshToken: ''// 刷新token
   },
   mutations: {
     setUserId(state, id) {
@@ -37,6 +38,9 @@ export default {
     },
     setRouterRules(state, routesName) {
       state.routerRules = routesName
+    },
+    setRefreshToken(state, refreshToekn) {
+      state.refreshToken = refreshToekn
     }
   },
   actions: {
@@ -49,7 +53,9 @@ export default {
           password
         }).then(res => {
           window.localStorage.removeItem('tagNaveList')
+          debugger
           commit('setToken', res.access_token)
+          commit('setRefreshToken', res.refresh_token)
           resolve()
         }).catch(err => {
           reject(err)
