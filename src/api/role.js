@@ -38,7 +38,7 @@ export const getRoleInfo = (id) => {
   return axios.request({
     url: '/role/get_info',
     method: 'get',
-    params: id
+    params: { id }
   })
 }
 
