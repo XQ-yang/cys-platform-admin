@@ -1,7 +1,8 @@
 import axios from 'axios'
-import { getToken } from '@/libs/util'
+import { getToken, localRead } from '@/libs/util'
 import { Message as Msg } from 'iview'
-
+import refreshToken from '@/api/refreshToken'
+let isLock = true
 class HttpRequest {
   constructor(baseUrl) {
     this.baseUrl = baseUrl
@@ -11,7 +12,8 @@ class HttpRequest {
     const config = {
       baseURL: this.baseUrl,
       headers: {
-        'X-URL-PATH': location.pathname
+        'X-URL-PATH': location.pathname,
+        'Authorization': 'Bearer ' + getToken()
       }
     }
     return config
@@ -27,18 +29,11 @@ class HttpRequest {
     instance.interceptors.request.use(request => {
       if (!request.url.includes('/oauth/token')) {
         request.headers['Content-type'] = 'application/json;charset=UTF-8'
-        if (getToken()) {
-          request.headers['Authorization'] = 'Bearer ' + getToken()
-        } else {
-          // 如果token过期或者不存在则跳转到登录页面
-          window.location.href = '/login'
-        }
       }
       // 添加全局的loading...
       if (!Object.keys(this.queue).length) {
         // Spin.show()
       }
-
       this.queue[url] = true
       return request
     }, error => {
@@ -46,17 +41,33 @@ class HttpRequest {
       return Promise.reject(error)
     })
     // 响应拦截
-    instance.interceptors.response.use(res => {
+    instance.interceptors.response.use(async(response) => {
+      let data = {}
       this.destroy(url)
-      if (res.data.code !== 2000 && !url.includes('/oauth/token')) {
+      if (response.data.code !== 2000 && !url.includes('/oauth/token')) {
         // token 过期应该返回登陆页面
-        if (res.data.code === 1400 || res.data.code === 1401) {
-          Msg.error('未登录，或者登录已过期，请登录')
-          window.location.href = '/login'
+        if (response.data.code === 1010) {
+          const refreshJwt = localRead(`refreshToken`)
+          if ((refreshJwt !== 'undefined' && refreshJwt) && isLock) {
+            debugger
+            await refreshToken(response)
+            isLock = false
+            response.config.headers.Authorization = 'Bearer ' + getToken()// 重新获取最新token
+            const result = await axios.request(response.config)
+            console.log(result)
+            if (result) {
+              data = result
+              isLock = true
+            } else {
+              Msg.error((response.data && response.data.msg) || `身份过期，请重新登录!`)
+              window.location.href = '/login'
+            }
+          }
         }
-        return Promise.reject(res.data)
+        return Promise.reject(response.data)
       } else {
-        return res.data
+        data = response.data
+        return data
       }
     }, error => {
       // 错误的请求结果处理，这里的代码根据后台的状态码来决定错误的输出信息
@@ -114,6 +125,7 @@ class HttpRequest {
 
   request(options) {
     const instance = axios.create()
+    // 解构对象
     options = Object.assign(this.getInsideConfig(), options)
     this.interceptors(instance, options.url)
     return instance(options)

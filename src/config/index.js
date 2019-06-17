@@ -1,14 +1,14 @@
 export default {
   /**
-   * @description token在Cookie中存储的天数，默认1天
+   * @description token在Cookie中存储的天数，默认1天 (测试时设置为4分钟)
    */
-  cookieExpires: 1,
+  cookieExpires: new Date(new Date().getTime() + 20 * 60 * 1000),
 
   /**
    * @description api请求基础路径
    */
   baseUrl: {
-    dev: 'http://192.168.10.115:8100',
+    dev: 'http://localhost:8080',
     pro: 'http://192.168.10.115:8100'
   },
 

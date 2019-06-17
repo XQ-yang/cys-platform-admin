@@ -39,9 +39,9 @@ export default {
     setRouterRules(state, routesName) {
       state.routerRules = routesName
     },
-    setRefreshToken(state, refreshToekn) {
-      state.refreshToken = refreshToekn
-      localSave('refreshToekn', refreshToekn)
+    setRefreshToken(state, refreshToken) {
+      state.refreshToken = refreshToken
+      localSave('refreshToken', refreshToken)
     }
   },
   actions: {
@@ -53,6 +53,7 @@ export default {
           userName,
           password
         }).then(res => {
+          debugger
           window.localStorage.removeItem('tagNaveList')
           commit('setToken', res.access_token)
           commit('setRefreshToken', res.refresh_token)
