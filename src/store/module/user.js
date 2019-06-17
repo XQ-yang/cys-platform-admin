@@ -1,5 +1,5 @@
 import { login, getUserInfo, logout, authorization } from '@/api/user'
-import { setToken, getToken } from '@/libs/util'
+import { setToken, getToken, localSave } from '@/libs/util'
 
 export default {
   state: {
@@ -41,6 +41,7 @@ export default {
     },
     setRefreshToken(state, refreshToekn) {
       state.refreshToken = refreshToekn
+      localSave('refreshToekn', refreshToekn)
     }
   },
   actions: {
@@ -53,7 +54,6 @@ export default {
           password
         }).then(res => {
           window.localStorage.removeItem('tagNaveList')
-          debugger
           commit('setToken', res.access_token)
           commit('setRefreshToken', res.refresh_token)
           resolve()
