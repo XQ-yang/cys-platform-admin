@@ -26,7 +26,6 @@ class HttpRequest {
     // 请求拦截
     instance.interceptors.request.use(request => {
       if (!request.url.includes('/oauth/token')) {
-        request.headers['Content-type'] = 'application/json;charset=UTF-8'
         if (getToken()) {
           request.headers['Authorization'] = 'Bearer ' + getToken()
         } else {
@@ -50,7 +49,7 @@ class HttpRequest {
       this.destroy(url)
       if (res.data.code !== 2000 && !url.includes('/oauth/token')) {
         // token 过期应该返回登陆页面
-        if (res.data.code === 1400 || res.data.code === 1401) {
+        if (res.data.code === 1010) {
           Msg.error('未登录，或者登录已过期，请登录')
           window.location.href = '/login'
         }

@@ -26,7 +26,7 @@ export const getUserInfo = (token) => {
 }
 export const logout = () => {
   return axios.request({
-    url: '/loginInfo/token-revoke',
+    url: '/loginInfo/revoke_token',
     method: 'post'
   })
 }
@@ -41,7 +41,7 @@ export const fetchList = (query) => {
 
 export const addOrUpdateUser = (userTemp) => {
   return axios.request({
-    url: '/user/',
+    url: '/user/save',
     method: 'post',
     data: userTemp
   })
@@ -58,7 +58,7 @@ export const getUser = (id) => {
   return axios.request({
     url: '/user/get_info',
     method: 'get',
-    params: id
+    params: { id }
   })
 }
 

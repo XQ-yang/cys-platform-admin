@@ -27,7 +27,7 @@ export const getPosition = (id) => {
   return axios.request({
     url: '/position/get_info',
     method: 'get',
-    params: id
+    params: { id }
   })
 }
 

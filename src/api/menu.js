@@ -30,7 +30,7 @@ export const getMenuInfo = (id) => {
   return axios.request({
     url: '/menu/get_info',
     method: 'get',
-    params: id
+    params: { id }
   })
 }
 
@@ -38,6 +38,6 @@ export const deleteMunu = (id) => {
   return axios.request({
     url: '/menu/remove',
     method: 'post',
-    params: id
+    data: id
   })
 }

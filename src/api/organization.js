@@ -23,7 +23,7 @@ export const getOrgInfo = (id) => {
   return axios.request({
     url: '/org/get_info',
     method: 'get',
-    params: id
+    params: { id }
   })
 }
 

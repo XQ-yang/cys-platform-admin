@@ -88,7 +88,6 @@
           <Col span="12">
             <Form-item label="性别">
               <RadioGroup v-model="dataForm.sex">
-                <Radio :label="0">未知</Radio>
                 <Radio :label="1">男</Radio>
                 <Radio :label="2">女</Radio>
               </RadioGroup>
@@ -259,6 +258,7 @@ export default {
           this.orgList = res.data
           if (this.dataForm.id !== '' && this.dataForm.id !== undefined) {
             getUser(this.dataForm.id).then(res => {
+              debugger
               this.dataForm = {
                 ...this.dataForm,
                 ...res.data

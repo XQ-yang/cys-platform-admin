@@ -20,7 +20,7 @@ export const getDeptInfo = (id) => {
   return axios.request({
     url: '/dept/get_info',
     method: 'get',
-    params: id
+    params: { id }
   })
 }
 export const deleteDept = (id) => {
