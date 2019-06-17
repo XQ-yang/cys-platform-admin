@@ -20,19 +20,12 @@ class HttpRequest {
   }
   destroy(url) {
     delete this.queue[url]
-    if (!Object.keys(this.queue).length) {
-      // Spin.hide()
-    }
   }
   interceptors(instance, url) {
     // 请求拦截
     instance.interceptors.request.use(request => {
       if (!request.url.includes('/oauth/token')) {
         request.headers['Content-type'] = 'application/json;charset=UTF-8'
-      }
-      // 添加全局的loading...
-      if (!Object.keys(this.queue).length) {
-        // Spin.show()
       }
       this.queue[url] = true
       return request
@@ -49,12 +42,11 @@ class HttpRequest {
         if (response.data.code === 1010) {
           const refreshJwt = localRead(`refreshToken`)
           if ((refreshJwt !== 'undefined' && refreshJwt) && isLock) {
-            debugger
             await refreshToken(response)
             isLock = false
-            response.config.headers.Authorization = 'Bearer ' + getToken()// 重新获取最新token
+            const token = getToken()
+            response.config.headers.Authorization = 'Bearer ' + token// 重新获取最新token
             const result = await axios.request(response.config)
-            console.log(result)
             if (result) {
               data = result
               isLock = true

@@ -15,25 +15,21 @@ export default async() => {
     refresh_token: refresh_token
   }
   try {
-    debugger
     const res = await axios.request({
       url: '/oauth/token',
       data: qs.stringify(refreshData),
       method: 'post'
     })
     debugger
-    if (res === 1011) { // 刷新token失效
+    const { code, access_token, refresh_token } = res
+    if (code && code === 1011) {
       window.location.href = '/login'
-    } else {
-      debugger
-      const { access_token, refresh_token } = res
-      console.log(res)
-      if (access_token && refresh_token) {
-        setToken('token', access_token)
-        localSave('refreshToken', refresh_token)
-      }
-      return { ...res }
     }
+    if (access_token && refresh_token) {
+      setToken(access_token)
+      localSave('refreshToken', refresh_token)
+    }
+    return res
   } catch (error) {
     console.log(error)
   }

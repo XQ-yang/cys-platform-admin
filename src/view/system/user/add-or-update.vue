@@ -73,8 +73,8 @@
           <Col span="12">
             <Form-item label="是否启用" prop="status">
               <Select v-model="dataForm.status" clearable placeholder="请选择">
-                <Option :value="0">启用</Option>
-                <Option :value="1">禁用</Option>
+                <Option :value="1">启用</Option>
+                <Option :value="0">禁用</Option>
               </Select>
             </Form-item>
           </Col>
