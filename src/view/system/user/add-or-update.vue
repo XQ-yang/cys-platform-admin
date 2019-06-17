@@ -152,7 +152,7 @@ export default {
         avatar: '',
         sex: '',
         birthday: '',
-        status: 0,
+        status: 1,
         orgId: '',
         orgName: '',
         deptId: '',
