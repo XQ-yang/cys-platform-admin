@@ -1,7 +1,7 @@
 import axios from '@/libs/api.request'
 import qs from 'qs'
 import { setToken, localRead, localSave } from '@/libs/util'
-
+import router from '@/router/index'
 export default async() => {
   let grant_type = 'refresh_token'
   let client_id = 'admin-web'
@@ -19,17 +19,18 @@ export default async() => {
       data: qs.stringify(refreshData),
       method: 'post'
     })
-    debugger
     const { code, access_token, refresh_token } = res
     if (code && code === 1011) {
-      window.location.href = '/login'
-    }
-    if (access_token && refresh_token) {
+      setToken('')
+      localSave('refreshToken', '')
+      return router.replace({ path: '/login', query: { redirect: router.currentRoute.fullPath }})
+      // window.location.href = '/login'
+    } else if (access_token && refresh_token) {
       setToken(access_token)
       localSave('refreshToken', refresh_token)
     }
     return res
   } catch (error) {
-    console.log(error)
+
   }
 }
