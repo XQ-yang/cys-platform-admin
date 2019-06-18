@@ -71,6 +71,24 @@ export const routerMap = [
           title: '系统菜单'
         },
         component: () => import('@/view/system/menu/index.vue')
+      },
+      {
+        path: 'operlog',
+        name: 'operlog',
+        meta: {
+          icon: 'ios-menu',
+          title: '操作日志'
+        },
+        component: () => import('@/view/system/operlog/index.vue')
+      },
+      {
+        path: 'log',
+        name: 'logininfo',
+        meta: {
+          icon: 'ios-menu',
+          title: '登录日志'
+        },
+        component: () => import('@/view/system/logininfo/index.vue')
       }
     ]
   }
