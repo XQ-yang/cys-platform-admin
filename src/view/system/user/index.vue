@@ -197,6 +197,7 @@ export default {
       })
     },
     handleSearch() {
+      this.listQuery.pageNumber = 1
       this.getList()
     },
     handleDelete(id) {
