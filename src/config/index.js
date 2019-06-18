@@ -2,7 +2,7 @@ export default {
   /**
    * @description token在Cookie中存储的天数，默认1天 (测试时设置为4分钟)
    */
-  cookieExpires: new Date(new Date().getTime() + 20 * 60 * 1000),
+  cookieExpires: 1,
 
   /**
    * @description api请求基础路径

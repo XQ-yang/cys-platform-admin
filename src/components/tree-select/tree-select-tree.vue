@@ -104,8 +104,6 @@ export default {
       this.parent.$emit('on-change', selectArray)
     },
     handleTreeSelect(selectArray, selectItem) {
-      debugger
-      // this.$emit('on-select', selectArray)
       this.parent.$emit('on-change', selectArray)
     },
     checkData(data, emit, expandAll) {

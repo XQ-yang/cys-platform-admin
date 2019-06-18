@@ -53,7 +53,6 @@ export default {
           userName,
           password
         }).then(res => {
-          debugger
           window.localStorage.removeItem('tagNaveList')
           commit('setToken', res.access_token)
           commit('setRefreshToken', res.refresh_token)
@@ -68,6 +67,7 @@ export default {
       return new Promise((resolve, reject) => {
         logout().then(() => {
           window.localStorage.removeItem('tagNaveList')
+          window.localStorage.removeItem('refreshToken')
           commit('setToken', '')
           commit('setHasGetInfo', false)
           resolve()

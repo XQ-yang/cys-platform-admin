@@ -24,7 +24,7 @@
                 type="text"
                 v-model="dataForm.username"
                 :maxlength="10"
-                :readonly="dataForm.id!=''&&dataForm.is!=undefined"
+                :disabled="userVisible"
               ></Input>
             </Form-item>
           </Col>
@@ -73,8 +73,8 @@
           <Col span="12">
             <Form-item label="是否启用" prop="status">
               <Select v-model="dataForm.status" clearable placeholder="请选择">
-                <Option :value="0">启用</Option>
-                <Option :value="1">禁用</Option>
+                <Option :value="1">启用</Option>
+                <Option :value="0">禁用</Option>
               </Select>
             </Form-item>
           </Col>
@@ -142,6 +142,7 @@ export default {
       popPositionVisible: false,
       visible: false,
       loading: true,
+      userVisible: false,
       dataForm: {
         id: '',
         username: '',
@@ -152,7 +153,7 @@ export default {
         avatar: '',
         sex: '',
         birthday: '',
-        status: 0,
+        status: 1,
         orgId: '',
         orgName: '',
         deptId: '',
@@ -257,8 +258,8 @@ export default {
         getOrgList().then(res => {
           this.orgList = res.data
           if (this.dataForm.id !== '' && this.dataForm.id !== undefined) {
+            this.userVisible = true
             getUser(this.dataForm.id).then(res => {
-              debugger
               this.dataForm = {
                 ...this.dataForm,
                 ...res.data

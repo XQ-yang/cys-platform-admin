@@ -15,7 +15,7 @@ let isLock = true
  * @param {*} config
  */
 const axiosConf = (config) => {
-  config.headers.Authorization = getToken()
+  config.headers.Authorization = 'Bearer ' + getToken()
   return config
 }
 axios.interceptors.request.use(axiosConf, err => {
