@@ -24,7 +24,7 @@
                 type="text"
                 v-model="dataForm.username"
                 :maxlength="10"
-                :readonly="dataForm.id!=''&&dataForm.is!=undefined"
+                :disabled="dataForm.id"
               ></Input>
             </Form-item>
           </Col>
