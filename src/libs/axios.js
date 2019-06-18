@@ -61,7 +61,6 @@ class HttpRequest {
         }
       } else {
         data = response.data
-        console.log(data)
         return data
       }
     }, error => {

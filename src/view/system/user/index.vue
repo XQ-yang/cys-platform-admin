@@ -173,13 +173,11 @@ export default {
       this.tableLoading = true
       fetchList(this.listQuery)
         .then(res => {
-          debugger
           this.list = res.data.records
           this.total = res.data.total
           this.tableLoading = false
         })
         .catch(error => {
-          debugger
           this.$Message.error(error.msg)
         })
     },
