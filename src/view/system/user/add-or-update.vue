@@ -24,7 +24,7 @@
                 type="text"
                 v-model="dataForm.username"
                 :maxlength="10"
-                :disabled="dataForm.id"
+                :disabled="userVisible"
               ></Input>
             </Form-item>
           </Col>
@@ -142,6 +142,7 @@ export default {
       popPositionVisible: false,
       visible: false,
       loading: true,
+      userVisible: false,
       dataForm: {
         id: '',
         username: '',
@@ -257,8 +258,8 @@ export default {
         getOrgList().then(res => {
           this.orgList = res.data
           if (this.dataForm.id !== '' && this.dataForm.id !== undefined) {
+            this.userVisible = true
             getUser(this.dataForm.id).then(res => {
-              debugger
               this.dataForm = {
                 ...this.dataForm,
                 ...res.data
