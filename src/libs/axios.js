@@ -36,7 +36,6 @@ class HttpRequest {
     instance.interceptors.response.use(async(response) => {
       let data = {}
       this.destroy(url)
-      debugger
       if (response.data.code !== 2000 && !url.includes('/oauth/token')) {
         // token 过期应该返回登陆页面
         if (response.data.code === 1010) {
@@ -50,14 +49,19 @@ class HttpRequest {
             if (result) {
               data = result.data
               isLock = true
-              return data
-            } else {
-              return Promise.reject(response.data)
+              if (data.code !== 2000) {
+                return Promise.reject(data)
+              } else {
+                return data
+              }
             }
           }
+        } else if (response.data.code !== 1010) {
+          return Promise.reject(response.data)
         }
       } else {
         data = response.data
+        console.log(data)
         return data
       }
     }, error => {

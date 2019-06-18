@@ -80,12 +80,14 @@ export default {
           return this.changeLoading()
         }
         addOrUpdateRole(this.dataForm).then(res => {
+          debugger
           this.changeLoading()
           this.visible = false
           // 触发刷新列表事件
           this.$emit('refreshDataList')
           this.$Message.success(res.msg)
         }).catch(error => {
+          debugger
           this.changeLoading()
           this.visible = true
           this.$Message.error(error.msg)
