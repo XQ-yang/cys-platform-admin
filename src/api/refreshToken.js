@@ -7,7 +7,6 @@ export default async() => {
   let client_id = 'admin-web'
   let client_secret = '4402b06a67334d769fed712453284dae'
   let refresh_token = localRead('refreshToken')
-  console.log(refresh_token)
   const refreshData = {
     grant_type: grant_type,
     client_id: client_id,

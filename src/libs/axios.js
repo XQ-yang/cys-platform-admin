@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { getToken, localRead } from '@/libs/util'
-import { Message as Msg } from 'iview'
 import refreshToken from '@/api/refreshToken'
 let isLock = true
 class HttpRequest {
@@ -37,6 +36,7 @@ class HttpRequest {
     instance.interceptors.response.use(async(response) => {
       let data = {}
       this.destroy(url)
+      debugger
       if (response.data.code !== 2000 && !url.includes('/oauth/token')) {
         // token 过期应该返回登陆页面
         if (response.data.code === 1010) {
@@ -46,17 +46,16 @@ class HttpRequest {
             isLock = false
             const token = getToken()
             response.config.headers.Authorization = 'Bearer ' + token// 重新获取最新token
-            const result = await axios.request(response.config)
+            const result = await axios.request(response.config) // 执行上一次请求
             if (result) {
-              data = result
+              data = result.data
               isLock = true
+              return data
             } else {
-              Msg.error((response.data && response.data.msg) || `身份过期，请重新登录!`)
-              window.location.href = '/login'
+              return Promise.reject(response.data)
             }
           }
         }
-        return Promise.reject(response.data)
       } else {
         data = response.data
         return data

@@ -49,10 +49,12 @@ export default {
     handleLogin({ commit }, { userName, password }) {
       userName = userName.trim()
       return new Promise((resolve, reject) => {
+        debugger
         login({
           userName,
           password
         }).then(res => {
+          debugger
           window.localStorage.removeItem('tagNaveList')
           commit('setToken', res.access_token)
           commit('setRefreshToken', res.refresh_token)
