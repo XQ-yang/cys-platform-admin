@@ -136,7 +136,6 @@ export default {
     },
     getInfo() {
       getOrgInfo(this.dataForm.id).then(res => {
-        debugger
         this.dataForm = {
           ...this.dataForm,
           ...res.data
