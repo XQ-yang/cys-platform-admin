@@ -5,28 +5,29 @@
       <div class="search-con search-con-top">
         操作模块：
         <Input
-          @on-change="handleClear"
+          @on-clear="handleClear"
           clearable
           placeholder="操作模块"
           class="search-input"
           v-model="listQuery.module"
         />
-        操作状态：
-        <i-select style="width:200px" @on-change="handleSelectChange" clearable v-model="listQuery.responeCode">
-          <i-option value="0">正常</i-option>
-          <i-option value="1">异常</i-option>
-        </i-select>
         操作内容：
         <Input
-          @on-change="handleClear"
+          @on-clear="handleClear"
           clearable
           placeholder="操作内容"
           class="search-input"
           v-model="listQuery.operation"
         />
-        <span v-if="show"></br>创建时间：</span>
-        <Date-picker v-if="show" type="datetime" @on-change="handleStartTime" :editable="false" @on-clear="clearStartTime" placeholder="选择日期和时间" style="width: 200px"></Date-picker>
-        <Date-picker v-if="show" type="datetime" :options="options" :editable="false" @on-change="handleEndTime" @on-clear="clearEndTime" placeholder="选择日期和时间" style="width: 200px;margin-right:10px;"></Date-picker>
+        操作状态：
+        <i-select style="width:200px" @on-clear="handleClear" clearable v-model="listQuery.responseCode">
+          <i-option value="0">正常</i-option>
+          <i-option value="1">异常</i-option>
+        </i-select>
+        <span v-show="show"></br>创建时间：</span>
+        <Date-picker v-show="show" type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="handleStartTime" :editable="false" v-model="listQuery.startTime" @on-clear="handleClear" placeholder="选择日期和时间" style="width: 200px"></Date-picker>
+        <span style="margin:2px;" v-show="show">至</span>
+        <Date-picker v-show="show" type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="listQuery.endTime=$event" :options="options" :editable="false" v-model="listQuery.endTime" @on-clear="handleClear" placeholder="选择日期和时间" style="width: 200px;margin-right:10px;"></Date-picker>
         <Button @click="handleSearch" class="search-btn">查询</Button>
         <Button @click="handleStretch">{{stretchName}}</Button>
       </div>
@@ -78,7 +79,7 @@ export default {
         { title: '请求url', key: 'requestUrl', tooltip: true },
         { title: '请求参数', key: 'requestParam', tooltip: true },
         { title: '请求类型', key: 'requestType', tooltip: true },
-        { title: '错误消息', key: 'responeMsg', tooltip: true },
+        { title: '错误消息', key: 'responseMsg', tooltip: true },
         { title: '请求来源', key: 'clientId', tooltip: true },
         { title: '操作用户', key: 'username', tooltip: true },
         { title: '操作内容', key: 'operation', tooltip: true },
@@ -99,7 +100,7 @@ export default {
           key: 'status',
           render: (h, params) => {
             const row = params.row
-            const text = row.responeCode === 0 ? '正常' : '异常'
+            const text = row.responseCode === 0 ? '正常' : '异常'
             return h(
               'div',
               text
@@ -115,7 +116,7 @@ export default {
         pageSize: 10,
         module: '',
         operation: '',
-        responeCode: '',
+        responseCode: '',
         startTime: '',
         endTime: ''
       },
@@ -168,12 +169,6 @@ export default {
     },
     // 清空查询值的时候 重新加载列表数据
     handleClear(e) {
-      if (e.target.value === '') {
-        this.getList()
-      }
-    },
-    handleSelectChange(e) {
-      this.listQuery.responeCode = e
       this.getList()
     },
     handleStartTime(e) {
@@ -183,17 +178,6 @@ export default {
           return date.valueOf() < new Date(e)
         }
       }
-    },
-    handleEndTime(e) {
-      this.listQuery.endTime = e
-    },
-    clearStartTime(e) {
-      this.listQuery.startTime = ''
-      this.getList()
-    },
-    clearEndTime(e) {
-      this.listQuery.endTime = ''
-      this.getList()
     },
     handleStretch() {
       var s = this.stretchName
