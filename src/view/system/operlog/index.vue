@@ -56,7 +56,7 @@
 </template>
 <script>
 import { fetchList } from '@/api/operlog'
-// excel from '@/libs/excel'
+import expandRow from './table-expand.vue'
 export default {
   name: 'operlog',
   filters: {
@@ -65,6 +65,17 @@ export default {
     return {
       list: [],
       tableColumns: [
+        {
+          type: 'expand',
+          width: 50,
+          render: (h, params) => {
+            return h(expandRow, {
+              props: {
+                row: params.row
+              }
+            })
+          }
+        },
         {
           title: '序号',
           width: 65,
@@ -78,18 +89,15 @@ export default {
           }
         },
         { title: '操作模块', key: 'module', tooltip: true },
-        { title: '请求url', key: 'requestUrl', tooltip: true },
-        { title: '请求参数', key: 'requestParam', tooltip: true },
-        { title: '请求类型', key: 'requestType', tooltip: true },
-        { title: '错误消息', key: 'responseMsg', tooltip: true },
-        { title: '请求来源', key: 'clientId', tooltip: true },
-        { title: '操作用户', key: 'username', tooltip: true },
         { title: '操作内容', key: 'operation', tooltip: true },
+        { title: '请求url', key: 'requestUrl', tooltip: true },
         { title: '耗时', key: 'spendTime', tooltip: true, width: 65 },
+        { title: '请求来源', key: 'clientId', tooltip: true },
         {
           title: '创建时间',
           key: 'createTime',
           tooltip: true,
+          width: 180,
           render: (h, params) => {
             return h(
               'div',
@@ -100,6 +108,7 @@ export default {
         {
           title: '操作状态',
           key: 'status',
+          width: 100,
           render: (h, params) => {
             const row = params.row
             const text = row.responseCode === 0 ? '正常' : '异常'
@@ -192,9 +201,6 @@ export default {
         this.show = false
         this.stretchName = '展开'
       }
-    },
-    exportExcel() {
-
     }
   }
 }
