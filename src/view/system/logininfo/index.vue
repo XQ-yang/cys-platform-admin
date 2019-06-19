@@ -17,8 +17,9 @@
           <i-option value="1">异常</i-option>
         </i-select>
         创建时间：
-        <Date-picker type="datetime" @on-change="handleStartTime" :editable="false" clearable @on-clear="handleClear" placeholder="选择日期和时间" style="width: 180px"></Date-picker>
-        <Date-picker type="datetime" :options="options" :editable="false" clearable @on-clear="handleClear" placeholder="选择日期和时间" style="width: 180px;margin-right:10px;"></Date-picker>
+        <Date-picker type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="handleStartTime" :editable="false" v-model="listQuery.startTime" @on-clear="handleClear" placeholder="选择日期和时间" style="width: 165px"></Date-picker>
+        至
+        <Date-picker type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="listQuery.endTime=$event" :options="options" :editable="false" v-model="listQuery.endTime" @on-clear="handleClear" placeholder="选择日期和时间" style="width: 165px;margin-right:10px;"></Date-picker>
         <Button @click="handleSearch" class="search-btn">查询</Button>
       </div>
       <!--列表 分页-->
