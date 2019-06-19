@@ -13,7 +13,8 @@
           <Form-item label="类型" prop="type" >
             <RadioGroup v-model="dataForm.type">
               <Radio :label="0" v-bind:disabled="typeVisible">菜单</Radio>
-              <Radio :label="1" v-bind:disabled="typeVisible">按钮</Radio>
+              <Radio :label="1" v-bind:disabled="typeVisible">按钮(弹出层)</Radio>
+              <Radio :label="2" v-bind:disabled="typeVisible">按钮(新开页)</Radio>
             </RadioGroup>
           </Form-item>
           <Form-item label="名称" prop="title">

@@ -98,7 +98,7 @@ export default {
     authorization({ state, commit }) {
       return new Promise((resolve, reject) => {
         authorization().then(res => {
-          const dataRoutesNames = res.data.ownerMenuList.filter(item => item.type === 0).map(item => {
+          const dataRoutesNames = res.data.ownerMenuList.filter(item => item.type === 0 || item.type === 2).map(item => {
             return item.permission
           })
           // 筛选按钮权限字段

@@ -56,6 +56,7 @@
 </template>
 <script>
 import { fetchList } from '@/api/operlog'
+// excel from '@/libs/excel'
 export default {
   name: 'operlog',
   filters: {
@@ -191,6 +192,9 @@ export default {
         this.show = false
         this.stretchName = '展开'
       }
+    },
+    exportExcel() {
+
     }
   }
 }
