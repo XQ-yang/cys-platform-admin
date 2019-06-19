@@ -12,7 +12,7 @@
           v-model="listQuery.module"
         />
         操作状态：
-        <i-select style="width:200px" @on-clear="handleClear" clearable v-model="listQuery.responeCode">
+        <i-select style="width:200px" @on-change="handleSelectChange" clearable v-model="listQuery.responeCode">
           <i-option value="0">正常</i-option>
           <i-option value="1">异常</i-option>
         </i-select>
@@ -26,8 +26,8 @@
         />
         </br>
         创建时间：
-        <Date-picker type="datetime" @on-change="handleStartTime" @on-clear="clearStartTime" placeholder="选择日期和时间" style="width: 200px"></Date-picker>
-        <Date-picker type="datetime" @on-change="handleEndTime" @on-clear="clearEndTime" placeholder="选择日期和时间" style="width: 200px"></Date-picker>
+        <Date-picker type="datetime" @on-change="handleStartTime" :editable="false" @on-clear="clearStartTime" placeholder="选择日期和时间" style="width: 200px"></Date-picker>
+        <Date-picker type="datetime" :options="options" :editable="false" @on-change="handleEndTime" @on-clear="clearEndTime" placeholder="选择日期和时间" style="width: 200px;margin-right:10px;"></Date-picker>
         <Button @click="handleSearch" class="search-btn">查询</Button>
       </div>
       <!--列表 分页-->
@@ -126,7 +126,12 @@ export default {
         startTime: '',
         endTime: ''
       },
-      dataListLoading: false
+      dataListLoading: false,
+      options: {
+        disabledDate(date) {
+          return false
+        }
+      }
     }
   },
   components: {
@@ -172,12 +177,19 @@ export default {
         this.getList()
       }
     },
+    handleSelectChange(e) {
+      this.listQuery.responeCode = e
+      this.getList()
+    },
     handleStartTime(e) {
-      console.log(e)
       this.listQuery.startTime = e
+      this.options = {
+        disabledDate(date) {
+          return date.valueOf() < new Date(e)
+        }
+      }
     },
     handleEndTime(e) {
-      console.log(e)
       this.listQuery.endTime = e
     },
     clearStartTime(e) {
