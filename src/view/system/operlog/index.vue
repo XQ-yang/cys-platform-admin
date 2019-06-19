@@ -12,7 +12,7 @@
           v-model="listQuery.module"
         />
         操作状态：
-        <i-select style="width:200px" @on-clear="handleClear" clearable v-model="listQuery.responeCode">
+        <i-select style="width:200px" @on-change="handleSelectChange" clearable v-model="listQuery.responeCode">
           <i-option value="0">正常</i-option>
           <i-option value="1">异常</i-option>
         </i-select>
@@ -24,11 +24,11 @@
           class="search-input"
           v-model="listQuery.operation"
         />
-        </br>
-        创建时间：
-        <Date-picker type="datetime" @on-change="handleStartTime" @on-clear="clearStartTime" placeholder="选择日期和时间" style="width: 200px"></Date-picker>
-        <Date-picker type="datetime" @on-change="handleEndTime" @on-clear="clearEndTime" placeholder="选择日期和时间" style="width: 200px"></Date-picker>
+        <span v-if="show"></br>创建时间：</span>
+        <Date-picker v-if="show" type="datetime" @on-change="handleStartTime" :editable="false" @on-clear="clearStartTime" placeholder="选择日期和时间" style="width: 200px"></Date-picker>
+        <Date-picker v-if="show" type="datetime" :options="options" :editable="false" @on-change="handleEndTime" @on-clear="clearEndTime" placeholder="选择日期和时间" style="width: 200px;margin-right:10px;"></Date-picker>
         <Button @click="handleSearch" class="search-btn">查询</Button>
+        <Button @click="handleStretch">{{stretchName}}</Button>
       </div>
       <!--列表 分页-->
       <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
@@ -126,7 +126,14 @@ export default {
         startTime: '',
         endTime: ''
       },
-      dataListLoading: false
+      dataListLoading: false,
+      options: {
+        disabledDate(date) {
+          return false
+        }
+      },
+      stretchName: '展开',
+      show: false
     }
   },
   components: {
@@ -172,12 +179,19 @@ export default {
         this.getList()
       }
     },
+    handleSelectChange(e) {
+      this.listQuery.responeCode = e
+      this.getList()
+    },
     handleStartTime(e) {
-      console.log(e)
       this.listQuery.startTime = e
+      this.options = {
+        disabledDate(date) {
+          return date.valueOf() < new Date(e)
+        }
+      }
     },
     handleEndTime(e) {
-      console.log(e)
       this.listQuery.endTime = e
     },
     clearStartTime(e) {
@@ -187,6 +201,18 @@ export default {
     clearEndTime(e) {
       this.listQuery.endTime = ''
       this.getList()
+    },
+    handleStretch() {
+      var s = this.stretchName
+      this.listQuery.startTime = ''
+      this.listQuery.endTime = ''
+      if (s === '展开') {
+        this.show = true
+        this.stretchName = '收起'
+      } else {
+        this.show = false
+        this.stretchName = '展开'
+      }
     }
   }
 }
