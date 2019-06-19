@@ -211,8 +211,8 @@ export default {
           if (exportData.length) {
             this.exportLoading = true
             const params = {
-              title: this.tableColumns.map(item => { return item.title }),
-              key: this.tableColumns.map(item => { return item.key }),
+              title: ['操作模块', '操作内容', '请求url', '耗时', '请求来源'],
+              key: ['module', 'operation', 'requestUrl', 'spendTime', 'clientId'],
               data: exportData,
               autoWidth: true,
               filename: '操作日志'
