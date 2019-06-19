@@ -28,6 +28,7 @@
         <Date-picker v-if="show" type="datetime" @on-change="handleStartTime" :editable="false" @on-clear="clearStartTime" placeholder="选择日期和时间" style="width: 200px"></Date-picker>
         <Date-picker v-if="show" type="datetime" :options="options" :editable="false" @on-change="handleEndTime" @on-clear="clearEndTime" placeholder="选择日期和时间" style="width: 200px;margin-right:10px;"></Date-picker>
         <Button @click="handleSearch" class="search-btn">查询</Button>
+        <Button class="search-btn">导出</Button>
         <Button @click="handleStretch">{{stretchName}}</Button>
       </div>
       <!--列表 分页-->
