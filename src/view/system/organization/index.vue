@@ -35,6 +35,7 @@
         </el-table-column>
         <el-table-column
           label="操作"
+          width="180"
           header-align="center"
           align="center">
           <template slot-scope="scope">

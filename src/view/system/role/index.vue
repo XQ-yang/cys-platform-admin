@@ -75,7 +75,8 @@ export default {
         {
           title: '操作',
           slot: 'action',
-          align: 'center'
+          align: 'center',
+          width: 180
         }
       ],
       total: 0,

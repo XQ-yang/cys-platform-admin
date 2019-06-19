@@ -209,7 +209,6 @@ export default {
       position: fixed;
       top:0;
       left: 0;
-      background: #2b3042;
       z-index:999;
       transition: width 0.28s;
     }

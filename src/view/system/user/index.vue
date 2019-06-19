@@ -121,15 +121,8 @@ export default {
           render: (h, params) => {
             const row = params.row
             const text = row.status === 1 ? '启用' : '禁用'
-            const color = row.status === 1 ? 'success' : 'error'
             return h(
-              'Tag',
-              {
-                props: {
-                  type: 'dot',
-                  color: color
-                }
-              },
+              'div',
               text
             )
           }
@@ -138,7 +131,7 @@ export default {
           title: '操作',
           key: 'action',
           align: 'center',
-          width: 250,
+          width: 160,
           slot: 'action'
         }
       ],

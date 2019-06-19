@@ -5,20 +5,20 @@
       <div class="search-con search-con-top">
         登录账号：
         <Input
-          @on-change="handleClear"
+          @on-clear="handleClear"
           clearable
           placeholder="登录账号"
           class="search-input"
           v-model="listQuery.loginName"
         />
         登录状态：
-        <i-select style="width:200px" @on-change="handleSelectChange" clearable v-model="listQuery.status">
+        <i-select style="width:200px" @on-clear="handleClear"  clearable v-model="listQuery.status">
           <i-option value="0">正常</i-option>
           <i-option value="1">异常</i-option>
         </i-select>
         创建时间：
-        <Date-picker type="datetime" @on-change="handleStartTime" :editable="false" @on-clear="clearStartTime" placeholder="选择日期和时间" style="width: 180px"></Date-picker>
-        <Date-picker type="datetime" :options="options" :editable="false" @on-change="handleEndTime" @on-clear="clearEndTime" placeholder="选择日期和时间" style="width: 180px;margin-right:10px;"></Date-picker>
+        <Date-picker type="datetime" @on-change="handleStartTime" :editable="false" clearable @on-clear="handleClear" placeholder="选择日期和时间" style="width: 180px"></Date-picker>
+        <Date-picker type="datetime" :options="options" :editable="false" clearable @on-clear="handleClear" placeholder="选择日期和时间" style="width: 180px;margin-right:10px;"></Date-picker>
         <Button @click="handleSearch" class="search-btn">查询</Button>
       </div>
       <!--列表 分页-->
@@ -88,15 +88,8 @@ export default {
           render: (h, params) => {
             const row = params.row
             const text = row.status === 0 ? '正常' : '异常'
-            const color = row.status === 0 ? 'success' : 'error'
             return h(
-              'Tag',
-              {
-                props: {
-                  type: 'dot',
-                  color: color
-                }
-              },
+              'div',
               text
             )
           }
@@ -158,12 +151,6 @@ export default {
     },
     // 清空查询值的时候 重新加载列表数据
     handleClear(e) {
-      if (e.target.value === '') {
-        this.getList()
-      }
-    },
-    handleSelectChange(e) {
-      this.listQuery.status = e
       this.getList()
     },
     handleStartTime(e) {
@@ -173,17 +160,6 @@ export default {
           return date.valueOf() < new Date(e)
         }
       }
-    },
-    handleEndTime(e) {
-      this.listQuery.endTime = e
-    },
-    clearStartTime(e) {
-      this.listQuery.startTime = ''
-      this.getList()
-    },
-    clearEndTime(e) {
-      this.listQuery.endTime = ''
-      this.getList()
     }
   }
 }

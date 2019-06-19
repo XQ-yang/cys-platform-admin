@@ -100,15 +100,8 @@ export default {
           render: (h, params) => {
             const row = params.row
             const text = row.responeCode === 0 ? '正常' : '异常'
-            const color = row.responeCode === 0 ? 'success' : 'error'
             return h(
-              'Tag',
-              {
-                props: {
-                  type: 'dot',
-                  color: color
-                }
-              },
+              'div',
               text
             )
           }
