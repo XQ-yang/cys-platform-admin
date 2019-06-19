@@ -29,7 +29,7 @@
         <span style="margin:2px;" v-show="show">至</span>
         <Date-picker v-show="show" type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="listQuery.endTime=$event" :options="options" :editable="false" v-model="listQuery.endTime" @on-clear="handleClear" placeholder="选择日期和时间" style="width: 200px;margin-right:10px;"></Date-picker>
         <Button @click="handleSearch" class="search-btn">查询</Button>
-        <Button class="search-btn">导出</Button>
+        <Button @click="exportData" :loading="exportLoading" class="search-btn">导出</Button>
         <Button @click="handleStretch">{{stretchName}}</Button>
       </div>
       <!--列表 分页-->
@@ -55,8 +55,9 @@
   </div>
 </template>
 <script>
-import { fetchList } from '@/api/operlog'
+import { fetchList, exportOperlog } from '@/api/operlog'
 import expandRow from './table-expand.vue'
+import excel from '@/libs/excel'
 export default {
   name: 'operlog',
   filters: {
@@ -138,7 +139,8 @@ export default {
         }
       },
       stretchName: '展开',
-      show: false
+      show: false,
+      exportLoading: false
     }
   },
   components: {
@@ -201,6 +203,30 @@ export default {
         this.show = false
         this.stretchName = '展开'
       }
+    },
+    exportData() {
+      exportOperlog(this.listQuery)
+        .then(res => {
+          let exportData = res.data
+          if (exportData.length) {
+            this.exportLoading = true
+            const params = {
+              title: this.tableColumns.map(item => { return item.title }),
+              key: this.tableColumns.map(item => { return item.key }),
+              data: exportData,
+              autoWidth: true,
+              filename: '操作日志'
+            }
+            excel.export_array_to_excel(params)
+            this.exportLoading = false
+          } else {
+            this.$Message.info('表格数据不能为空！')
+          }
+          console.log(exportData)
+        })
+        .catch(error => {
+          this.$Message.error(error.msg)
+        })
     }
   }
 }

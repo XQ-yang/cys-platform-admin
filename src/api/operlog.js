@@ -8,3 +8,10 @@ export const fetchList = (query) => {
   })
 }
 
+export const exportOperlog = (query) => {
+  return axios.request({
+    url: '/oper_log/get_list',
+    method: 'get',
+    params: query
+  })
+}
