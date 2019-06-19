@@ -3,6 +3,23 @@
   <div>
     <Card>
       <div class="search-con search-con-top">
+        部门名称：
+        <Input
+          @on-change="handleClear"
+          clearable
+          placeholder="部门名称"
+          class="search-input"
+          v-model="listQuery.deptName"
+        />
+        所属机构：
+        <Input
+          @on-change="handleClear"
+          clearable
+          placeholder="机构名称"
+          class="search-input"
+          v-model="listQuery.orgName"
+        />
+        <Button @click="handleSearch" class="search-btn">查询</Button>
         <Button v-permission="{rule:'dept:add'}" class="search-btn" @click="addOrUpdateHandle()">新增</Button>
       </div>
       <div class="table-dom">
@@ -27,6 +44,7 @@
           </el-table-column>
           <el-table-column
             label="操作"
+            width="180"
             header-align="center"
             align="center">
             <template slot-scope="scope">
@@ -49,6 +67,10 @@ export default {
   data() {
     return {
       tableData: [],
+      listQuery: {
+        deptName: '',
+        orgName: ''
+      },
       addOrUpdateVisible: true,
       dataListLoading: false
     }
@@ -66,12 +88,15 @@ export default {
   methods: {
     getList() {
       this.dataListLoading = true
-      fetchList().then(res => {
+      fetchList(this.listQuery).then(res => {
         this.tableData = res.data
         this.dataListLoading = false
       }).catch(error => {
         this.$Message.error(error.msg)
       })
+    },
+    handleSearch() {
+      this.getList()
     },
     addOrUpdateHandle(id) {
       this.addOrUpdateVisible = true
@@ -93,6 +118,12 @@ export default {
           })
         }
       })
+    },
+    // 清空查询值的时候 重新加载列表数据
+    handleClear(e) {
+      if (e.target.value === '') {
+        this.getList()
+      }
     }
   }
 }
