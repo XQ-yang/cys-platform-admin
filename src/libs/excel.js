@@ -1,6 +1,11 @@
 /* eslint-disable */
 import XLSX from 'xlsx';
-
+//import STYLE from 'xlsx-style'
+/**
+ * 根据数据长度自动计算单元格的宽度
+ * @param {*} ws
+ * @param {*} data
+ */
 function auto_width(ws, data){
     /*set worksheet max width per col*/
     const colWidth = data.map(row => row.map(val => {

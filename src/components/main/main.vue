@@ -34,7 +34,7 @@
               <router-view/>
             </keep-alive>
           </Content>
-           <Footer class="layout-footer-center"  style="padding: 10px 50px;border-top:1px solid #dcdee2; background:#fff;">版权所有 xxxxxx限公司  &copy;2019 </Footer>
+           <Footer class="layout-footer-center"  style="padding: 10px 50px;border-top:1px solid #dcdee2; background:#fff;">版权所有 深圳市残友软件限公司  &copy;2019 </Footer>
         </Layout>
       </Content>
     </Layout>
