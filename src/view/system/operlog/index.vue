@@ -206,19 +206,18 @@ export default {
     exportData() {
       exportOperlog(this.listQuery)
         .then(res => {
-          let exportData = res.data
-          if (exportData.length) {
+          if (res.data.length) {
             this.exportLoading = true
             const header = ['操作模块', '操作内容', '请求url', '耗时', '请求来源']
             const key = ['module', 'operation', 'requestUrl', 'spendTime', 'clientId']
             const data = res.data
             export_json_to_excel({
-              header: header,
-              key,
-              data,
-              filename: '操作日志导出',
-              autoWidth: true,
-              bookType: 'xlsx'
+              header: header, // 表头
+              key, // 对应的数据库字段
+              data, // 查询出的列表数据
+              filename: '操作日志', // 文件名称
+              autoWidth: true, // 单元格宽度自适应
+              bookType: 'xlsx'// 导出文件类型
             })
             this.exportLoading = false
           } else {
