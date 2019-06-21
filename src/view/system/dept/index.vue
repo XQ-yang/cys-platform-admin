@@ -121,9 +121,7 @@ export default {
     },
     // 清空查询值的时候 重新加载列表数据
     handleClear(e) {
-      if (e.target.value === '') {
-        this.getList()
-      }
+      this.getList()
     }
   }
 }

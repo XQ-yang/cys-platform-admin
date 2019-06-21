@@ -24,6 +24,7 @@ module.exports = {
   // https://www.foobar.com/my-app/
   // then change this to '/my-app/'
   baseUrl: BASE_URL,
+
   // tweak internal webpack configuration.
   // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
   // 如果你不需要使用eslint，把lintOnSave设为false即可
@@ -32,6 +33,12 @@ module.exports = {
     config.resolve.alias
       .set('@', resolve('src')) // key,value自行定义，比如.set('@@', resolve('src/components'))
       .set('_c', resolve('src/components'))
+  },
+  // 解决：This relative module was not found: ./cptable in ./node_modules/xlsx-style@0.8.13@xlsx-style/dist/cpexcel.js
+  configureWebpack: config => {
+    config.externals = {
+      './cptable': 'var cptable'
+    }
   },
   // 打包时不生成.map文件
   productionSourceMap: false

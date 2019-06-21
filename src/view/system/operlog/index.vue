@@ -57,7 +57,7 @@
 <script>
 import { fetchList, exportOperlog } from '@/api/operlog'
 import expandRow from './table-expand.vue'
-import excel from '@/libs/excel'
+import { export_json_to_excel } from '@/libs/exportExcel'
 export default {
   name: 'operlog',
   filters: {
@@ -209,19 +209,21 @@ export default {
           let exportData = res.data
           if (exportData.length) {
             this.exportLoading = true
-            const params = {
-              title: ['操作模块', '操作内容', '请求url', '耗时', '请求来源'],
-              key: ['module', 'operation', 'requestUrl', 'spendTime', 'clientId'],
-              data: exportData,
+            const header = ['操作模块', '操作内容', '请求url', '耗时', '请求来源']
+            const key = ['module', 'operation', 'requestUrl', 'spendTime', 'clientId']
+            const data = res.data
+            export_json_to_excel({
+              header: header,
+              key,
+              data,
+              filename: '操作日志导出',
               autoWidth: true,
-              filename: '操作日志'
-            }
-            excel.export_array_to_excel(params)
+              bookType: 'xlsx'
+            })
             this.exportLoading = false
           } else {
             this.$Message.info('表格数据不能为空！')
           }
-          console.log(exportData)
         })
         .catch(error => {
           this.$Message.error(error.msg)

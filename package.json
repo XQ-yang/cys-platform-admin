@@ -19,6 +19,7 @@
     "dayjs": "^1.7.8",
     "echarts": "^4.0.4",
     "element-ui": "^2.8.2",
+    "file-saver": "^2.0.2",
     "html2canvas": "^1.0.0-alpha.12",
     "iview": "^3.4.2",
     "iview-area": "^1.5.17",
