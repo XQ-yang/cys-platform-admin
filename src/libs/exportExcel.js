@@ -158,9 +158,8 @@ export function export_json_to_excel({
   }
 
   var ws_name = filename
-  // eslint-disable-next-line one-var
-  var wb = new Workbook(),
-    ws = sheet_from_array_of_arrays(data)
+  var wb = new Workbook()
+  var ws = sheet_from_array_of_arrays(data)
   if (merges.length > 0) {
     if (!ws['!merges']) ws['!merges'] = []
     merges.forEach(item => {
