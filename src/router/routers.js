@@ -31,7 +31,7 @@ export const routerMap = [
         path: 'user',
         name: 'user',
         meta: {
-          icon: 'md-contacts',
+          icon: 'ios-contact-outline',
           title: '用户管理'
         },
         component: () => import('@/view/system/user')
@@ -58,7 +58,7 @@ export const routerMap = [
         path: 'dept',
         name: 'dept',
         meta: {
-          icon: 'md-albums',
+          icon: 'ios-bookmark-outline',
           title: '部门管理'
         },
         component: () => import('@/view/system/dept')
@@ -67,7 +67,7 @@ export const routerMap = [
         path: 'menu',
         name: 'menu',
         meta: {
-          icon: 'ios-menu',
+          icon: 'ios-grid-outline',
           title: '系统菜单'
         },
         component: () => import('@/view/system/menu/index.vue')
@@ -76,7 +76,7 @@ export const routerMap = [
         path: 'operlog',
         name: 'operlog',
         meta: {
-          icon: 'ios-menu',
+          icon: 'md-bulb',
           title: '操作日志'
         },
         component: () => import('@/view/system/operlog/index.vue')
@@ -85,7 +85,7 @@ export const routerMap = [
         path: 'log',
         name: 'logininfo',
         meta: {
-          icon: 'ios-menu',
+          icon: 'ios-bulb-outline',
           title: '登录日志'
         },
         component: () => import('@/view/system/logininfo/index.vue')
