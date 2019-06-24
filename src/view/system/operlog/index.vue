@@ -209,12 +209,16 @@ export default {
           if (res.data.length) {
             this.exportLoading = true
             const header = ['操作模块', '操作内容', '请求url', '耗时', '请求来源']
+            const title = ['操作日志', '', '', '', '']
             const key = ['module', 'operation', 'requestUrl', 'spendTime', 'clientId']
             const data = res.data
+            const merges = ['A1:E1']// 合并单元格
             export_json_to_excel({
+              title: title, // 标题
               header: header, // 表头
               key, // 对应的数据库字段
               data, // 查询出的列表数据
+              merges,
               filename: '操作日志', // 文件名称
               autoWidth: true, // 单元格宽度自适应
               bookType: 'xlsx'// 导出文件类型

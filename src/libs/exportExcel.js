@@ -138,6 +138,7 @@ export function export_table_to_excel(id) {
   }), 'test.xlsx')
 }
 export function export_json_to_excel({
+  title,
   multiHeader = [],
   header,
   key,
@@ -147,12 +148,15 @@ export function export_json_to_excel({
   autoWidth = true,
   bookType = 'xlsx'
 } = {}) {
+  debugger
   /* original data */
   filename = filename || 'excel-list'
   data = json_to_array(key, data)
   data = [...data]
   data.unshift(header)
-  // data.unshift(title)
+  if (title) {
+    data.unshift(title)
+  }
   for (let i = multiHeader.length - 1; i > -1; i--) {
     data.unshift(multiHeader[i])
   }
@@ -242,24 +246,20 @@ export function export_json_to_excel({
     })
   }
 
-  // // 设置主标题样式
-  // dataInfo['A1'].s = {
-  //   font: {
-  //     name: '宋体',
-  //     sz: 18,
-  //     color: { rgb: 'ff0000' },
-  //     bold: true,
-  //     italic: false,
-  //     underline: false
-  //   },
-  //   alignment: {
-  //     horizontal: 'center',
-  //     vertical: 'center'
-  //   }
-  // }
-
-  // console.log(merges)
-  // console.log(dataInfo)
+  // 设置主标题样式
+  dataInfo['A1'].s = {
+    font: {
+      name: '宋体',
+      sz: 18,
+      bold: true,
+      italic: false,
+      underline: false
+    },
+    alignment: {
+      horizontal: 'center',
+      vertical: 'center'
+    }
+  }
 
   var wbout = XLSX.write(wb, {
     bookType: bookType,
