@@ -102,7 +102,7 @@ export default {
             return item.permission
           })
           // 筛选按钮权限字段
-          const dataBtnRules = res.data.ownerMenuList.filter(item => item.type === 1).map(item => {
+          const dataBtnRules = res.data.ownerMenuList.filter(item => item.type === 1 || item.type === 2).map(item => {
             return item.permission
           })
           commit('setRouterRules', dataRoutesNames)
