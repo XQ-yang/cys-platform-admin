@@ -42,7 +42,7 @@
              <Input v-model="dataForm.permission" type="text"  :maxlength="20"></Input>
           </Form-item>
           <Form-item v-show="dataForm.type===0" label="图标" prop="icon">
-             <Input v-model="dataForm.icon" type="text"  :maxlength="20"></Input>
+             <Input v-model="dataForm.icon" type="text"  :maxlength="30"></Input>
           </Form-item>
         </Form>
       </Modal>

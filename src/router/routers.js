@@ -91,6 +91,27 @@ export const routerMap = [
         component: () => import('@/view/system/logininfo/index.vue')
       }
     ]
+  },
+  {
+    path: '/case',
+    name: 'case',
+    meta: {
+      icon: 'ios-briefcase-outline',
+      title: '常用案例',
+      showAlways: true
+    },
+    component: Main,
+    children: [
+      {
+        path: 'uploadfile',
+        name: 'uploadfile',
+        meta: {
+          icon: 'ios-cloud-upload-outline',
+          title: '文件上传'
+        },
+        component: () => import('@/view/case/upload-file/')
+      }
+    ]
   }
 ]
 // 默认加载的 登陆页、首页等路由
