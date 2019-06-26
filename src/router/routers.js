@@ -110,6 +110,15 @@ export const routerMap = [
           title: '文件上传'
         },
         component: () => import('@/view/case/upload-file/')
+      },
+      {
+        path: 'oss',
+        name: 'oss',
+        meta: {
+          icon: 'ios-cloud-upload-outline',
+          title: '文件上传'
+        },
+        component: () => import('@/view/case/upload-oss/')
       }
     ]
   }
