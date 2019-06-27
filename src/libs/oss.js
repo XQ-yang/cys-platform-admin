@@ -2,7 +2,7 @@ import { getSignature } from '@/api/api-upload'
 let accessid = ''// 用户请求的accessid
 let policyBase64 = ''// 用户表单上传的策略（Policy），是经过base64编码过的字符串
 let signature = ''// 对变量policy签名后的字符串
-// let callbackbody = ''
+let callbackbody = ''
 let key = ''
 let expire = 0// 上传策略Policy失效时间，在服务端指定。失效时间之前都可以利用此Policy上传文件，无需每次上传都去服务端获取签名。
 let host = ''// 用户要往哪个域名发送上传请求。
@@ -58,7 +58,7 @@ function oss(filename = null) {
       accessid = res.data.accessid
       signature = res.data.signature
       expire = parseInt(res.data.expire)
-      // callbackbody = res.data.callback
+      callbackbody = res.data.callback
       host = res.data.host
       key = res.data.dir
 
@@ -67,12 +67,13 @@ function oss(filename = null) {
       }
       // 返回表单上传需要的参数信息
       return {
-        'key': g_object_name,
-        'policy': policyBase64,
-        'OSSAccessKeyId': accessid,
+        'key': g_object_name, // 文件名
+        'policy': policyBase64, // 用户表单上传的策略（Policy)
+        'OSSAccessKeyId': accessid, // 用户请求的accessid
         'success_action_status': '200', // 让服务端返回200,不然，默认会返回204
-        'signature': signature,
-        'host': host
+        'callback': callbackbody, // 回调
+        'signature': signature, // 签名
+        'host': host// 用户要往哪个域名发送上传请求。
       }
     })
   }

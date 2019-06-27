@@ -45,12 +45,12 @@ export default {
   methods: {
     beforeUploadHandle(file) {
       return oss(file.name).then(res => {
-        debugger
         this.uploadHost = res.host
         this.uploadData = res
       })
     },
     handleSuccess(res, file, fileList) {
+      debugger
       console.log(res)
     }
   }
