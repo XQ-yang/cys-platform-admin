@@ -116,7 +116,7 @@ export const routerMap = [
         name: 'oss',
         meta: {
           icon: 'ios-cloud-upload-outline',
-          title: '文件上传'
+          title: '阿里OSS'
         },
         component: () => import('@/view/case/upload-oss/')
       }
