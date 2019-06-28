@@ -4,7 +4,7 @@
       <!--查询条件及操作按钮-->
       <div class="search-con search-con-top">
         角色名称：
-        <Input @on-change="handleClear"  clearable placeholder="角色名称" class="search-input" v-model="listQuery.roleName"/>
+        <Input @on-clear="handleClear"  clearable placeholder="角色名称" class="search-input" v-model="listQuery.roleName"/>
         <Button @click="handleSearch" class="search-btn">查询</Button>
         <Button v-permission="{rule:'role:add'}" @click="addOrUpdateHandle()" class="search-btn">新增</Button>
       </div>
@@ -161,10 +161,10 @@ export default {
       })
     },
     // 清空查询值的时候 重新加载列表数据
-    handleClear(e) {
-      if (e.target.value === '') {
+    handleClear() {
+      this.$nextTick(() => {
         this.getList()
-      }
+      })
     },
     dropDownClick(e, row) {
       switch (e) {

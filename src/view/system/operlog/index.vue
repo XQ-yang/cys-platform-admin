@@ -21,8 +21,8 @@
         />
         操作状态：
         <i-select style="width:200px" @on-clear="handleClear" clearable v-model="listQuery.responseCode">
-          <i-option value="0">正常</i-option>
-          <i-option value="1">异常</i-option>
+          <i-option :value="0">正常</i-option>
+          <i-option :value="1">异常</i-option>
         </i-select>
         <span v-show="show"></br>创建时间：</span>
         <Date-picker v-show="show" type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="handleStartTime" :editable="false" v-model="listQuery.startTime" @on-clear="handleClear" placeholder="选择日期和时间" style="width: 200px"></Date-picker>
@@ -180,8 +180,10 @@ export default {
       this.getList()
     },
     // 清空查询值的时候 重新加载列表数据
-    handleClear(e) {
-      this.getList()
+    handleClear() {
+      this.$nextTick(() => {
+        this.getList()
+      })
     },
     handleStartTime(e) {
       this.listQuery.startTime = e

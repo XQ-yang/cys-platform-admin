@@ -5,7 +5,7 @@
       <div class="search-con search-con-top">
         部门名称：
         <Input
-          @on-change="handleClear"
+          @on-clear="handleClear"
           clearable
           placeholder="部门名称"
           class="search-input"
@@ -13,7 +13,7 @@
         />
         所属机构：
         <Input
-          @on-change="handleClear"
+          @on-clear="handleClear"
           clearable
           placeholder="机构名称"
           class="search-input"
@@ -120,8 +120,10 @@ export default {
       })
     },
     // 清空查询值的时候 重新加载列表数据
-    handleClear(e) {
-      this.getList()
+    handleClear() {
+      this.$nextTick(() => {
+        this.getList()
+      })
     }
   }
 }

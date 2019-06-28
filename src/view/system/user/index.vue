@@ -5,7 +5,7 @@
       <div class="search-con search-con-top">
         用户名：
         <Input
-          @on-change="handleClear"
+          @on-clear="handleClear"
           clearable
           placeholder="用户名"
           class="search-input"
@@ -13,7 +13,7 @@
         />
         姓名：
         <Input
-          @on-change="handleClear"
+          @on-clear="handleClear"
           clearable
           placeholder="姓名"
           class="search-input"
@@ -233,10 +233,10 @@ export default {
       })
     },
     // 清空查询值的时候 重新加载列表数据
-    handleClear(e) {
-      if (e.target.value === '') {
+    handleClear() {
+      this.$nextTick(() => {
         this.getList()
-      }
+      })
     },
     dropDownClick(e, row) {
       switch (e) {
