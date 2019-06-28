@@ -21,6 +21,7 @@
         />
         <Button @click="handleSearch" class="search-btn">查询</Button>
         <Button v-permission="{rule:'user:add'}"  @click="addOrUpdateHandle()" class="search-btn">新增</Button>
+        <Button @click="testadd">新开</Button>
       </div>
       <!--列表 分页-->
       <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
@@ -162,6 +163,12 @@ export default {
   mounted() {},
   // 组件方法
   methods: {
+    testadd() {
+      const route = {
+        name: 'test'
+      }
+      this.$router.push(route)
+    },
     getList() {
       this.tableLoading = true
       fetchList(this.listQuery)

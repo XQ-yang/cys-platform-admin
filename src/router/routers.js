@@ -20,6 +20,7 @@ export const routerMap = [
   {
     path: '/system',
     name: 'system',
+    access: 'system',
     meta: {
       icon: 'md-settings',
       title: '系统设置',
@@ -30,6 +31,7 @@ export const routerMap = [
       {
         path: 'user',
         name: 'user',
+        access: 'user',
         meta: {
           icon: 'ios-contact-outline',
           title: '用户管理'
@@ -37,8 +39,19 @@ export const routerMap = [
         component: () => import('@/view/system/user')
       },
       {
+        path: 'test',
+        name: 'test',
+        access: 'user:test',
+        meta: {
+          hideInMenu: true,
+          title: '新增tab'
+        },
+        component: () => import('@/view/system/user/test.vue')
+      },
+      {
         path: 'role',
         name: 'role',
+        access: 'role',
         meta: {
           icon: 'ios-lock-outline',
           title: '角色管理'
@@ -48,6 +61,7 @@ export const routerMap = [
       {
         path: 'org',
         name: 'org',
+        access: 'org',
         meta: {
           icon: 'md-git-network',
           title: '机构管理'
@@ -57,6 +71,7 @@ export const routerMap = [
       {
         path: 'dept',
         name: 'dept',
+        access: 'dept',
         meta: {
           icon: 'ios-bookmark-outline',
           title: '部门管理'
@@ -66,6 +81,7 @@ export const routerMap = [
       {
         path: 'menu',
         name: 'menu',
+        access: 'menu',
         meta: {
           icon: 'ios-grid-outline',
           title: '系统菜单'
@@ -75,6 +91,7 @@ export const routerMap = [
       {
         path: 'operlog',
         name: 'operlog',
+        access: 'operlog',
         meta: {
           icon: 'md-bulb',
           title: '操作日志'
@@ -82,8 +99,9 @@ export const routerMap = [
         component: () => import('@/view/system/operlog/index.vue')
       },
       {
-        path: 'log',
+        path: 'logininfo',
         name: 'logininfo',
+        access: 'logininfo',
         meta: {
           icon: 'ios-bulb-outline',
           title: '登录日志'
@@ -95,6 +113,7 @@ export const routerMap = [
   {
     path: '/case',
     name: 'case',
+    access: 'case',
     meta: {
       icon: 'ios-briefcase-outline',
       title: '常用案例',
@@ -105,6 +124,7 @@ export const routerMap = [
       {
         path: 'uploadfile',
         name: 'uploadfile',
+        access: 'uploadfile',
         meta: {
           icon: 'ios-cloud-upload-outline',
           title: '文件上传'
@@ -114,6 +134,7 @@ export const routerMap = [
       {
         path: 'oss',
         name: 'oss',
+        access: 'oss',
         meta: {
           icon: 'ios-cloud-upload-outline',
           title: '阿里OSS'
