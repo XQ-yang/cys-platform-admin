@@ -8,6 +8,7 @@ let expire = 0// 上传策略Policy失效时间，在服务端指定。失效时
 let host = ''// 用户要往哪个域名发送上传请求。
 let g_object_name = ''
 let now = Date.parse(new Date()) / 1000
+let dir = ''// 后端返回的文件路径
 // 生成随机字符串
 function random_string(len) {
   len = len || 32
@@ -61,13 +62,13 @@ function oss(filename = null) {
       callbackbody = res.data.callback
       host = res.data.host
       key = res.data.dir
-
+      dir = res.data.dir
       if (filename != null) {
         set_file_name(filename)
       }
       // 返回表单上传需要的参数信息
       return {
-        'key': 'test/' + g_object_name, // 路径+/文件名
+        'key': dir + g_object_name, // 路径+/文件名
         'policy': policyBase64, // 用户表单上传的策略（Policy)
         'OSSAccessKeyId': accessid, // 用户请求的accessid
         'success_action_status': '200', // 让服务端返回200,不然，默认会返回204
