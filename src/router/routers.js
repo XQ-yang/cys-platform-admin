@@ -39,16 +39,6 @@ export const routerMap = [
         component: () => import('@/view/system/user')
       },
       {
-        path: 'test',
-        name: 'test',
-        access: 'user:test',
-        meta: {
-          hideInMenu: true,
-          title: '新增tab'
-        },
-        component: () => import('@/view/system/user/test.vue')
-      },
-      {
         path: 'role',
         name: 'role',
         access: 'role',
