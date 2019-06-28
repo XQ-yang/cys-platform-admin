@@ -54,7 +54,6 @@ function oss(filename = null) {
           signature: "JumJy*****k6/EMG7U=" // 签名信息
         }
         */
-      debugger
       policyBase64 = res.data.policy
       accessid = res.data.accessid
       signature = res.data.signature
