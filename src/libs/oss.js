@@ -67,7 +67,7 @@ function oss(filename = null) {
       }
       // 返回表单上传需要的参数信息
       return {
-        'key': g_object_name, // 文件名
+        'key': 'test/' + g_object_name, // 路径+/文件名
         'policy': policyBase64, // 用户表单上传的策略（Policy)
         'OSSAccessKeyId': accessid, // 用户请求的accessid
         'success_action_status': '200', // 让服务端返回200,不然，默认会返回204

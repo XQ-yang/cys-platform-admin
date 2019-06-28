@@ -43,7 +43,6 @@ export const getRoleInfo = (id) => {
 }
 
 export const setRoles = (roleMenus) => {
-  console.log(roleMenus)
   return axios.request({
     url: '/role/save_role_menu',
     method: 'post',

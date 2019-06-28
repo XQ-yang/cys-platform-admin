@@ -2,8 +2,8 @@
 <div>
   <Card>
     <div class="search-con search-con-top">
-      机构名称：<Input @on-change="handleClear"  clearable placeholder="机构名称" class="search-input" v-model="listQuery.orgName"/>
-      联系人：<Input @on-change="handleClear"  clearable placeholder="联系人" class="search-input" v-model="listQuery.contacts"/>
+      机构名称：<Input @on-clear="handleClear"  clearable placeholder="机构名称" class="search-input" v-model="listQuery.orgName"/>
+      联系人：<Input @on-clear="handleClear"  clearable placeholder="联系人" class="search-input" v-model="listQuery.contacts"/>
       <Button @click="handleSearch" class="search-btn">查询</Button>
       <Button v-permission="{rule:'org:add'}" class="search-btn" @click="addOrUpdateHandle()">新增</Button>
     </div>
@@ -106,10 +106,10 @@ export default {
       this.getList()
     },
     // 清空查询值的时候 重新加载列表数据
-    handleClear(e) {
-      if (e.target.value === '') {
+    handleClear() {
+      this.$nextTick(() => {
         this.getList()
-      }
+      })
     }
   },
   components: {

@@ -16,7 +16,7 @@ const mutations = {
 
 const getAccesRouterList = (routerMap, rules) => {
   return routerMap.filter(item => {
-    if (rules.indexOf(item.name) > -1) {
+    if (rules.indexOf(item.access) > -1) {
       if (item.children)item.children = getAccesRouterList(item.children, rules)
       return true
     } else return false

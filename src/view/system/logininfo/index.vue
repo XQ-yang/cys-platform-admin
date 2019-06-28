@@ -151,8 +151,10 @@ export default {
       this.getList()
     },
     // 清空查询值的时候 重新加载列表数据
-    handleClear(e) {
-      this.getList()
+    handleClear() {
+      this.$nextTick(() => {
+        this.getList()
+      })
     },
     handleStartTime(e) {
       this.listQuery.startTime = e
