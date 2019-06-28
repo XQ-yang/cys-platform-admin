@@ -84,3 +84,11 @@ export const resetPassword = (id) => {
     data: id
   })
 }
+export const exportData = (query) => {
+  return axios.request({
+    url: '/user/export_excel',
+    method: 'get',
+    responseType: 'arraybuffer',
+    params: query
+  })
+}
