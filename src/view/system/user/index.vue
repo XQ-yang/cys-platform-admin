@@ -21,6 +21,7 @@
         />
         <Button @click="handleSearch" class="search-btn">查询</Button>
         <Button v-permission="{rule:'user:add'}"  @click="addOrUpdateHandle()" class="search-btn">新增</Button>
+        <Button @click="exportData"  class="search-btn">导出</Button>
       </div>
       <!--列表 分页-->
       <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
@@ -63,8 +64,9 @@
   </div>
 </template>
 <script>
-import { fetchList, deleteUser, resetPassword } from '@/api/user'
+import { fetchList, deleteUser, resetPassword, exportData } from '@/api/user'
 import AddOrUpdate from './add-or-update'
+import { saveAs } from 'file-saver'
 export default {
   name: 'user',
   filters: {
@@ -192,6 +194,17 @@ export default {
     handleSearch() {
       this.listQuery.pageNumber = 1
       this.getList()
+    },
+    exportData() {
+      exportData(this.listQuery)
+        .then(res => {
+          saveAs(new Blob([res], {
+            type: 'application/vnd.ms-excel;charset=UTF-8'
+          }), `text.xls`)
+        })
+        .catch(error => {
+          this.$Message.error(error.msg)
+        })
     },
     handleDelete(id) {
       this.$Modal.confirm({
