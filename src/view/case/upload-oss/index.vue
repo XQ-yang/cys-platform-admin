@@ -38,7 +38,6 @@ export default {
   },
 
   components: {},
-
   mounted() {},
   computed: {},
 
@@ -50,7 +49,6 @@ export default {
       })
     },
     handleSuccess(res, file, fileList) {
-      debugger
       console.log(res)
     }
   }

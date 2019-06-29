@@ -8,7 +8,6 @@ let expire = 0// 上传策略Policy失效时间，在服务端指定。失效时
 let host = ''// 用户要往哪个域名发送上传请求。
 let g_object_name = ''
 let now = Date.parse(new Date()) / 1000
-let dir = ''// 后端返回的文件路径
 // 生成随机字符串
 function random_string(len) {
   len = len || 32
@@ -38,7 +37,6 @@ function set_file_name(filename) {
 
 // 获取后端返回的签名信息，生成oss参数
 function oss(filename = null) {
-  debugger
   // 可以判断当前expire是否超过了当前时间， 如果超过了当前时间， 就重新取一下， 3 s 作为缓冲。
   now = Date.parse(new Date()) / 1000
   if (expire < now + 3) {
@@ -48,7 +46,7 @@ function oss(filename = null) {
         {
           accessid: "LTAI*******UPPr", // 用户请求的accessid
           callback: "eyJjYWxs************H0ifQ==", // 回调
-          dir: "test/file-dir/", // 上传文件的存储位置
+          dir: "test/file-dir/", // 上传文件的存储位置 后端设置dir 前端上传时不用在拼接到名称上
           expire: "1557974779", // 上传策略Policy失效时间
           host: "http://xxxxxxxxx.com", // 上传文件服务器地址
           policy: "eyJleHBp***********6/EMG7U=" ,// 用户表单上传的策略（Policy)
@@ -62,13 +60,12 @@ function oss(filename = null) {
       callbackbody = res.data.callback
       host = res.data.host
       key = res.data.dir
-      dir = res.data.dir
       if (filename != null) {
         set_file_name(filename)
       }
       // 返回表单上传需要的参数信息
       return {
-        'key': dir + g_object_name, // 路径+/文件名
+        'key': g_object_name, // 路径+/文件名
         'policy': policyBase64, // 用户表单上传的策略（Policy)
         'OSSAccessKeyId': accessid, // 用户请求的accessid
         'success_action_status': '200', // 让服务端返回200,不然，默认会返回204
