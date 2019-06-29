@@ -49,7 +49,21 @@ export default {
       })
     },
     handleSuccess(res, file, fileList) {
-      console.log(res)
+      // 上传成功后OSS会通过res返回如下对象,拿到改对象然后我们要进行保存本地数据库的操作
+      /**
+       *
+       * {
+        bucket: 'vue-cys-platform'
+        etag: 'A393B4FC1617F7338EAF0BA6623F11FD'
+        height: '820'
+        mimeType: 'image/jpeg'
+        object: 'cys-platform/dHeyaWc6YM.jpg'
+        size: '319305'
+        url: 'http://vue-cys-platform.oss-cn-shenzhen.aliyuncs.com\cys-platform/dHeyaWc6YM.jpg'
+        width: '1600'
+      }
+       *
+       */
     }
   }
 }
