@@ -59,9 +59,10 @@ class HttpRequest {
         } else if (response.data.code !== 1010) {
           return Promise.reject(response.data)
         }
+      } else if (response.headers['content-type'] === 'application/vnd.ms-excel;charset=UTF-8') {
+        return response
       } else {
-        data = response.data
-        return data
+        return response.data
       }
     }, error => {
       // 错误的请求结果处理，这里的代码根据后台的状态码来决定错误的输出信息

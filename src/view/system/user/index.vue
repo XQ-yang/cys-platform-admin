@@ -198,11 +198,10 @@ export default {
     exportData() {
       exportData(this.listQuery)
         .then(res => {
-          debugger
-          console.log(res)
-          saveAs(new Blob([res], {
+          var filename = decodeURIComponent(res.headers['filename'])
+          saveAs(new Blob([res.data], {
             type: 'application/vnd.ms-excel;charset=UTF-8'
-          }), `text.xlsx`)
+          }), filename)
         })
         .catch(error => {
           this.$Message.error(error.msg)
