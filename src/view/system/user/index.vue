@@ -91,7 +91,7 @@ export default {
             )
           }
         },
-        { title: '账号', key: 'username', tooltip: true },
+        { title: '用户名', key: 'username', tooltip: true },
         { title: '姓名', key: 'realName', tooltip: true },
         {
           title: '性别',
@@ -102,7 +102,7 @@ export default {
             return h('div', text)
           }
         },
-        { title: '手机', key: 'mobile', tooltip: true },
+        { title: '手机号码', key: 'mobile', tooltip: true },
         { title: '组织', key: 'orgName', tooltip: true },
         { title: '部门', key: 'deptName', tooltip: true },
         { title: '角色', key: 'roleName', tooltip: true },
