@@ -200,7 +200,7 @@ export default {
         .then(res => {
           saveAs(new Blob([res], {
             type: 'application/vnd.ms-excel;charset=UTF-8'
-          }), `text.xls`)
+          }), `text.xlsx`)
         })
         .catch(error => {
           this.$Message.error(error.msg)

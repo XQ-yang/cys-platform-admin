@@ -18,7 +18,7 @@ Vue.use(Table)
 Vue.use(TableColumn)
 // 实际打包时应该不引入mock
 /* eslint-disable */
-if (process.env.NODE_ENV !== 'production') require('@/mock')
+//if (process.env.NODE_ENV !== 'production') require('@/mock')
 
 const fileUrl = process.env.NODE_ENV === 'development' ? config.fileUrl.dev : config.fileUrl.pro
 const baseUrl = process.env.NODE_ENV === 'development' ? config.baseUrl.dev : config.baseUrl.pro
