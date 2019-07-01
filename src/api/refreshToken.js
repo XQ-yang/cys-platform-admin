@@ -24,7 +24,6 @@ export default async() => {
       setToken('')
       localSave('refreshToken', '')
       return router.replace({ path: '/login', query: { redirect: router.currentRoute.fullPath }})
-      // window.location.href = '/login'
     } else if (access_token && refresh_token) {
       setToken(access_token)
       localSave('refreshToken', refresh_token)

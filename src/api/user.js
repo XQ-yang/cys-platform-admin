@@ -88,7 +88,7 @@ export const exportData = (query) => {
   return axios.request({
     url: '/user/export_excel',
     method: 'get',
-    responseType: 'arraybuffer',
+    responseType: 'blob',
     params: query
   })
 }

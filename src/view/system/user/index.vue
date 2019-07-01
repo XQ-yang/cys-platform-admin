@@ -198,6 +198,8 @@ export default {
     exportData() {
       exportData(this.listQuery)
         .then(res => {
+          debugger
+          console.log(res)
           saveAs(new Blob([res], {
             type: 'application/vnd.ms-excel;charset=UTF-8'
           }), `text.xlsx`)

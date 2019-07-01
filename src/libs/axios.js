@@ -36,7 +36,7 @@ class HttpRequest {
     instance.interceptors.response.use(async(response) => {
       let data = {}
       this.destroy(url)
-      if (response.data.code !== 2000 && !url.includes('/oauth/token')) {
+      if (response.data.code && response.data.code !== 2000 && !url.includes('/oauth/token')) {
         // token 过期应该返回登陆页面
         if (response.data.code === 1010) {
           const refreshJwt = localRead(`refreshToken`)
