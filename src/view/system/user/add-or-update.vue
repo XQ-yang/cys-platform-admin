@@ -115,7 +115,7 @@
         <Row>
           <Col span="12">
             <Form-item label="邮箱" prop="email">
-              <Input type="text" v-model="dataForm.email" :maxlength="20"></Input>
+              <Input type="text" v-model="dataForm.email" :maxlength="100"></Input>
             </Form-item>
           </Col>
 
