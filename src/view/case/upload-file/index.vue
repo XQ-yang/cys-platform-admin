@@ -6,8 +6,8 @@
         multiple
         type="drag"
         :max-size="10240"
-        accept=".pdf, .png, .jpg, .jpeg"
-        :format="['pdf','jpeg','png','jpg']"
+        accept=".pdf, .png, .jpg, .jpeg, .xls, .xlsx"
+        :format="['pdf','jpeg','png','jpg','xls','xlsx']"
         :before-upload="beforeUploadHandle"
         :on-exceeded-size="exceededSizeHandel"
         :headers="headers"
@@ -64,7 +64,7 @@ export default {
     handleFormatError(file, fileList) {
       this.$Notice.error({
         title: '文件格式错误',
-        desc: '文件名为：' + file.name + '的格式错误，请选择.pdf, .png, .jpg, .jpeg格式文件上传！'
+        desc: '文件名为：' + file.name + '的格式错误，请选择.pdf, .png, .jpg, .jpeg,xls,xlsx式文件上传！'
       })
     }
   }
