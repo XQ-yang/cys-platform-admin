@@ -92,7 +92,7 @@ module.exports = {
     // 禁止使用arguments.caller和arguments.callee
     'no-caller': 2,
     // 禁用 console = error
-    'no-console': 2,
+    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     // 禁止覆盖class命名，也就是说变量名不要和class名重名
     'no-class-assign': 2,
     // 在条件语句中不要使用赋值语句
