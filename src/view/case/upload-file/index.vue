@@ -31,7 +31,7 @@ export default {
   data() {
     return {
       uploadList: [],
-      actionUrl: this.$baseUrl + '/user/import_excel',
+      actionUrl: this.$baseUrl + '/upload/local_single',
       headers: { Authorization: 'Bearer ' + getToken() }
     }
   },
