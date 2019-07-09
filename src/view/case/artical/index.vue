@@ -1,10 +1,11 @@
 <!-- create by lester -->
 <template>
-  <div></div>
+  <div>
+  </div>
 </template>
 
 <script>
-// import tinymce from 'tinymce'
+import tinymce from '_c/Tinymce'
 export default {
   name: '',
   data() {
@@ -12,7 +13,9 @@ export default {
     }
   },
 
-  components: {},
+  components: {
+    tinymce
+  },
 
   mounted() {},
   computed: {},

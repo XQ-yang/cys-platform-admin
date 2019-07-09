@@ -54,7 +54,7 @@ export default {
     },
     // 文件上传成功的回调
     handleSuccess(res, file, fileList) {
-      console.log(this.uploadList)
+      // console.log(this.uploadList)
     },
     // 上传出错的回调
     // eslint-disable-next-line handle-callback-err

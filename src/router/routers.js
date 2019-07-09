@@ -131,6 +131,16 @@ export const routerMap = [
           title: '阿里OSS'
         },
         component: () => import('@/view/case/upload-oss/')
+      },
+      {
+        path: 'artical',
+        name: 'artical',
+        access: 'artical',
+        meta: {
+          icon: 'ios-cloud-upload-outline',
+          title: '文章管理'
+        },
+        component: () => import('_c/Tinymce/')
       }
     ]
   }
