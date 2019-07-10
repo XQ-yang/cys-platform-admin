@@ -1,6 +1,7 @@
 <!-- create by lester -->
 <template>
   <div>
+    <tinymce :height="300" v-model="content" id='tinymce'></tinymce>
   </div>
 </template>
 
@@ -12,15 +13,20 @@ export default {
     return {
     }
   },
-
   components: {
     tinymce
   },
 
-  mounted() {},
+  mounted() {
+
+  },
   computed: {},
 
-  methods: {}
+  methods: {
+  },
+  destroyed() {
+
+  }
 }
 
 </script>

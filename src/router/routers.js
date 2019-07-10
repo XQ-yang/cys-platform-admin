@@ -140,7 +140,7 @@ export const routerMap = [
           icon: 'ios-cloud-upload-outline',
           title: '文章管理'
         },
-        component: () => import('_c/Tinymce/')
+        component: () => import('@/view/case/artical/')
       }
     ]
   }
