@@ -11,6 +11,7 @@ export default {
   name: '',
   data() {
     return {
+      content: ''
     }
   },
   components: {

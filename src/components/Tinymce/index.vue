@@ -6,12 +6,19 @@
 </template>
 
 <script>
+import tinymce from 'tinymce/tinymce'
+import 'tinymce/themes/silver/theme'
+import 'tinymce/plugins/advlist'
+import 'tinymce/plugins/table'
+import 'tinymce/plugins/lists'
+import 'tinymce/plugins/paste'
+import 'tinymce/plugins/preview'
+import 'tinymce/plugins/fullscreen'
+
 import plugins from './plugins'
 import toolbar from './toolbar'
-import load from './dynamicLoadScript'
-const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js'
 export default {
-  name: 'Tinymce',
+  name: 'tinymce-editor',
   components: { },
   props: {
     id: {
@@ -73,7 +80,7 @@ export default {
     value(val) {
       if (!this.hasChange && this.hasInit) {
         this.$nextTick(() =>
-          window.tinymce.get(this.tinymceId).setContent(val || ''))
+          tinymce.get(this.tinymceId).setContent(val || ''))
       }
     }
   },
@@ -81,9 +88,9 @@ export default {
     this.init()
   },
   activated() {
-    if (window.tinymce) {
-      this.initTinymce()
-    }
+    // if (window.tinymce) {
+    //   this.initTinymce()
+    // }
   },
   deactivated() {
     this.destroyTinymce()
@@ -94,18 +101,14 @@ export default {
   methods: {
     init() {
       // dynamic load tinymce from cdn
-      load(tinymceCDN, (err) => {
-        if (err) {
-          this.$message.error(err.message)
-          return
-        }
-        this.initTinymce()
-      })
+      this.initTinymce()
     },
     initTinymce() {
       const _this = this
-      window.tinymce.init({
+      tinymce.init({
         selector: `#${this.tinymceId}`,
+        skin_url: '/tinymce/skins/ui/oxide',
+        language_url: `/tinymce/langs/zh_CN.js`,
         language: this.languageTypeList['zh'],
         height: this.height,
         body_class: 'panel-body ',
@@ -141,17 +144,17 @@ export default {
       })
     },
     destroyTinymce() {
-      const tinymce = window.tinymce.get(this.tinymceId)
+      const tinymcet = tinymce.get(this.tinymceId)
       if (this.fullscreen) {
-        tinymce.execCommand('mceFullScreen')
+        tinymcet.execCommand('mceFullScreen')
       }
 
-      if (tinymce) {
-        tinymce.destroy()
+      if (tinymcet) {
+        tinymcet.destroy()
       }
     },
     setContent(value) {
-      window.tinymce.get(this.tinymceId).setContent(value)
+      tinymce.get(this.tinymceId).setContent(value)
     },
     getContent() {
       window.tinymce.get(this.tinymceId).getContent()
