@@ -114,6 +114,8 @@ export default {
         body_class: 'panel-body ',
         object_resizing: false,
         toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar,
+        statusbar: true, // 隐藏编辑器底部的状态栏
+        paste_data_images: true, // 允许粘贴图像
         menubar: this.menubar,
         plugins: plugins,
         end_container_on_empty_block: true,
