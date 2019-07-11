@@ -2,6 +2,6 @@
 // Detail plugins list see https://www.tinymce.com/docs/plugins/
 // Custom builds see https://www.tinymce.com/download/custom-builds/
 
-const plugins = ['advlist table lists paste preview fullscreen']
+const plugins = ['advlist table lists paste image  preview fullscreen']
 
 export default plugins

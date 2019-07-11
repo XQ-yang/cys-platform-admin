@@ -1,11 +1,15 @@
 <!-- create by lester -->
 <template>
-  <div>
+  <div :class="{fullscreen:fullscreen}" class="tinymce-container" :style="{width:containerWidth}">
     <textarea :id="tinymceId" class="tinymce-textarea" />
+    <div class="editor-custom-btn-container">
+      <editorImage  class="editor-upload-btn"  />
+    </div>
   </div>
 </template>
 
 <script>
+import editorImage from './components/EditorImage'
 import tinymce from 'tinymce/tinymce'
 import 'tinymce/themes/silver/theme'
 import 'tinymce/plugins/advlist'
@@ -14,12 +18,13 @@ import 'tinymce/plugins/lists'
 import 'tinymce/plugins/paste'
 import 'tinymce/plugins/preview'
 import 'tinymce/plugins/fullscreen'
+import 'tinymce/plugins/image'
 
 import plugins from './plugins'
 import toolbar from './toolbar'
 export default {
   name: 'tinymce-editor',
-  components: { },
+  components: { editorImage },
   props: {
     id: {
       type: String,
@@ -110,14 +115,15 @@ export default {
         skin_url: '/tinymce/skins/ui/oxide',
         language_url: `/tinymce/langs/zh_CN.js`,
         language: this.languageTypeList['zh'],
-        height: this.height,
+        height: document.body.offsetHeight - 300,
         body_class: 'panel-body ',
         object_resizing: false,
         toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar,
+        browser_spellcheck: true, // 拼写检查
         statusbar: true, // 隐藏编辑器底部的状态栏
         paste_data_images: true, // 允许粘贴图像
-        menubar: this.menubar,
-        plugins: plugins,
+        menubar: this.menubar, // 是否隐藏最上方menu
+        plugins: plugins, // 插件
         end_container_on_empty_block: true,
         powerpaste_word_import: 'clean',
         code_dialog_height: 450,
@@ -159,12 +165,12 @@ export default {
       tinymce.get(this.tinymceId).setContent(value)
     },
     getContent() {
-      window.tinymce.get(this.tinymceId).getContent()
+      tinymce.get(this.tinymceId).getContent()
     },
     imageSuccessCBK(arr) {
       const _this = this
       arr.forEach(v => {
-        window.tinymce.get(_this.tinymceId).insertContent(`<img class="wscnph" src="${v.url}" >`)
+        tinymce.get(_this.tinymceId).insertContent(`<img class="wscnph" src="${v.url}" >`)
       })
     }
   }
