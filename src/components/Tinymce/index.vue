@@ -3,7 +3,7 @@
   <div :class="{fullscreen:fullscreen}" class="tinymce-container" :style="{width:containerWidth}">
     <textarea :id="tinymceId" class="tinymce-textarea" />
     <div class="editor-custom-btn-container">
-      <editorImage  class="editor-upload-btn"  />
+      <editorImage  class="editor-upload-btn"  @successCBK="imageSuccessCBK"/>
     </div>
   </div>
 </template>
@@ -168,6 +168,7 @@ export default {
       tinymce.get(this.tinymceId).getContent()
     },
     imageSuccessCBK(arr) {
+      debugger
       const _this = this
       arr.forEach(v => {
         tinymce.get(_this.tinymceId).insertContent(`<img class="wscnph" src="${v.url}" >`)

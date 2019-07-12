@@ -49,8 +49,6 @@ export default {
       })
     },
     handleSuccess(res, file, fileList) {
-      debugger
-      console.log(res)
       // 上传成功后OSS会通过res返回如下对象,拿到改对象然后我们要进行保存本地数据库的操作
       /**
        *
