@@ -21,7 +21,9 @@
         />
         <Button @click="handleSearch" class="search-btn">查询</Button>
         <Button v-permission="{rule:'user:add'}"  @click="addOrUpdateHandle()" class="search-btn">新增</Button>
-        <Button @click="exportData"  class="search-btn">导出</Button>
+        <Button @click="exportData"  class="search-btn">导出Excel</Button>
+        <Button @click="exportWordDemo"  class="search-btn">导出word例子</Button>
+        <Button @click="exportPdfDemo"  class="search-btn">导出pdf例子</Button>
       </div>
       <!--列表 分页-->
       <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
@@ -64,7 +66,7 @@
   </div>
 </template>
 <script>
-import { fetchList, deleteUser, resetPassword, exportData } from '@/api/user'
+import { fetchList, deleteUser, resetPassword, exportData, exportWord, exportPdf } from '@/api/user'
 import AddOrUpdate from './add-or-update'
 import { saveAs } from 'file-saver'
 export default {
@@ -201,6 +203,30 @@ export default {
           var filename = decodeURIComponent(res.headers['filename'])
           saveAs(new Blob([res.data], {
             type: 'application/vnd.ms-excel;charset=UTF-8'
+          }), filename)
+        })
+        .catch(error => {
+          this.$Message.error(error.msg)
+        })
+    },
+    exportWordDemo() {
+      exportWord(this.listQuery)
+        .then(res => {
+          var filename = decodeURIComponent(res.headers['filename'])
+          saveAs(new Blob([res.data], {
+            type: 'application/vnd.ms-word;charset=UTF-8'
+          }), filename)
+        })
+        .catch(error => {
+          this.$Message.error(error.msg)
+        })
+    },
+    exportPdfDemo() {
+      exportPdf(this.listQuery)
+        .then(res => {
+          var filename = decodeURIComponent(res.headers['filename'])
+          saveAs(new Blob([res.data], {
+            type: 'application/x-download;charset=UTF-8'
           }), filename)
         })
         .catch(error => {

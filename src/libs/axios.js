@@ -60,7 +60,8 @@ class HttpRequest {
           return Promise.reject(response.data)
         }
       } else if (response.headers['content-type'] === 'application/vnd.ms-excel;charset=UTF-8' ||
-          response.headers['content-type'] === 'application/vnd.ms-word;charset=UTF-8') {
+          response.headers['content-type'] === 'application/vnd.ms-word;charset=UTF-8' ||
+          response.headers['content-type'] === 'application/x-download;charset=UTF-8') {
         return response
       } else {
         return response.data

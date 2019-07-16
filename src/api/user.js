@@ -92,3 +92,21 @@ export const exportData = (query) => {
     params: query
   })
 }
+
+export const exportWord = (query) => {
+  return axios.request({
+    url: '/export/export_word',
+    method: 'get',
+    responseType: 'blob',
+    params: query
+  })
+}
+
+export const exportPdf = (query) => {
+  return axios.request({
+    url: '/export/export_pdf',
+    method: 'get',
+    responseType: 'blob',
+    params: query
+  })
+}
