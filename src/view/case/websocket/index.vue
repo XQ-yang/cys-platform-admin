@@ -14,7 +14,10 @@ export default {
   data() {
     return {
       id: '',
-      message: 'helloWord!'
+      message: 'helloWord!',
+      query: {
+        userName: this.$store.state.user.userName
+      }
     }
   },
 
@@ -30,7 +33,7 @@ export default {
   methods: {
     initWebSocket: function() {
       // WebSocket与普通的请求所用协议有所不同，ws等同于http，wss等同于https
-      this.websock = new WebSocket('ws://localhost:8180/websocket_service')
+      this.websock = new WebSocket('ws://localhost:8180/websocket_service/' + this.$store.state.user.userName)
       this.websock.onopen = this.websocketonopen
       this.websock.onerror = this.websocketonerror
       this.websock.onmessage = this.websocketonmessage
@@ -43,14 +46,13 @@ export default {
       console.log('WebSocket连接发生错误')
     },
     websocketonmessage: function(e) {
-      var messageData = JSON.parse(e.data)
-      this.message = messageData
+      this.message = e.data
     },
     websocketclose: function(e) {
       console.log('connection closed (' + e.code + ')')
     },
     sendOneMessage: function(e) {
-      sendOneWebSocket()
+      sendOneWebSocket(this.query)
     },
     sendAllMessage: function(e) {
       sendAllWebSocket()
