@@ -7,6 +7,8 @@
 </template>
 
 <script>
+
+import { sendOneWebSocket, sendAllWebSocket } from '@/api/websocket'
 export default {
   name: '',
   data() {
@@ -28,7 +30,7 @@ export default {
   methods: {
     initWebSocket: function() {
       // WebSocket与普通的请求所用协议有所不同，ws等同于http，wss等同于https
-      this.websock = new WebSocket('ws://localhost:8046/websocket/DPS007')
+      this.websock = new WebSocket('ws://localhost:8180/websocket_service')
       this.websock.onopen = this.websocketonopen
       this.websock.onerror = this.websocketonerror
       this.websock.onmessage = this.websocketonmessage
@@ -41,11 +43,17 @@ export default {
       console.log('WebSocket连接发生错误')
     },
     websocketonmessage: function(e) {
-      var da = JSON.parse(e.data)
-      this.message = da
+      var messageData = JSON.parse(e.data)
+      this.message = messageData
     },
     websocketclose: function(e) {
       console.log('connection closed (' + e.code + ')')
+    },
+    sendOneMessage: function(e) {
+      sendOneWebSocket()
+    },
+    sendAllMessage: function(e) {
+      sendAllWebSocket()
     }
   }
 }
