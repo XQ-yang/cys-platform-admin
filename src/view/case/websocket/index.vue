@@ -32,8 +32,9 @@ export default {
 
   methods: {
     initWebSocket: function() {
+      const baseUrl = this.$baseUrl.replace('http', 'ws').replace('https', 'ws')
       // WebSocket与普通的请求所用协议有所不同，ws等同于http，wss等同于https
-      this.websock = new WebSocket('ws://localhost:8180/websocket_service/' + this.$store.state.user.userName)
+      this.websock = new WebSocket(baseUrl + '/websocket_service/' + this.$store.state.user.userName)
       this.websock.onopen = this.websocketonopen
       this.websock.onerror = this.websocketonerror
       this.websock.onmessage = this.websocketonmessage
