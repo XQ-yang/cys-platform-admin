@@ -50,7 +50,7 @@ export default {
       this.message = e.data
     },
     websocketclose: function(e) {
-      console.log('connection closed (' + e.code + ')')
+      // console.log('connection closed (' + e.code + ')')
     },
     sendOneMessage: function(e) {
       sendOneWebSocket(this.query)
