@@ -124,6 +124,7 @@ export default {
         paste_data_images: true, // 允许粘贴图像
         menubar: this.menubar, // 是否隐藏最上方menu
         plugins: plugins, // 插件
+        branding: true, // 隐藏 由Tiny驱动
         end_container_on_empty_block: true,
         powerpaste_word_import: 'clean',
         code_dialog_height: 450,
