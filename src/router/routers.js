@@ -141,6 +141,16 @@ export const routerMap = [
           title: '文章管理'
         },
         component: () => import('@/view/case/artical/')
+      },
+      {
+        path: 'websocket',
+        name: 'websocket',
+        access: 'websocket',
+        meta: {
+          icon: 'ios-cloud-upload-outline',
+          title: '消息推送'
+        },
+        component: () => import('@/view/case/websocket/')
       }
     ]
   }
