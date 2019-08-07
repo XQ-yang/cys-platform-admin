@@ -20,6 +20,7 @@
     "echarts": "^4.0.4",
     "element-ui": "^2.8.2",
     "file-saver": "^2.0.2",
+    "gojs": "^2.0.15",
     "html2canvas": "^1.0.0-alpha.12",
     "iview": "^3.4.2",
     "js-cookie": "^2.2.0",

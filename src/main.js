@@ -12,6 +12,7 @@ import '@/assets/theme/index.less'
 import '@/assets/icons/iconfont.css'
 import '@/assets/css/common.less'
 import { formatDate } from '@/libs/tools.js'
+import gojs from 'gojs'
 // 引入element的table 作一些简单尝试
 import { Table, TableColumn } from 'element-ui'
 Vue.use(Table)
@@ -47,6 +48,8 @@ Vue.prototype.$baseUrl = baseUrl
  * @description 全局注册日期格式化函数
  */
 Vue.prototype.$formatDate=formatDate
+
+Vue.prototype.go=gojs
 /**
  * 注册指令
  */

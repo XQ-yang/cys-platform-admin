@@ -151,6 +151,16 @@ export const routerMap = [
           title: '消息推送'
         },
         component: () => import('@/view/case/websocket/')
+      },
+      {
+        path: 'flow',
+        name: 'flow',
+        access: 'flow',
+        meta: {
+          icon: 'ios-cloud-upload-outline',
+          title: '流程图'
+        },
+        component: () => import('@/view/case/flow/')
       }
     ]
   }
