@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import diagram from '_c/flow-chart'
-import go from 'gojs'
+import diagram from '_c/flow-chart/flow-tree'
+let go = window.go
 export default {
   name: 'flow',
   data() {

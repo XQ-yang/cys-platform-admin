@@ -3,10 +3,10 @@
 </template>
 
 <script>
-import go from 'gojs'
-let $ = go.GraphObject.make
+let $ = window.go.GraphObject.make
+let go = window.go
 export default {
-  name: '',
+  name: 'flowTree',
   props: ['modelData'],
   data() {
     return {

@@ -161,6 +161,16 @@ export const routerMap = [
           title: '流程图'
         },
         component: () => import('@/view/case/flow/')
+      },
+      {
+        path: 'workflow',
+        name: 'workflow',
+        access: 'workflow',
+        meta: {
+          icon: 'ios-cloud-upload-outline',
+          title: '工作流设计'
+        },
+        component: () => import('@/view/case/workflow/')
       }
     ]
   }
