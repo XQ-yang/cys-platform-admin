@@ -9,20 +9,6 @@
 <script>
 let go = window.go
 let $ = window.go.GraphObject.make
-// let dataTemp = {
-//   'class': 'GraphLinksModel',
-//   'modelData': { 'position': '-399 -104' },
-//   'nodeDataArray': [
-//     { 'key': '110100345', 'nodeType': 0, 'nodeWidth': 65, 'nodeHeight': 90, 'imgWidth': 50, 'imgHeight': 50, 'bgImage': '/RtManageCon/jsLib/gojs/images/os.svg', 'imgAlign': { 'class': 'go.Spot', 'x': 0.5, 'y': 0.5, 'offsetX': 0, 'offsetY': 0 }, 'pictrueMargin': { 'class': 'go.Margin', 'top': -26, 'right': 0, 'bottom': 0, 'left': 0 }, 'contentText': '110100345\nH:97  P:96', 'text': '', 'textAlign': { 'class': 'go.Spot', 'x': 0.5, 'y': 1, 'offsetX': 0, 'offsetY': 0 },
-// 'loc': '-120 -67', 'panelVisible': true },
-//     { 'key': '210100376', 'nodeType': 1, 'nodeWidth': 65, 'nodeHeight': 90, 'imgWidth': 50, 'imgHeight': 50, 'bgImage': '/RtManageCon/jsLib/gojs/images/oracle.svg', 'imgAlign': { 'class': 'go.Spot', 'x': 0.5, 'y': 0.5, 'offsetX': 0, 'offsetY': 0 }, 'pictrueMargin': { 'class': 'go.Margin', 'top': -26, 'right': 0, 'bottom': 0, 'left': 0 }, 'contentText': '210100376\nH:97  P:96', 'text': '', 'textAlign': { 'class': 'go.Spot', 'x': 0.5, 'y': 1, 'offsetX': 0, 'offsetY': 0 }, 'loc': '39.453125 66.5', 'panelVisible': true },
-//     { 'key': '210100375', 'nodeType': 1, 'nodeWidth': 65, 'nodeHeight': 90, 'imgWidth': 50, 'imgHeight': 50, 'bgImage': '/RtManageCon/jsLib/gojs/images/oracle.svg', 'imgAlign': { 'class': 'go.Spot', 'x': 0.5, 'y': 0.5, 'offsetX': 0, 'offsetY': 0 }, 'pictrueMargin': { 'class': 'go.Margin', 'top': -26, 'right': 0, 'bottom': 0, 'left': 0 }, 'contentText': '210100375\nH:97  P:96', 'text': '', 'textAlign': { 'class': 'go.Spot', 'x': 0.5, 'y': 1, 'offsetX': 0, 'offsetY': 0 }, 'loc': '-284 54', 'panelVisible': true }
-//   ],
-//   'linkDataArray': [
-//     { 'from': '110100345', 'to': '210100375' },
-//     { 'from': '110100345', 'to': '210100376' }
-//   ]
-// }
 export default {
   name: '',
   data() {
@@ -31,17 +17,25 @@ export default {
       diagram: null,
       savedModelText: '',
       nodeDataArray: [
-        { key: '1', imgWidth: 38, imgHeight: 38, img: require('../../../assets/images/gs/1.png'), location: '230 196' },
-        { key: '2', imgWidth: 38, imgHeight: 38, img: require('../../../assets/images/gs/2.png'), location: '295 89' },
-        { key: '3', imgWidth: 38, imgHeight: 38, img: require('../../../assets/images/gs/3.png'), location: '444 57' },
-        { key: '4', imgWidth: 38, imgHeight: 38, img: require('../../../assets/images/gs/4.png'), location: '587.9999999999998 79' },
-        { key: '5', imgWidth: 38, imgHeight: 38, img: require('../../../assets/images/gs/5.png'), location: '674 190.99999999999994' },
-        { key: '6', text: '6', imgWidth: 92, imgHeight: 96, img: require('../../../assets/images/gs/save.png'), location: '-116.00000000000006 -217.00000000000003' },
-        { key: '7', text: '7', imgWidth: 92, imgHeight: 96, img: require('../../../assets/images/gs/network.png'), location: '144.99999999999994 -223.00000000000006' },
-        { key: '8', text: '8', imgWidth: 92, imgHeight: 96, img: require('../../../assets/images/gs/plugin.png'), location: '415.9999999999999 -229.99999999999991' },
-        { key: '9', text: '9', imgWidth: 92, imgHeight: 96, img: require('../../../assets/images/gs/sys.png'), location: '670.0000000000001 -218' },
-        { key: '10', text: '10', imgWidth: 92, imgHeight: 96, img: require('../../../assets/images/gs/database.png'), location: '887.0000000000001 -221.0000000000002' },
-        { key: '11', text: '', imgWidth: 378, imgHeight: 252, img: require('../../../assets/images/gs/AI.png'), location: '278.9999999999999 112.99999999999994' }
+        { key: '1', text: '', imgWidth: 38, imgHeight: 38, img: require('../../../assets/images/gs/1.png'), location: '230 196' },
+        { key: '2', text: '', imgWidth: 38, imgHeight: 38, img: require('../../../assets/images/gs/2.png'), location: '295 89' },
+        { key: '3', text: '', imgWidth: 38, imgHeight: 38, img: require('../../../assets/images/gs/3.png'), location: '444 57' },
+        { key: '4', text: '', imgWidth: 38, imgHeight: 38, img: require('../../../assets/images/gs/4.png'), location: '587.9999999999998 79' },
+        { key: '5', text: '', imgWidth: 38, imgHeight: 38, img: require('../../../assets/images/gs/5.png'), location: '674 190.99999999999994' },
+        {
+          key: '6',
+          text: '存储健康模型',
+          imgWidth: 92,
+          imgHeight: 96,
+          img: require('../../../assets/images/gs/save.png'),
+          location: '-116.00000000000006 -217.00000000000003',
+          score: 80
+        },
+        { key: '7', text: '网络健康模型', imgWidth: 92, imgHeight: 96, img: require('../../../assets/images/gs/network.png'), location: '144.99999999999994 -223.00000000000006', score: 95 },
+        { key: '8', text: '中间件健康模型', imgWidth: 92, imgHeight: 96, img: require('../../../assets/images/gs/plugin.png'), location: '416.9999999999998 -225.99999999999994', score: 95 },
+        { key: '9', text: '应用系统健康模型', imgWidth: 92, imgHeight: 96, img: require('../../../assets/images/gs/sys.png'), location: '670.0000000000001 -218', score: 95 },
+        { key: '10', text: '数据库健康模型', imgWidth: 92, imgHeight: 96, img: require('../../../assets/images/gs/database.png'), location: '887.0000000000001 -221.0000000000002', score: 95 },
+        { key: '11', text: '系统健康模型', imgWidth: 378, imgHeight: 252, img: require('../../../assets/images/gs/AI.png'), location: '278.9999999999999 112.99999999999994' }
       ],
       linkDataArray: [
         { from: 1, to: 6 },
@@ -86,11 +80,32 @@ export default {
         )
       })
       myDiagram.linkTemplate =
-     $(go.Link,
-       { routing: go.Link.Normal, selectable: true },
-       $(go.Shape,
-         { strokeWidth: 3 })
-     )
+      $(go.Link,
+        {
+          routing: go.Link.AvoidsNodes,
+          curve: go.Link.JumpOver,
+          fromEndSegmentLength: 20,
+          toEndSegmentLength: 20,
+          corner: 50
+        },
+        new go.Binding('points').makeTwoWay(), // 精准定位，但会影响容器位置 ,
+        // 线路外观
+        $(go.Shape, { isPanelMain: true, stroke: '#62aeae', strokeWidth: 5 }, new go.Binding('visible')),
+        $(go.Shape, { isPanelMain: true, stroke: '#258e8f', strokeWidth: 3 }, new go.Binding('visible')),
+        $(go.Shape, { isPanelMain: true, stroke: '#fff', strokeWidth: 1, name: 'PIPE', strokeDashArray: [10, 10] }
+          , new go.Binding('stroke', 'strokeDashColor')
+          , new go.Binding('strokeDashArray')
+          , new go.Binding('strokeWidth')),
+        // 连接线的文本
+        $(go.TextBlock,
+          new go.Binding('text', 'text'),
+          new go.Binding('segmentIndex', 'segmentIndex'),
+          new go.Binding('segmentOffset', 'segmentOffset', go.Point.parse),
+          new go.Binding('segmentFraction', 'segmentFraction')),
+
+        // 设置异常连接线的打叉图(从上到下的元素中，每一级元素位置会遮盖上一级元素，本次图片位置显示最前面)
+        $(go.Picture, new go.Binding('source', 'errorImg'))
+      )
       // 屏蔽Ctrl+C（复制）、Ctrl+V（粘贴）、Ctrl+X（剪切）
       myDiagram.commandHandler.doKeyDown = function() {
         var e = myDiagram.lastInput
@@ -103,27 +118,37 @@ export default {
       }
       // myDiagram.nodeTemplateMap.add()
       // 定义节点模板
-      myDiagram.nodeTemplate = $(go.Node, 'Auto',
+      myDiagram.nodeTemplate = $(go.Node, 'Vertical',
         $(go.Picture,
-          { name: 'Picture' },
-          new go.Binding('width', 'imgWidth'), // 绑定图片的宽高
-          new go.Binding('height', 'imgHeight'), // 绑定图片的宽高
-          new go.Binding('source', 'img')), // 绑定图片的资源路径
+          new go.Binding('source', 'img'),
+          new go.Binding('width', 'imgWidth'),
+          new go.Binding('height', 'imgHeight'),
+        ),
         $(go.TextBlock,
-          { margin: new go.Margin(5, 0, 0, 0),
-            maxSize: new go.Size(100, 30),
-            isMultiline: false },
-          new go.Binding('text', 'text')),
+          {
+            margin: new go.Margin(3, 0, 0, 0),
+            isMultiline: false
+          },
+          new go.Binding('text', 'text')
+        ),
+        $(go.TextBlock,
+          {
+            margin: new go.Margin(3, 0, 0, 0),
+            isMultiline: false
+          },
+          new go.Binding('text', 'score')
+        ),
         new go.Binding('location', 'location', go.Point.parse).makeTwoWay(go.Point.stringify)
       )
       // 定义节点数据
       myDiagram.model.nodeDataArray = this.nodeDataArray
       myDiagram.model.linkDataArray = this.linkDataArray
-      // myDiagram.model = new go.GraphLinksModel(
-      //   [{ key: 'Hello' }, // two node data, in an Array
-      //     { key: 'World!' }],
-      //   [{ from: 'Hello', to: 'World!' }] // one link data, in an Array
-      // )
+      myDiagram.model = $(go.GraphLinksModel, {
+        linkFromPortIdProperty: 'fromPort', // 用于记录做任意端与端连接点位置信息
+        linkToPortIdProperty: 'toPort', // 用于记录做任意端与端连接点位置信息
+        nodeDataArray: this.nodeDataArray,
+        linkDataArray: this.linkDataArray
+      })
     },
     makePort(name, spot, output, input) {
       return $(go.Shape, 'Circle',
@@ -155,6 +180,13 @@ export default {
           }
         }
       ]
+    },
+    showPorts(node, show) {
+      var diagram = node.diagram
+      if (!diagram || diagram.isReadOnly || !diagram.allowLink) return
+      node.ports.each(function(port) {
+        port.fill = show ? 'rgba(0,0,0,.3)' : null
+      })
     }
   }
 }
