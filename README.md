@@ -28,8 +28,6 @@ node proxy
 ## 文件结构
 ```shell
 .
-├── build  项目构建配置
-├── config  开发相关配置
 ├── public  打包所需静态资源
 └── src
     ├── api  AJAX请求
@@ -45,7 +43,7 @@ node proxy
     ├── router  路由配置
     ├── store  Vuex配置
     ├── view  页面文件
-    └── tests  测试相关
+└── tests  测试相关
 ```
 
 ## Links
