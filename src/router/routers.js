@@ -1,7 +1,7 @@
 import Main from '@/components/main'
 
 /**
- * iview-admin中meta除了原生参数外可配置的参数:
+ * 路由中meta除了原生参数外可配置的参数:
  * meta: {
  *  title: { String|Number|Function }
  *         显示在侧边栏、面包屑和标签栏的文字
@@ -181,6 +181,27 @@ export const routerMap = [
           title: '流程图测试'
         },
         component: () => import('@/view/case/flowtest/')
+      },
+      {
+        path: 'lesson',
+        name: 'lesson',
+        access: 'lesson',
+        meta: {
+          icon: 'ios-cloud-upload-outline',
+          title: '前端学习'
+        },
+        component: () => import('@/view/case/lesson/')
+      },
+      {
+        path: 'addlesson',
+        name: 'addlesson',
+        access: 'lesson',
+        meta: {
+          icon: 'ios-cloud-upload-outline',
+          title: '新增',
+          hideInMenu: true
+        },
+        component: () => import('@/view/case/lesson/new-tab-page.vue')
       }
     ]
   }
