@@ -55,9 +55,7 @@ export default {
     },
     // 上传之前需要做一些什么
     beforeUpdate(file) {
-      debugger
       return oss(file.name).then(res => {
-        debugger
         this.uploadHost = res.host
         this.uploadData = res
       })
