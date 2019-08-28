@@ -29,33 +29,31 @@ export default {
         'linkDataArray': []
       },
       diagramData: {
-        'class': 'go.GraphLinksModel',
-        'linkFromPortIdProperty': 'fromPort',
-        'linkToPortIdProperty': 'toPort',
-        'nodeDataArray': [
+        class: 'go.GraphLinksModel',
+        linkFromPortIdProperty: 'fromPort',
+        linkToPortIdProperty: 'toPort',
+        nodeDataArray: [
           {
-            'category': 'Command',
-            'text': 'Command1',
-            'key': -2,
-            'loc': '-202.90624999999994 -369.4999999999998'
+            category: 'Command',
+            text: 'Command1',
+            key: -2,
+            loc: '-202.90624999999994 -369.4999999999998',
+            img: require('../../../assets/images/temp/01.png'),
+            imgWidth: 50,
+            imgHeight: 50
           },
           {
-            'category': 'Command',
-            'title': 'tsfsfsfsfsfsf',
-            'text': 'Command2',
-            'key': -3,
-            'loc': '-109.79687500000006 -248.24999999999994'
+            category: 'Command',
+            title: 'tsfsfsfsfsfsf',
+            text: 'Command2',
+            key: -3,
+            loc: '-109.79687500000006 -248.24999999999994',
+            img: require('../../../assets/images/temp/02.png'),
+            imgWidth: 50,
+            imgHeight: 50
           }
         ],
-        'linkDataArray': [{
-          'from': -2,
-          'to': -3,
-          'fromPort': 'B',
-          'toPort': 'T',
-          // 'text': 'up or timer',
-          'curviness': -20,
-          'points': [-202.90625, -353.06227569580085, -202.90625, -343.06227569580085, -202.90625, -308.875, -109.796875, -308.875, -109.796875, -274.6877243041992, -109.796875, -264.6877243041992]
-        }]
+        linkDataArray: []
       },
       currentNode: null,
       savedModelText: '',
