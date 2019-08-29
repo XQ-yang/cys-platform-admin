@@ -13,6 +13,7 @@
 
 <script>
 let go = window.go
+var $ = go.GraphObject.make // for conciseness in defining templates
 // let $ = window.go.GraphObject.make
 export default {
   name: '',
@@ -32,256 +33,190 @@ export default {
   },
   methods: {
     init() {
-      var $ = go.GraphObject.make // for conciseness in defining templates
       var self = this
       var myDiagram =
         $(go.Diagram, this.$refs.myDiagramDiv, // must name or refer to the DIV HTML element
           {
-            'LinkDrawn': showLinkLabel, // this DiagramEvent listener is defined below
-            'LinkRelinked': showLinkLabel,
+            initialContentAlignment: go.Spot.Center, // 居中
+            // 显示网格
+            'grid.visible': false,
+            // 启动Ctrl+Z（撤销）、Ctrl+Y（恢复）
             'undoManager.isEnabled': true,
             'ModelChanged': function(e) {
               self.savedModelText = e.model.toJson()
             }
           })
-
-      // helper definitions for node templates
-
-      // eslint-disable-next-line no-unused-vars
-      function nodeStyle() {
-        return [
-          // The Node.location comes from the "loc" property of the node data,
-          // converted by the Point.parse static method.
-          // If the Node.location is changed, it updates the "loc" property of the node data,
-          // converting back using the Point.stringify static method.
-          new go.Binding('location', 'loc', go.Point.parse).makeTwoWay(go.Point.stringify),
-          {
-            // the Node.location is at the center of each node
-            locationSpot: go.Spot.Center
-          }
-        ]
-      }
-
-      // Define a function for creating a "port" that is normally transparent.
-      // The "name" is used as the GraphObject.portId,
-      // the "align" is used to determine where to position the port relative to the body of the node,
-      // the "spot" is used to control how links connect with the port and whether the port
-      // stretches along the side of the node,
-      // and the boolean "output" and "input" arguments control whether the user can draw links from or to the port.
-      // eslint-disable-next-line no-unused-vars
-      function makePort(name, align, spot, output, input) {
-        var horizontal = align.equals(go.Spot.Top) || align.equals(go.Spot.Bottom)
-        // the port is basically just a transparent rectangle that stretches along the side of the node,
-        // and becomes colored when the mouse passes over it
-        return $(go.Shape,
-          {
-            fill: 'transparent', // changed to a color in the mouseEnter event handler
-            strokeWidth: 0, // no stroke
-            width: horizontal ? NaN : 8, // if not stretching horizontally, just 8 wide
-            height: !horizontal ? NaN : 8, // if not stretching vertically, just 8 tall
-            alignment: align, // align the port on the main Shape
-            stretch: (horizontal ? go.GraphObject.Horizontal : go.GraphObject.Vertical),
-            portId: name, // declare this object to be a "port"
-            fromSpot: spot, // declare where links may connect at this port
-            fromLinkable: output, // declare whether the user may draw links from here
-            toSpot: spot, // declare where links may connect at this port
-            toLinkable: input, // declare whether the user may draw links to here
-            cursor: 'pointer', // show a different cursor to indicate potential link point
-            mouseEnter: function(e, port) { // the PORT argument will be this Shape
-              if (!e.diagram.isReadOnly) port.fill = 'rgba(255,0,255,0.5)'
-            },
-            mouseLeave: function(e, port) {
-              port.fill = 'transparent'
-            }
-          })
-      }
-
-      // eslint-disable-next-line no-unused-vars
-      function textStyle() {
-        return {
-          font: 'bold 11pt Helvetica, Arial, sans-serif',
-          stroke: 'whitesmoke'
-        }
-      }
-
-      // define the Node templates for regular nodes
-
-      // myDiagram.nodeTemplateMap.add('', // the default category
-      //   $(go.Node, 'Table', nodeStyle(),
-      //     // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
-      //     $(go.Panel, 'Auto',
-      //       $(go.Shape, 'Rectangle',
-      //         { fill: '#00A9C9', strokeWidth: 0 },
-      //         new go.Binding('figure', 'figure')),
-      //       $(go.TextBlock, textStyle(),
-      //         {
-      //           margin: 8,
-      //           maxSize: new go.Size(160, NaN),
-      //           wrap: go.TextBlock.WrapFit,
-      //           editable: true
-      //         },
-      //         new go.Binding('text').makeTwoWay())
-      //     ),
-      //     // four named ports, one on each side:
-      //     makePort('T', go.Spot.Top, go.Spot.TopSide, false, true),
-      //     makePort('L', go.Spot.Left, go.Spot.LeftSide, true, true),
-      //     makePort('R', go.Spot.Right, go.Spot.RightSide, true, true),
-      //     makePort('B', go.Spot.Bottom, go.Spot.BottomSide, true, false)
-      //   ))
-
-      // myDiagram.nodeTemplateMap.add('Conditional',
-      //   $(go.Node, 'Table', nodeStyle(),
-      //     // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
-      //     $(go.Panel, 'Auto',
-      //       $(go.Shape, 'Diamond',
-      //         { fill: '#00A9C9', strokeWidth: 0 },
-      //         new go.Binding('figure', 'figure')),
-      //       $(go.TextBlock, textStyle(),
-      //         {
-      //           margin: 8,
-      //           maxSize: new go.Size(160, NaN),
-      //           wrap: go.TextBlock.WrapFit,
-      //           editable: true
-      //         },
-      //         new go.Binding('text').makeTwoWay())
-      //     ),
-      //     // four named ports, one on each side:
-      //     makePort('T', go.Spot.Top, go.Spot.Top, false, true),
-      //     makePort('L', go.Spot.Left, go.Spot.Left, true, true),
-      //     makePort('R', go.Spot.Right, go.Spot.Right, true, true),
-      //     makePort('B', go.Spot.Bottom, go.Spot.Bottom, true, false)
-      //   ))
-
-      // myDiagram.nodeTemplateMap.add('Start',
-      //   $(go.Node, 'Table', nodeStyle(),
-      //     $(go.Panel, 'Auto',
-      //       $(go.Shape, 'Circle',
-      //         { minSize: new go.Size(40, 40), fill: '#79C900', strokeWidth: 0 }),
-      //       $(go.TextBlock, 'Start', textStyle(),
-      //         new go.Binding('text'))
-      //     ),
-      //     // three named ports, one on each side except the top, all output only:
-      //     makePort('L', go.Spot.Left, go.Spot.Left, true, false),
-      //     makePort('R', go.Spot.Right, go.Spot.Right, true, false),
-      //     makePort('B', go.Spot.Bottom, go.Spot.Bottom, true, false)
-      //   ))
-
-      // myDiagram.nodeTemplateMap.add('End',
-      //   $(go.Node, 'Table', nodeStyle(),
-      //     $(go.Panel, 'Auto',
-      //       $(go.Shape, 'Circle',
-      //         { minSize: new go.Size(40, 40), fill: '#DC3C00', strokeWidth: 0 }),
-      //       $(go.TextBlock, 'End', textStyle(),
-      //         new go.Binding('text'))
-      //     ),
-      //     // three named ports, one on each side except the bottom, all input only:
-      //     makePort('T', go.Spot.Top, go.Spot.Top, false, true),
-      //     makePort('L', go.Spot.Left, go.Spot.Left, false, true),
-      //     makePort('R', go.Spot.Right, go.Spot.Right, false, true)
-      //   ))
-
-      // taken from ../extensions/Figures.js:
-      // go.Shape.defineFigureGenerator('File', function(shape, w, h) {
-      //   var geo = new go.Geometry()
-      //   var fig = new go.PathFigure(0, 0, true) // starting point
-      //   geo.add(fig)
-      //   fig.add(new go.PathSegment(go.PathSegment.Line, 0.75 * w, 0))
-      //   fig.add(new go.PathSegment(go.PathSegment.Line, w, 0.25 * h))
-      //   fig.add(new go.PathSegment(go.PathSegment.Line, w, h))
-      //   fig.add(new go.PathSegment(go.PathSegment.Line, 0, h).close())
-      //   var fig2 = new go.PathFigure(0.75 * w, 0, false)
-      //   geo.add(fig2)
-      //   // The Fold
-      //   fig2.add(new go.PathSegment(go.PathSegment.Line, 0.75 * w, 0.25 * h))
-      //   fig2.add(new go.PathSegment(go.PathSegment.Line, w, 0.25 * h))
-      //   geo.spot1 = new go.Spot(0, 0.25)
-      //   geo.spot2 = go.Spot.BottomRight
-      //   return geo
-      // })
-
-      // myDiagram.nodeTemplateMap.add('Comment',
-      //   $(go.Node, 'Auto', nodeStyle(),
-      //     $(go.Shape, 'File',
-      //       { fill: '#DEE0A3', strokeWidth: 0 }),
-      //     $(go.TextBlock, textStyle(),
-      //       {
-      //         margin: 5,
-      //         maxSize: new go.Size(200, NaN),
-      //         wrap: go.TextBlock.WrapFit,
-      //         textAlign: 'center',
-      //         editable: true,
-      //         font: 'bold 12pt Helvetica, Arial, sans-serif',
-      //         stroke: '#454545'
-      //       },
-      //       new go.Binding('text').makeTwoWay())
-      //     // no ports, because no links are allowed to connect with a comment
-      //   ))
-
-      // replace the default Link template in the linkTemplateMap
-      myDiagram.linkTemplate = $(go.Link, {
-
+      // 监听拖拽事件
+      myDiagram.addDiagramListener('ExternalObjectsDropped', function(e) {
+        // var nodes = myDiagram.selection.first().data
+        // console.log(nodes)
       })
-
-      // Make link labels visible if coming out of a "conditional" node.
-      // This listener is called by the "LinkDrawn" and "LinkRelinked" DiagramEvents.
-      function showLinkLabel(e) {
-        var label = e.subject.findObject('LABEL')
-        if (label !== null) label.visible = (e.subject.fromNode.data.category === 'Conditional')
-      }
-
+      myDiagram.nodeTemplateMap.add('',
+        $(go.Node, 'Spot', this.nodeStyle(),
+          $(go.Panel, 'Vertical',
+            $(go.Picture, {
+              margin: 3
+            },
+            new go.Binding('source', 'img'),
+            new go.Binding('width', 'imgWidth'),
+            new go.Binding('height', 'imgHeight')),
+            $(go.TextBlock,
+              {
+                alignment: go.Spot.BottomCenter,
+                // 文本不允许换行
+                isMultiline: true,
+                font: '13px sans-serif'
+              },
+              new go.Binding('text', 'text'),
+              new go.Binding('text').makeTwoWay()
+            )
+          ),
+          this.makePort('TC', go.Spot.TopCenter, true, true),
+          this.makePort('TL', go.Spot.TopLeft, true, true),
+          this.makePort('TR', go.Spot.TopRight, true, true),
+          this.makePort('LC', go.Spot.LeftCenter, true, true),
+          this.makePort('R', go.Spot.Right, true, true),
+          this.makePort('BC', go.Spot.BottomCenter, true, true),
+          this.makePort('BL', go.Spot.BottomLeft, true, true),
+          this.makePort('BR', go.Spot.BottomRight, true, true)
+        ))
+      myDiagram.linkTemplate = $(go.Link,
+        // the whole link panel
+        {
+          routing: go.Link.Bezier,
+          // curve: go.Link.JumpOver,
+          corner: 5,
+          toShortLength: 4,
+          relinkableFrom: true,
+          relinkableTo: true,
+          reshapable: false,
+          resegmentable: false,
+          // mouse-overs subtly highlight links:
+          mouseEnter: function(e, link) {
+            link.findObject('HIGHLIGHT').stroke = 'rgba(30,144,255,0.2)'
+          },
+          mouseLeave: function(e, link) {
+            link.findObject('HIGHLIGHT').stroke = 'transparent'
+          }
+        },
+        new go.Binding('points').makeTwoWay(),
+        $(go.Shape, // the highlight shape, normally transparent
+          { isPanelMain: true, strokeWidth: 8, stroke: 'transparent', name: 'HIGHLIGHT' }),
+        $(go.Shape, // the link path shape
+          { isPanelMain: true, stroke: 'gray', strokeWidth: 2 }),
+        $(go.Shape, // the arrowhead
+          { toArrow: 'standard', stroke: null, fill: 'gray' }),
+        $(go.Shape, { toArrow: 'Standard' }),
+        $(go.TextBlock, 'from', { segmentIndex: 0, segmentFraction: 0.2, editable: true }, new go.Binding('text', 'fromText').makeTwoWay()),
+        $(go.TextBlock, 'mid', { segmentIndex: 0, segmentFraction: 0.5, editable: true }, new go.Binding('text', 'midText').makeTwoWay()),
+        $(go.TextBlock, 'to', { segmentIndex: 0, segmentFraction: 0.8, editable: true }, new go.Binding('text', 'toText').makeTwoWay())
+      )
       // temporary links used by LinkingTool and RelinkingTool are also orthogonal:
-      myDiagram.toolManager.linkingTool.temporaryLink.routing = go.Link.Orthogonal
-      myDiagram.toolManager.relinkingTool.temporaryLink.routing = go.Link.Orthogonal
-
+      // myDiagram.toolManager.linkingTool.temporaryLink.routing = go.Link.Orthogonal
+      // myDiagram.toolManager.relinkingTool.temporaryLink.routing = go.Link.Orthogonal
       // initialize the Palette that is on the left side of the page
       // eslint-disable-next-line no-unused-vars
       var myPalette =
-        $(go.Palette, this.$refs.myPaletteDiv, // must name or refer to the DIV HTML element
-          {
-            nodeTemplateMap: myDiagram.nodeTemplateMap
-          })
+        $(go.Palette, this.$refs.myPaletteDiv)
 
       myPalette.nodeTemplate = $(go.Node, 'Vertical',
         $(go.Picture, { margin: 3 },
           new go.Binding('source', 'img'),
           new go.Binding('width', 'imgWidth'),
-          new go.Binding('height', 'imgHeight')),
-        $(go.TextBlock,
-          {
-            margin: new go.Margin(3, 0, 0, 0),
-            isMultiline: false
-          },
-          new go.Binding('text', 'text')
-        ),
+          new go.Binding('height', 'imgHeight'))
       )
       myPalette.model.nodeDataArray = [
         {
           img: require('../../../assets/images/temp/01.png'),
-          imgWidth: 20,
-          imgHeight: 20
+          imgWidth: 50,
+          imgHeight: 50,
+          text: '12333'
         },
         {
           img: require('../../../assets/images/temp/02.png'),
-          imgWidth: 20,
-          imgHeight: 20
+          imgWidth: 50,
+          imgHeight: 50
         },
         {
           img: require('../../../assets/images/temp/03.png'),
-          imgWidth: 20,
-          imgHeight: 20
+          imgWidth: 50,
+          imgHeight: 50
         },
         {
           img: require('../../../assets/images/temp/04.png'),
-          imgWidth: 20,
-          imgHeight: 20
+          imgWidth: 50,
+          imgHeight: 50
         },
         {
           img: require('../../../assets/images/temp/05.png'),
-          imgWidth: 20,
-          imgHeight: 20
+          imgWidth: 50,
+          imgHeight: 50
+        },
+        {
+          img: require('../../../assets/images/temp/06.png'),
+          imgWidth: 50,
+          imgHeight: 50
+        },
+        {
+          img: require('../../../assets/images/temp/07.png'),
+          imgWidth: 50,
+          imgHeight: 50
+        },
+        {
+          img: require('../../../assets/images/temp/08.png'),
+          imgWidth: 50,
+          imgHeight: 50
+        },
+        {
+          img: require('../../../assets/images/temp/09.png'),
+          imgWidth: 50,
+          imgHeight: 50
+        },
+        {
+          img: require('../../../assets/images/temp/10.png'),
+          imgWidth: 50,
+          imgHeight: 50
         }
       ]
-    } // end init
+    },
+    makePort(name, spot, output, input) {
+      return $(go.Shape, 'Circle',
+        {
+          fill: 'transparent',
+          stroke: null, // this is changed to 'white' in the showPorts function
+          desiredSize: new go.Size(8, 8),
+          alignment: spot,
+          alignmentFocus: spot, // align the port on the main Shape
+          portId: name, // declare this object to be a 'port'
+          fromSpot: spot,
+          toSpot: spot, // declare where links may connect at this port
+          fromLinkable: output,
+          toLinkable: input, // declare whether the user may draw links to/from here
+          cursor: 'pointer' // show a different cursor to indicate potential link point
+        })
+    },
+    nodeStyle() {
+      return [
+        new go.Binding('location', 'loc', go.Point.parse).makeTwoWay(go.Point.stringify),
+        {
+          locationSpot: go.Spot.Center,
+          mouseEnter: (e, obj) => {
+            this.showPorts(obj.part, true)
+          },
+          mouseLeave: (e, obj) => {
+            this.showPorts(obj.part, false)
+          }
+        }
+      ]
+    },
+    showPorts(node, show) {
+      let diagram = node.diagram
+      if (!diagram || diagram.isReadOnly || !diagram.allowLink) return
+      node.ports.each(function(port) {
+        port.stroke = (show ? 'rgba(0,0,0,.3)' : null)
+      })
+    }
+
   }
 }
 

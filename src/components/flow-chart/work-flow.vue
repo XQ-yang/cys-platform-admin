@@ -1,7 +1,7 @@
 <template>
     <div style='width:100%; white-space:nowrap;'>
         <span style='border: 1px solid gray;display: inline-block; vertical-align: top; width:120px;'>
-            <div ref='myPaletteDiv' style='height: 410px;'></div>
+            <div ref='myPaletteDiv' style='height: 410px;'>1111</div>
         </span>
         <span style='border: 1px solid gray;display: inline-block; vertical-align: top; width:100%;'>
             <div ref='myDiagramDiv' style='height: 410px'></div>
@@ -58,17 +58,13 @@ export default {
               wrap: go.TextBlock.WrapFit,
               editable: true
             },
-            new go.Binding('text').makeTwoWay()),
-          $(go.Picture, { margin: 3 },
-            new go.Binding('source', 'img'),
-            new go.Binding('width', 'imgWidth'),
-            new go.Binding('height', 'imgHeight'))
+            new go.Binding('text').makeTwoWay())
         ),
         // four named ports, one on each side:
-        this.makePort('T', go.Spot.Top, false, true),
+        this.makePort('T', go.Spot.Top, true, true),
         this.makePort('L', go.Spot.Left, true, true),
         this.makePort('R', go.Spot.Right, true, true),
-        this.makePort('B', go.Spot.Bottom, true, false)
+        this.makePort('B', go.Spot.Bottom, true, true)
       ))
     myDiagram.linkTemplate =
             $(go.Link,
@@ -112,47 +108,21 @@ export default {
                     editable: false
                   },
                   new go.Binding('text').makeTwoWay())
-
               )
             )
-
-    // eslint-disable-next-line no-unused-vars
     let myPalette =
             $(go.Palette, this.$refs.myPaletteDiv, // must name or refer to the DIV HTML element
               {
                 'animationManager.duration': 800, // slightly longer than default (600ms) animation
-                nodeTemplateMap: myDiagram.nodeTemplateMap // share the templates used by myDiagram
+                nodeTemplateMap: myDiagram.nodeTemplateMap, // share the templates used by myDiagram
+                // nodeTemplate: myDiagram.nodeTemplate, // share the templates used by myDiagram
+                model: new go.GraphLinksModel([ // specify the contents of the Palette
+                  { category: 'Start', text: 'Start' },
+                  { category: 'Command', text: 'Command' },
+                  { category: 'End', text: 'End' }
+                ])
               })
-    myPalette.nodeTemplate = $(go.Node, 'Horizontal',
-      $(go.Picture, { margin: 3 },
-        new go.Binding('source', 'img'),
-        new go.Binding('width', 'imgWidth'),
-        new go.Binding('height', 'imgHeight'))
-    )
-    myPalette.model.nodeDataArray = [
-      { key: 'C',
-        color: 'cyan',
-        img: require('../../../src/assets/images/temp/01.png'),
-        imgWidth: 50,
-        imgHeight: 50
-      },
-      { key: 'LC',
-        color: 'lightcyan',
-        img: require('../../../src/assets/images/temp/02.png'),
-        imgWidth: 50,
-        imgHeight: 50 },
-      { key: 'A',
-        color: 'aquamarine',
-        img: require('../../../src/assets/images/temp/03.png'),
-        imgWidth: 50,
-        imgHeight: 50 },
-      { key: 'T',
-        color: 'turquoise',
-        img: require('../../../src/assets/images/temp/04.png'),
-        imgWidth: 50,
-        imgHeight: 50 }
-    ]
-    // console.log(myPalette)
+    console.log(myPalette)
     this.diagram = myDiagram
     this.updateModel(this.modelData)
   },
