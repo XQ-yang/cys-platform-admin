@@ -148,7 +148,6 @@ export function export_json_to_excel({
   autoWidth = true,
   bookType = 'xlsx'
 } = {}) {
-  debugger
   /* original data */
   filename = filename || 'excel-list'
   data = json_to_array(key, data)

@@ -33,7 +33,6 @@ export default {
           })
         })
       }).catch(error => {
-        debugger
         this.$Message.error(error.msg)
       })
     }
