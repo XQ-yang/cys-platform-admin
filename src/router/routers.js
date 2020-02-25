@@ -181,27 +181,6 @@ export const routerMap = [
           title: '流程图测试'
         },
         component: () => import('@/view/case/flowtest/')
-      },
-      {
-        path: 'lesson',
-        name: 'lesson',
-        access: 'lesson',
-        meta: {
-          icon: 'ios-cloud-upload-outline',
-          title: '前端学习'
-        },
-        component: () => import('@/view/case/lesson/')
-      },
-      {
-        path: 'addlesson',
-        name: 'addlesson',
-        access: 'lesson',
-        meta: {
-          icon: 'ios-cloud-upload-outline',
-          title: '新增',
-          hideInMenu: true
-        },
-        component: () => import('@/view/case/lesson/new-tab-page.vue')
       }
     ]
   }
