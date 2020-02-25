@@ -4,7 +4,8 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store'
-import iView from 'iview'
+import ViewUI from 'view-design'
+import 'view-design/dist/styles/iview.css'
 import config from '@/config'
 import importDirective from '@/directive'
 import installPlugin from '@/plugin'
@@ -12,6 +13,7 @@ import '@/assets/theme/index.less'
 import '@/assets/icons/iconfont.css'
 import '@/assets/css/common.less'
 import { formatDate } from '@/libs/tools.js'
+import Bus from './bus'
 // 引入element的table 作一些简单尝试
 import { Table, TableColumn } from 'element-ui'
 Vue.use(Table)
@@ -22,7 +24,9 @@ Vue.use(TableColumn)
 
 const fileUrl = process.env.NODE_ENV === 'development' ? config.fileUrl.dev : config.fileUrl.pro
 const baseUrl = process.env.NODE_ENV === 'development' ? config.baseUrl.dev : config.baseUrl.pro
-Vue.use(iView)
+Vue.use(ViewUI)
+
+Vue.prototype.$bus=Bus
 /**
  * @description 注册admin内置插件
  */

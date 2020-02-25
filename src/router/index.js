@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import { routes, page404 } from './routers'
 import store from '@/store'
-import iView from 'iview'
+import ViewUI from 'view-design'
 import { setToken, getToken } from '@/libs/util'
 import config from '@/config'
 const { homeName } = config
@@ -15,7 +15,7 @@ const router = new Router({
 const LOGIN_PAGE_NAME = 'login'
 
 router.beforeEach((to, from, next) => {
-  iView.LoadingBar.start()
+  ViewUI.LoadingBar.start()
   const token = getToken()
   if (token) {
     if (!store.state.router.hasGetRules) {
@@ -57,7 +57,7 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach(to => {
-  iView.LoadingBar.finish()
+  ViewUI.LoadingBar.finish()
   window.scrollTo(0, 0)
 })
 

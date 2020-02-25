@@ -160,7 +160,7 @@ export const routerMap = [
           icon: 'ios-cloud-upload-outline',
           title: '流程图'
         },
-        component: () => import('@/view/case/flow/')
+        component: () => import('@/view/case/flow/test.vue')
       },
       {
         path: 'workflow',
