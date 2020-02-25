@@ -135,7 +135,7 @@ export default {
           title: '操作',
           key: 'action',
           align: 'center',
-          width: 160,
+          width: 260,
           slot: 'action'
         }
       ],

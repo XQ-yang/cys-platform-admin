@@ -8,42 +8,18 @@
       <Button v-permission="{rule:'org:add'}" class="search-btn" @click="addOrUpdateHandle()">新增</Button>
     </div>
     <div class="table-dom">
-      <el-table :data="tableData" style="width: 100%;margin-bottom: 20px;" border row-key="id">
-        <el-table-column
-          header-align="center"
-          prop="orgName"
-          label="机构名称"
-          width="220">
-        </el-table-column>
-        <el-table-column
-          header-align="center"
-          align="center"
-          prop="contacts"
-          label="联系人">
-        </el-table-column>
-        <el-table-column
-          header-align="center"
-          align="center"
-          prop="tel"
-          label="联系电话">
-        </el-table-column>
-        <el-table-column
-          header-align="center"
-          align="center"
-          prop="address"
-          label="联系地址">
-        </el-table-column>
-        <el-table-column
-          label="操作"
-          width="180"
-          header-align="center"
-          align="center">
-          <template slot-scope="scope">
-            <Button v-permission="{rule:'org:edit'}" type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(scope.row.id)">编辑</Button>
-            <Button v-permission="{rule:'org:del'}" type="error" size="small" @click="deleteHandle(scope.row.id)" >删除</Button>
-          </template>
-        </el-table-column>
-      </el-table>
+      <Table row-key="id" :columns="tableColumn" :data="tableData" border stripe>
+        <template slot-scope="{row,index}" slot="action">
+          <Button
+            v-permission="{rule:'org:edit'}"
+            type="primary"
+            size="small"
+            style="margin: 5px"
+            @click="addOrUpdateHandle(row.id)"
+          >编辑</Button>
+          <Button v-permission="{rule:'org:del'}" type="error" size="small" @click="deleteHandle(row.id)" >删除</Button>
+        </template>
+      </Table>
     </div>
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpate" @refreshDataList="getList"></add-or-update>
   </Card>
@@ -57,6 +33,35 @@ export default {
   data() {
     return {
       tableData: [],
+      tableColumn: [
+        {
+          title: '机构名称',
+          key: 'orgName',
+          tree: true
+        },
+        {
+          title: '联系人',
+          key: 'contacts',
+          align: 'center'
+        },
+        {
+          title: '联系电话',
+          key: 'tel',
+          align: 'center'
+        },
+        {
+          title: '联系地址',
+          key: 'address',
+          align: 'center'
+        },
+        {
+          title: '操作',
+          key: 'action',
+          align: 'center',
+          width: 260,
+          slot: 'action'
+        }
+      ],
       addOrUpdateVisible: false,
       dataListLoading: false,
       listQuery: {
