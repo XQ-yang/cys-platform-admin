@@ -23,36 +23,12 @@
         <Button v-permission="{rule:'dept:add'}" class="search-btn" @click="addOrUpdateHandle()">新增</Button>
       </div>
       <div class="table-dom">
-        <el-table :data="tableData" style="width: 100%;margin-bottom: 20px;" border row-key="id">
-          <el-table-column
-            header-align="center"
-            prop="deptName"
-            label="名称"
-            >
-          </el-table-column>
-          <el-table-column
-            header-align="center"
-            prop="orgName"
-            label="机构名称"
-            >
-          </el-table-column>
-          <el-table-column
-            header-align="center"
-            align="center"
-            prop="sort"
-            label="排序">
-          </el-table-column>
-          <el-table-column
-            label="操作"
-            width="180"
-            header-align="center"
-            align="center">
-            <template slot-scope="scope">
-              <Button v-permission="{rule:'dept:edit'}"  type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(scope.row.id)">编辑</Button>
-              <Button v-permission="{rule:'dept:del'}"  type="error" size="small" @click="deleteHandle(scope.row.id)" >删除</Button>
-            </template>
-          </el-table-column>
-        </el-table>
+        <Table row-key="id" :columns="tableColumn" :data="tableData" border stripe>
+          <template slot-scope="{row,index}" slot="action">
+              <Button v-permission="{rule:'dept:edit'}"  type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(row.id)">编辑</Button>
+              <Button v-permission="{rule:'dept:del'}"  type="error" size="small" @click="deleteHandle(row.id)" >删除</Button>
+          </template>
+        </Table>
       </div>
       <add-or-update v-if="addOrUpdateVisible" ref="addOrUpate" @refreshDataList="getList"></add-or-update>
     </Card>
@@ -67,6 +43,30 @@ export default {
   data() {
     return {
       tableData: [],
+      tableColumn: [
+        {
+          title: '名称',
+          key: 'deptName',
+          tree: true
+        },
+        {
+          title: '机构名称',
+          key: 'orgName',
+          align: 'center'
+        },
+        {
+          title: '排序',
+          key: 'sort',
+          align: 'center'
+        },
+        {
+          title: '操作',
+          key: 'action',
+          align: 'center',
+          width: 260,
+          slot: 'action'
+        }
+      ],
       listQuery: {
         deptName: '',
         orgName: ''
