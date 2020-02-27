@@ -14,10 +14,6 @@ import '@/assets/icons/iconfont.css'
 import '@/assets/css/common.less'
 import { formatDate } from '@/libs/tools.js'
 import Bus from './bus'
-// 引入element的table 作一些简单尝试
-import { Table, TableColumn } from 'element-ui'
-Vue.use(Table)
-Vue.use(TableColumn)
 // 实际打包时应该不引入mock
 /* eslint-disable */
 //if (process.env.NODE_ENV !== 'production') require('@/mock')
