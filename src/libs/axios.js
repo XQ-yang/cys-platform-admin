@@ -37,8 +37,8 @@ class HttpRequest {
         if (response.data.code === 1010) {
           const refreshJwt = localRead(`refreshToken`)
           if (refreshJwt) {
-            await refreshToken()
-            const token = getToken()
+            var res = await refreshToken()
+            const token = res.access_token
             response.config.headers.Authorization = 'Bearer ' + token // 使用新获取到的token
             const result = await axios.request(response.config) // 执行上一次请求
             data = result.data
@@ -49,6 +49,7 @@ class HttpRequest {
             }
           } else {
             window.location.href = '/login'
+            return Promise.reject(new Error('授权已过期，请重新登录'))
           }
         } else {
           return Promise.reject(response.data)
