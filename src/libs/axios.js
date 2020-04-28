@@ -40,11 +40,11 @@ class HttpRequest {
         // token 过期应该返回登陆页面
         if (response.data.code === 1010) {
           const refreshJwt = localRead(`refreshToken`)
-          if ((refreshJwt !== 'undefined' && refreshJwt) && isLock) {
-            await refreshToken(response)
+          if (refreshJwt !== 'undefined' && refreshJwt && isLock) {
+            await refreshToken()
             isLock = false
             const token = getToken()
-            response.config.headers.Authorization = 'Bearer ' + token// 重新获取最新token
+            response.config.headers.Authorization = 'Bearer ' + token// 使用新获取到的token
             const result = await axios.request(response.config) // 执行上一次请求
             if (result) {
               data = result.data
@@ -54,9 +54,13 @@ class HttpRequest {
               } else {
                 return data
               }
+            } else {
+              console.log(result)
             }
+          } else {
+            console.log('refresh请求中')
           }
-        } else if (response.data.code !== 1010) {
+        } else {
           return Promise.reject(response.data)
         }
       } else if (response.headers['content-type'] === 'application/vnd.ms-excel;charset=UTF-8' ||
