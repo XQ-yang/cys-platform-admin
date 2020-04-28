@@ -1,11 +1,12 @@
 import axios from 'axios'
-import { getToken, localRead } from '@/libs/util'
+import {
+  getToken,
+  localRead
+} from '@/libs/util'
 import refreshToken from '@/api/refreshToken'
-let isLock = true
 class HttpRequest {
   constructor(baseUrl) {
     this.baseUrl = baseUrl
-    this.queue = {}
   }
   getInsideConfig() {
     const config = {
@@ -17,62 +18,50 @@ class HttpRequest {
     }
     return config
   }
-  destroy(url) {
-    delete this.queue[url]
-  }
+
   interceptors(instance, url) {
     // 请求拦截
     instance.interceptors.request.use(request => {
       if (!request.url.includes('/oauth/token')) {
-        request.headers['Content-type'] = 'application/json;charset=UTF-8'
+        request.headers['Content-type'] = request.headers['Content-type'] || 'application/json;charset=UTF-8'
       }
-      this.queue[url] = true
       return request
     }, error => {
-      this.destroy(url)
       return Promise.reject(error)
     })
     // 响应拦截
     instance.interceptors.response.use(async(response) => {
       let data = {}
-      this.destroy(url)
       if (response.data.code && response.data.code !== 2000 && !url.includes('/oauth/token')) {
         // token 过期应该返回登陆页面
         if (response.data.code === 1010) {
           const refreshJwt = localRead(`refreshToken`)
-          if (refreshJwt !== 'undefined' && refreshJwt && isLock) {
+          if (refreshJwt) {
             await refreshToken()
-            isLock = false
             const token = getToken()
-            response.config.headers.Authorization = 'Bearer ' + token// 使用新获取到的token
+            response.config.headers.Authorization = 'Bearer ' + token // 使用新获取到的token
             const result = await axios.request(response.config) // 执行上一次请求
-            if (result) {
-              data = result.data
-              isLock = true
-              if (data.code !== 2000) {
-                return Promise.reject(data)
-              } else {
-                return data
-              }
+            data = result.data
+            if (data.code !== 2000) {
+              return Promise.reject(data)
             } else {
-              console.log(result)
+              return data
             }
           } else {
-            console.log('refresh请求中')
+            window.location.href = '/login'
           }
         } else {
           return Promise.reject(response.data)
         }
       } else if (response.headers['content-type'] === 'application/vnd.ms-excel;charset=UTF-8' ||
-          response.headers['content-type'] === 'application/vnd.ms-word;charset=UTF-8' ||
-          response.headers['content-type'] === 'application/x-download;charset=UTF-8') {
+        response.headers['content-type'] === 'application/vnd.ms-word;charset=UTF-8' ||
+        response.headers['content-type'] === 'application/x-download;charset=UTF-8') {
         return response
       } else {
         return response.data
       }
     }, error => {
       // 错误的请求结果处理，这里的代码根据后台的状态码来决定错误的输出信息
-      this.destroy(url)
       if (error && error.response) {
         switch (error.response.status) {
           case 400:
