@@ -4,8 +4,9 @@
   "author": "lester<123107806@qq.com>",
   "private": false,
   "scripts": {
-    "dev": "vue-cli-service serve --port 8099 --open",
-    "build": "vue-cli-service build",
+    "dev": "vue-cli-service serve --mode dev --port 8099 --open",
+    "build": "vue-cli-service build --mode prd",
+    "build:test": "vue-cli-service build --mode test",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e"
