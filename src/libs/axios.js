@@ -1,9 +1,29 @@
 import axios from 'axios'
-import {
-  getToken,
-  localRead
-} from '@/libs/util'
+import { getToken } from '@/libs/util'
 import refreshToken from '@/api/refresh-token'
+let isLock = false
+let requests = []
+
+// 读取Blob转为String
+function readBlobAsStr(blob) {
+  return new Promise((resolve, reject) => {
+    // // 下面这种方式在ie上不兼容
+    // let blobStr = await (new Response(data)).text()
+    let reader = new FileReader()
+    reader.onload = () => {
+      resolve(reader.result)
+    }
+    reader.onerror = reject
+    reader.readAsText(blob, 'utf-8')
+  })
+}
+
+// 读取Blob转为json
+async function readBlobAsJson(blob) {
+  let blobStr = await readBlobAsStr(blob)
+  return JSON.parse(blobStr)
+}
+
 class HttpRequest {
   constructor(baseUrl) {
     this.baseUrl = baseUrl
@@ -23,43 +43,60 @@ class HttpRequest {
     // 请求拦截
     instance.interceptors.request.use(request => {
       if (!request.url.includes('/oauth/token')) {
-        request.headers['Content-type'] = request.headers['Content-type'] || 'application/json;charset=UTF-8'
+        request.headers['Content-type'] = 'application/json;charset=UTF-8'
       }
       return request
     }, error => {
       return Promise.reject(error)
     })
     // 响应拦截
-    instance.interceptors.response.use(async(response) => {
-      let data = {}
-      if (response.data.code && response.data.code !== 2000 && !url.includes('/oauth/token')) {
+    instance.interceptors.response.use(async response => {
+      let data = response.data
+      if (data instanceof Blob && data.type && data.type.indexOf('application/json') > -1) {
+        data = await readBlobAsJson(data)
+      }
+      if (data.code && data.code !== 2000) {
         // token 过期应该返回登陆页面
-        if (response.data.code === 1010) {
-          const refreshJwt = localRead(`refreshToken`)
-          if (refreshJwt) {
-            var res = await refreshToken()
-            const token = res.access_token
-            response.config.headers.Authorization = 'Bearer ' + token // 使用新获取到的token
-            const result = await axios.request(response.config) // 执行上一次请求
-            data = result.data
-            if (data.code !== 2000) {
-              return Promise.reject(data)
-            } else {
-              return data
+        if (data.code === 1010) {
+          if (!isLock) {
+            isLock = true
+            try {
+              await refreshToken()
+            } finally {
+              isLock = false
             }
+            const token = getToken()
+            // 获取到token之后, 将之前缓存的请求重试执行
+            requests.forEach(fun => fun(token))
+            requests = []
+            // 重新获取最新token
+            response.config.headers.Authorization = 'Bearer ' + token
+            // 执行上一次请求
+            return instance(response.config)
           } else {
-            window.location.href = '/login'
-            return Promise.reject(new Error('授权已过期，请重新登录'))
+            // 正在刷新token, 将返回的一个未执行resolve的promise
+            return new Promise(resolve => {
+              // 将resolve放进队列, 用一个函数形式来保存, 等token刷新后直接执行
+              requests.push(token => {
+                response.config.headers.Authorization = 'Bearer ' + token
+                // 因为这里我们的路径是`http/https`开头的绝对路径, 不是`/api`开头的相对路径, 所以不需要将`baseURL`置空, 如果是相对路径, 记得重置
+                resolve(instance(response.config))
+              })
+            })
           }
-        } else {
-          return Promise.reject(response.data)
+        } else if (data.code !== 1010) {
+          return Promise.reject(data)
         }
-      } else if (response.headers['content-type'] === 'application/vnd.ms-excel;charset=UTF-8' ||
-        response.headers['content-type'] === 'application/vnd.ms-word;charset=UTF-8' ||
-        response.headers['content-type'] === 'application/x-download;charset=UTF-8') {
+      } else if (data instanceof Blob) {
+        /**
+         * 只需要判断是否是Blob对象, 是则直接返回二进制流
+         * response.headers['content-type'] === 'application/vnd.ms-excel;charset=UTF-8' ||
+         * response.headers['content-type'] === 'application/vnd.ms-word;charset=UTF-8' ||
+         * response.headers['content-type'] === 'application/x-download;charset=UTF-8'
+         */
         return response
       } else {
-        return response.data
+        return data
       }
     }, error => {
       // 错误的请求结果处理，这里的代码根据后台的状态码来决定错误的输出信息
