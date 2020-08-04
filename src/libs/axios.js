@@ -107,7 +107,7 @@ class HttpRequest {
             break
           case 401:
             // 如果token过期或者不存在则跳转到登录页面
-            window.location.href = '/login'
+            // window.location.href = '/login'
             // Msg.error('未登录，或者登录已过期，请登录')
             error.message = '未授权，请重新登录'
             break
