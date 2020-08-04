@@ -3,7 +3,7 @@ import {
   getToken,
   localRead
 } from '@/libs/util'
-import refreshToken from '@/api/refreshToken'
+import refreshToken from '@/api/refresh-token'
 class HttpRequest {
   constructor(baseUrl) {
     this.baseUrl = baseUrl
