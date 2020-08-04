@@ -1,12 +1,15 @@
 import axios from '@/libs/api.request'
 import qs from 'qs'
-export const login = ({ userName, password }) => {
+
+export const login = ({ username, password, generateKey, captchaCode }) => {
   let grant_type = 'password'
   let client_id = 'admin-web'
   let client_secret = '4402b06a67334d769fed712453284dae'
   const data = {
-    username: userName,
+    username: username,
     password: password,
+    generate_key: generateKey,
+    captcha_code: captchaCode,
     grant_type: grant_type,
     client_id: client_id,
     client_secret: client_secret
