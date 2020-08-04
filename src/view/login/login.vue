@@ -25,13 +25,21 @@ export default {
       'getUserInfo'
     ]),
     handleSubmit({ userName, password }) {
+      const msg = this.$Message.loading({
+        content: '正在登录...',
+        duration: 0
+      })
       this.handleLogin({ userName, password }).then(res => {
         this.getUserInfo().then(res => {
           window.localStorage.removeItem('tagNaveList')
           this.$router.push({
             name: this.$config.homeName
           })
+          msg()
         })
+      }).catch(error => {
+        msg()
+        this.$Message.error(error.msg)
       })
     }
   }
