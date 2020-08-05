@@ -20,11 +20,9 @@ import Bus from './bus'
 //if (process.env.NODE_ENV !== 'production') require('@/mock')
 
 Vue.use(ViewUI)
-
 Vue.prototype.$bus=Bus
 const fileUrl = process.env.VUE_APP_FILE_URL
 const baseUrl = process.env.VUE_APP_BASE_API_URL
-Vue.use(iView)
 /**
  * @description 注册admin内置插件
  */
