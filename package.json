@@ -4,8 +4,9 @@
   "author": "lester<123107806@qq.com>",
   "private": false,
   "scripts": {
-    "dev": "vue-cli-service serve --port 8099 --open",
-    "build": "vue-cli-service build",
+    "dev": "vue-cli-service serve --mode dev --port 8099 --open",
+    "build": "vue-cli-service build --mode prd",
+    "build:test": "vue-cli-service build --mode test",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e"
@@ -42,6 +43,7 @@
     "@vue/eslint-config-standard": "^3.0.0-beta.10",
     "@vue/test-utils": "^1.0.0-beta.10",
     "babel-plugin-component": "^1.1.1",
+    "babel-polyfill": "^6.26.0",
     "chai": "^4.1.2",
     "eslint-plugin-cypress": "^2.0.1",
     "less": "^2.7.3",

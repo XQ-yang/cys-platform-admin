@@ -16,7 +16,7 @@ import Main from '@/components/main'
  * }
  */
 // 需要权限控制动态加载的路由
-export const routerMap = [
+export const routerMap = () => [
   {
     path: '/system',
     name: 'system',

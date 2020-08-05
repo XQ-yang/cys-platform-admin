@@ -1,7 +1,7 @@
 <template>
   <Form ref="loginForm" :model="form" :rules="rules" @keydown.enter.native="handleSubmit">
-    <FormItem prop="userName">
-      <i-Input v-model="form.userName" placeholder="请输入用户名">
+    <FormItem prop="username">
+      <i-Input v-model="form.username" placeholder="请输入用户名">
         <span slot="prepend">
           <Icon :size="16" type="ios-person"></Icon>
         </span>
@@ -14,16 +14,34 @@
         </span>
       </i-Input>
     </FormItem>
+    <FormItem prop="captchaCode">
+      <Row>
+        <Col span="14">
+          <i-Input v-model="form.captchaCode" placeholder="请输入验证码">
+            <span slot="prepend">
+              <Icon :size="14" type="ios-key"></Icon>
+            </span>
+          </i-Input>
+        </Col>
+        <Col span="10">
+          <Captcha ref="captcha" v-model="form.generateKey" class="login-code-img" />
+        </Col>
+      </Row>
+    </FormItem>
     <FormItem>
       <Button @click="handleSubmit" type="primary" long>登录</Button>
     </FormItem>
   </Form>
 </template>
 <script>
+import Captcha from '_c/captcha'
 export default {
   name: 'LoginForm',
+  components: {
+    Captcha
+  },
   props: {
-    userNameRules: {
+    usernameRules: {
       type: Array,
       default: () => {
         return [
@@ -38,34 +56,49 @@ export default {
           { required: true, message: '密码不能为空', trigger: 'blur' }
         ]
       }
+    },
+    captchaRules: {
+      type: Array,
+      default: () => {
+        return [
+          { required: true, message: '验证码不能为空', trigger: 'blur' }
+        ]
+      }
     }
   },
   data() {
     return {
       form: {
-        userName: '',
-        password: ''
-      }
+        username: null,
+        password: null,
+        generateKey: null,
+        captchaCode: null
+      },
+      intervalTimer: null,
+      captchaUrl: null
     }
   },
   computed: {
     rules() {
       return {
-        userName: this.userNameRules,
-        password: this.passwordRules
+        username: this.usernameRules,
+        password: this.passwordRules,
+        captchaCode: this.captchaRules
       }
     }
+  },
+  created() {
   },
   methods: {
     handleSubmit() {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
-          this.$emit('on-success-valid', {
-            userName: this.form.userName,
-            password: this.form.password
-          })
+          this.$emit('on-success-valid', this.form)
         }
       })
+    },
+    refreshCode() {
+      this.$refs.captcha.refreshCode()
     }
   }
 }

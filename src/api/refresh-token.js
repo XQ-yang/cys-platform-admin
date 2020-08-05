@@ -19,17 +19,19 @@ export default async() => {
       data: qs.stringify(refreshData),
       method: 'post'
     })
-    const { code, access_token, refresh_token } = res
-    if (code && code === 1011) {
-      setToken('')
-      localSave('refreshToken', '')
-      return router.replace({ path: '/login', query: { redirect: router.currentRoute.fullPath }})
-    } else if (access_token && refresh_token) {
+    const { access_token, refresh_token } = res
+    if (access_token && refresh_token) {
       setToken(access_token)
       localSave('refreshToken', refresh_token)
     }
     return res
   } catch (error) {
-
+    if (error.code && error.code === 1011) {
+      setToken('')
+      localSave('refreshToken', '')
+      error.msg = '登录已过期, 请重新登录！'
+      router.replace({ path: '/login', query: { redirect: router.currentRoute.fullPath }})
+    }
+    throw error
   }
 }
