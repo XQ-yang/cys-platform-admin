@@ -19,6 +19,7 @@
           v-model="listQuery.realName"
         />
         <Button @click="handleSearch" class="search-btn">查询</Button>
+        <Button @click="handleCancel" class="search-btn">重置</Button>
         <Button v-permission="{rule:'user:add'}" @click="addOrUpdateHandle()" class="search-btn">新增</Button>
         <Button @click="exportData" class="search-btn">导出Excel</Button>
         <Button @click="exportWordDemo" class="search-btn">导出word例子</Button>
@@ -274,6 +275,13 @@ export default {
 
     handleSearch() {
       this.listQuery.pageNumber = 1
+      this.getList()
+    },
+
+    handleCancel() {
+      this.listQuery.pageNumber = 1
+      this.listQuery.username = ''
+      this.listQuery.realName = ''
       this.getList()
     },
 
