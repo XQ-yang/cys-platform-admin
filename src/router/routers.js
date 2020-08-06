@@ -34,8 +34,7 @@ export const routerMap = () => [
         access: 'user',
         meta: {
           icon: 'ios-contact-outline',
-          title: '用户管理',
-          notCache: true
+          title: '用户管理'
         },
         component: () => import('@/view/system/user')
       },
