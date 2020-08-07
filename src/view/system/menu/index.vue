@@ -35,31 +35,37 @@ export default {
         {
           title: '名称',
           key: 'title',
+          minWidth: 180,
           tree: true
         },
         {
           title: '图标',
+          minWidth: 70,
           slot: 'icon',
           align: 'center'
         },
         {
           title: '类型',
+          minWidth: 100,
           slot: 'type',
           align: 'center'
         },
         {
           title: '排序',
           key: 'sort',
+          minWidth: 70,
           align: 'center'
         },
         {
           title: '路由',
           key: 'url',
+          minWidth: 150,
           align: 'center'
         },
         {
           title: '授权标识',
           key: 'permission',
+          minWidth: 150,
           align: 'center'
         },
         {
@@ -67,6 +73,7 @@ export default {
           key: 'action',
           align: 'center',
           width: 260,
+          fixed: 'right',
           slot: 'action'
         }
       ],
