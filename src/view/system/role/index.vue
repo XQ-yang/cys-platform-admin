@@ -6,10 +6,18 @@
         角色名称：
         <Input @on-clear="handleClear"  clearable placeholder="角色名称" class="search-input" v-model="listQuery.roleName"/>
         <Button @click="handleSearch" class="search-btn">查询</Button>
+        <Button @click="handleCancel" class="search-btn">重置</Button>
         <Button v-permission="{rule:'role:add'}" @click="addOrUpdateHandle()" class="search-btn">新增</Button>
       </div>
       <!--列表 分页-->
-      <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
+      <Table
+      border
+      stripe
+      :data="list"
+      :columns="tableColumns"
+      :loading="tableLoading"
+      :max-height="tableHeight"
+      ref="table">
         <template slot-scope="{ row, index }" slot="action">
             <Button  type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(row.id)">编辑</Button>
             <Dropdown @on-click="dropDownClick($event,row)" transfer>
@@ -32,8 +40,10 @@
             :total="total"
             :current.sync="listQuery.pageNumber"
             :page-size.sync="listQuery.pageSize"
+            @on-page-size-change="pageSizeChange"
             @on-change="getList"
             show-total
+            show-sizer
             prev-text="上一页"
             next-text="下一页"></Page>
         </div>
@@ -57,6 +67,9 @@ export default {
   data() {
     return {
       list: [],
+
+      // 列表高度
+      tableHeight: 450,
 
       tableColumns: [
         {
@@ -124,6 +137,7 @@ export default {
   // 此钩子函数中一般会做一些ajax请求获取数据进行数据初始化
   // mounted在整个实例中只执行一次
   mounted() {
+    this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 180
   },
 
   // 组件方法
@@ -139,8 +153,19 @@ export default {
       })
     },
 
+    pageSizeChange(pagesize) {
+      this.listQuery.pageSize = pagesize
+      this.getList()
+    },
+
     handleSearch() {
       this.listQuery.pageNumber = 1
+      this.getList()
+    },
+
+    handleCancel() {
+      this.listQuery.pageNumber = 1
+      this.listQuery.roleName = ''
       this.getList()
     },
 
