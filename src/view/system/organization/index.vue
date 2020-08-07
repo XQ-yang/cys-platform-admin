@@ -31,7 +31,7 @@ import AddOrUpdate from './add-or-update'
 import { fetchList, deleteOrg } from '@/api/organization'
 
 export default {
-  name: 'organization',
+  name: 'org',
 
   data() {
     return {
