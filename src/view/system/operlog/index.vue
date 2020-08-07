@@ -33,7 +33,14 @@
         <Button @click="handleStretch">{{stretchName}}</Button>
       </div>
       <!--列表 分页-->
-      <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
+      <Table
+      border
+      stripe
+      :data="list"
+      :columns="tableColumns"
+      :loading="tableLoading"
+      :max-height="tableHeight"
+      ref="table">
         <template slot-scope="{ row, index }" slot="action">
         </template>
       </Table>
@@ -44,8 +51,10 @@
             :total="total"
             :current.sync="listQuery.pageNumber"
             :page-size.sync="listQuery.pageSize"
+            @on-page-size-change="pageSizeChange"
             @on-change="getList"
             show-total
+            show-sizer
             prev-text="上一页"
             next-text="下一页"
           ></Page>
@@ -54,17 +63,22 @@
     </Card>
   </div>
 </template>
+
 <script>
 import { fetchList, exportOperlog } from '@/api/operlog'
 import expandRow from './table-expand.vue'
 import { export_json_to_excel } from '@/libs/exportExcel'
+
 export default {
   name: 'operlog',
-  filters: {
-  },
+
   data() {
     return {
       list: [],
+
+      // 列表高度
+      tableHeight: 450,
+
       tableColumns: [
         {
           type: 'expand',
@@ -186,6 +200,7 @@ export default {
   // 此钩子函数中一般会做一些ajax请求获取数据进行数据初始化
   // mounted在整个实例中只执行一次
   mounted() {
+    this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 180
   },
 
   // 组件方法
@@ -209,6 +224,11 @@ export default {
       this.$nextTick(() => {
         this.loading = true
       })
+    },
+
+    pageSizeChange(pagesize) {
+      this.listQuery.pageSize = pagesize
+      this.getList()
     },
 
     handleSearch() {
