@@ -44,28 +44,39 @@
     </Card>
   </div>
 </template>
+
 <script>
 import { fetchList, deleteRole } from '@/api/role'
 import AddOrUpdate from './add-or-update'
 import SetRole from './set-role'
 import SetDataRole from './set-data-role'
+
 export default {
   name: 'role',
+
   data() {
     return {
       list: [],
+
       tableColumns: [
         {
           title: '序号',
-          width: 80,
+          align: 'center',
+          minWidth: 80,
           render: (h, params) => {
             return h('span', params.index + (this.listQuery.pageNumber - 1) * this.listQuery.pageSize + 1)
           }
         },
-        { title: '角色名称', key: 'roleName' },
+        {
+          title: '角色名称',
+          key: 'roleName',
+          align: 'center',
+          minWidth: 100
+        },
         { title: '创建时间',
           key: 'createTime',
-          tooltip: true,
+          align: 'center',
+          minWidth: 120,
           render: (h, params) => {
             return h('div',
               this.$formatDate(params.row.createTime, 'yyyy-MM-dd')
@@ -76,37 +87,45 @@ export default {
           title: '操作',
           slot: 'action',
           align: 'center',
-          width: 180
+          width: 180,
+          fixed: 'right'
         }
       ],
+
       total: 0,
       tableLoading: false,
+
       listQuery: {
         pageNumber: 1,
         pageSize: 10,
         roleName: ''
       },
+
       addOrUpdateVisible: false,
       setRoleVisible: false,
       setDataRoleVisible: false
     }
   },
+
   components: {
     AddOrUpdate,
     SetRole,
     SetDataRole
   },
+
   // 一般ajaxajax请求数据放到created里面就可以了，这样可以及早发请求获取数据，
   // 如果有依赖dom必须存在的情况则需要放导 mounted
   created() {
-  // 获取列表数据
+    // 获取列表数据
     this.getList()
   },
+
   // 编译好的HTML 挂载到页面完成后执行的事件钩子，
   // 此钩子函数中一般会做一些ajax请求获取数据进行数据初始化
   // mounted在整个实例中只执行一次
   mounted() {
   },
+
   // 组件方法
   methods: {
     getList() {
@@ -119,10 +138,12 @@ export default {
         this.$Message.error(error.msg)
       })
     },
+
     handleSearch() {
       this.listQuery.pageNumber = 1
       this.getList()
     },
+
     addOrUpdateHandle(id) {
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
@@ -130,6 +151,7 @@ export default {
         this.$refs.addOrUpate.init()
       })
     },
+
     setRole(row) {
       this.setRoleVisible = true
       this.$nextTick(() => {
@@ -138,6 +160,7 @@ export default {
         this.$refs.setRole.init()
       })
     },
+
     setDataRole(row) {
       this.setDataRoleVisible = true
       this.$nextTick(() => {
@@ -146,6 +169,7 @@ export default {
         this.$refs.setDataRole.init()
       })
     },
+
     handleDelete(id) {
       this.$Modal.confirm({
         title: '提示',
@@ -160,12 +184,14 @@ export default {
         }
       })
     },
+
     // 清空查询值的时候 重新加载列表数据
     handleClear() {
       this.$nextTick(() => {
         this.getList()
       })
     },
+
     dropDownClick(e, row) {
       switch (e) {
         case 'setRole':
@@ -179,10 +205,10 @@ export default {
           break
       }
     }
-
   }
 }
 </script>
+
 <style>
 .ivu-dropdown-item{
   z-index: 8888
