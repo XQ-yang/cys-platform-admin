@@ -37,7 +37,6 @@ function set_file_name(filename) {
 
 // 获取后端返回的签名信息，生成oss参数
 function oss(filename = null) {
-  debugger
   // 可以判断当前expire是否超过了当前时间， 如果超过了当前时间， 就重新取一下， 3 s 作为缓冲。
   now = Date.parse(new Date()) / 1000
   if (expire < now + 3) {

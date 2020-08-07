@@ -169,7 +169,6 @@ export default {
       tinymce.get(this.tinymceId).getContent()
     },
     imageSuccessCBK(arr) {
-      debugger
       const _this = this
       arr.forEach(v => {
         tinymce.get(_this.tinymceId).insertContent(`<img class="wscnph" src="${v.url}" >`)
