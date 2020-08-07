@@ -33,7 +33,7 @@
             <Input v-model="dataForm.tel" type="text"  :maxlength="11"></Input>
           </Form-item>
           <Form-item label="联系地址" prop="address">
-             <Input v-model="dataForm.address" type="text"  :maxlength="20"></Input>
+             <Input v-model="dataForm.address" type="text"  :maxlength="100"></Input>
           </Form-item>
           <Form-item label="排序" prop="sort">
              <Input v-model="dataForm.sort" type="number"  :maxlength="20"></Input>

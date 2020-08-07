@@ -118,7 +118,6 @@
               <Input type="text" v-model="dataForm.email" :maxlength="100"></Input>
             </Form-item>
           </Col>
-
         </Row>
       </Form>
     </Modal>
@@ -143,6 +142,7 @@ export default {
       visible: false,
       loading: true,
       userVisible: false,
+
       dataForm: {
         id: '',
         username: '',
@@ -166,14 +166,19 @@ export default {
         isDelete: 0,
         version: '1'
       },
+
       // 组织
       orgList: [],
+
       // 部门
       deptList: [],
+
       // 岗位
       positionList: [],
+
       // 角色
       roleList: [],
+
       rules: {
         username: [
           { required: true, message: '必填项，不能为空', trigger: 'blur' },
@@ -227,6 +232,7 @@ export default {
       }
     }
   },
+
   computed: {
     returnModalTitle() {
       if (!this.dataForm.id) {
@@ -240,9 +246,11 @@ export default {
     orgData() {
       return this.expandOrgTree(this.orgList)
     },
+
     deptData() {
       return this.expandDeptTree(this.deptList)
     },
+
     positionData() {
       return this.expandPositionTree(this.positionList)
     }
@@ -275,6 +283,7 @@ export default {
       this.dataForm.deptId = ''
       this.dataForm.deptName = ''
     },
+
     // 响应下拉框change事件
     selectOrg(selectArray, item) {
       this.dataForm.orgId = item.id
@@ -290,6 +299,7 @@ export default {
           this.$Message.error(error.msg)
         })
     },
+
     selectDept(selectArray, item) {
       this.dataForm.deptId = item.id
       this.dataForm.deptName = item.title
@@ -306,6 +316,7 @@ export default {
         return item
       })
     },
+
     expandDeptTree(treeData) {
       return treeData.map(item => {
         item.title = item.deptName
@@ -315,6 +326,7 @@ export default {
         return item
       })
     },
+
     expandPositionTree(treeData) {
       return treeData.map(item => {
         item.title = item.name
@@ -324,17 +336,20 @@ export default {
         return item
       })
     },
+
     changeLoading() {
       this.loading = false
       this.$nextTick(() => {
         this.loading = true
       })
     },
+
     onSubmit() {
       this.$refs['userForm'].validate(valid => {
         if (!valid) {
           return this.changeLoading()
         }
+
         this.dataForm.birthday = new Date(this.dataForm.birthday)
         addOrUpdateUser(this.dataForm)
           .then(res => {
@@ -354,5 +369,6 @@ export default {
   }
 }
 </script>
-<style>
+
+<style lang="less" scoped>
 </style>

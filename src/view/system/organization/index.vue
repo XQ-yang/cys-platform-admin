@@ -25,57 +25,75 @@
   </Card>
 </div>
 </template>
+
 <script>
 import AddOrUpdate from './add-or-update'
 import { fetchList, deleteOrg } from '@/api/organization'
+
 export default {
   name: 'organization',
+
   data() {
     return {
       tableData: [],
+
       tableColumn: [
         {
           title: '机构名称',
           key: 'orgName',
+          minWidth: 200,
           tree: true
         },
         {
           title: '联系人',
           key: 'contacts',
+          minWidth: 100,
           align: 'center'
         },
         {
           title: '联系电话',
           key: 'tel',
+          minWidth: 140,
           align: 'center'
         },
         {
           title: '联系地址',
           key: 'address',
-          align: 'center'
+          minWidth: 200,
+          align: 'center',
+          tooltip: true
         },
         {
           title: '操作',
           key: 'action',
           align: 'center',
           width: 260,
-          slot: 'action'
+          slot: 'action',
+          fixed: 'right'
         }
       ],
+
       addOrUpdateVisible: false,
       dataListLoading: false,
+
       listQuery: {
         orgName: '',
         contacts: ''
       }
     }
   },
+
+  components: {
+    AddOrUpdate
+  },
+
   created() {
     this.getList()
   },
-  mounted() {
 
+  mounted() {
   },
+
   methods: {
     getList() {
       this.dataListLoading = true
@@ -86,6 +104,7 @@ export default {
         this.$Message.error(error.msg)
       })
     },
+
     addOrUpdateHandle(id) {
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
@@ -93,6 +112,7 @@ export default {
         this.$refs.addOrUpate.init()
       })
     },
+
     deleteHandle(id) {
       this.$Modal.confirm({
         title: '提示',
@@ -107,20 +127,20 @@ export default {
         }
       })
     },
+
     handleSearch() {
       this.getList()
     },
+
     // 清空查询值的时候 重新加载列表数据
     handleClear() {
       this.$nextTick(() => {
         this.getList()
       })
     }
-  },
-  components: {
-    AddOrUpdate
   }
 }
 </script>
-<style >
+
+<style lang="less" scoped>
 </style>
