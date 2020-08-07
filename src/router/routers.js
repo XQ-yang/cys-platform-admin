@@ -219,9 +219,8 @@ export const routes = [
     ]
   },
   {
-    path: '/',
+    path: '/userInfo',
     name: 'userInfo',
-    redirect: '/userInfo',
     component: Main,
     meta: {
       hideInMenu: true,
