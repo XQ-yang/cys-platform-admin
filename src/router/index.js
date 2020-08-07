@@ -12,6 +12,12 @@ const router = new Router({
   routes,
   mode: 'history'
 })
+
+router.$addRoutes = (params) => {
+  router.matcher = new Router({ routes, mode: 'history' }).matcher
+  router.addRoutes(params)
+}
+
 const LOGIN_PAGE_NAME = 'login'
 
 router.beforeEach((to, from, next) => {
@@ -21,7 +27,7 @@ router.beforeEach((to, from, next) => {
     if (!store.state.router.hasGetRules) {
       store.dispatch('authorization').then(rules => {
         store.dispatch('concatRouters', rules).then(routers => {
-          router.addRoutes(routers.concat(page404))
+          router.$addRoutes(routers.concat(page404))
           next({ ...to, replace: true })
         })
       })
