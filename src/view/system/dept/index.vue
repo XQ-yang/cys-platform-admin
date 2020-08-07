@@ -20,6 +20,7 @@
           v-model="listQuery.orgName"
         />
         <Button @click="handleSearch" class="search-btn">查询</Button>
+        <Button @click="handleCancel" class="search-btn">重置</Button>
         <Button v-permission="{rule:'dept:add'}" class="search-btn" @click="addOrUpdateHandle()">新增</Button>
       </div>
       <div class="table-dom">
@@ -111,6 +112,12 @@ export default {
     },
 
     handleSearch() {
+      this.getList()
+    },
+
+    handleCancel() {
+      this.listQuery.deptName = ''
+      this.listQuery.orgName = ''
       this.getList()
     },
 
