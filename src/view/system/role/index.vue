@@ -6,6 +6,7 @@
         角色名称：
         <Input @on-clear="handleClear"  clearable placeholder="角色名称" class="search-input" v-model="listQuery.roleName"/>
         <Button @click="handleSearch" class="search-btn">查询</Button>
+        <Button @click="handleCancel" class="search-btn">重置</Button>
         <Button v-permission="{rule:'role:add'}" @click="addOrUpdateHandle()" class="search-btn">新增</Button>
       </div>
       <!--列表 分页-->
@@ -141,6 +142,12 @@ export default {
 
     handleSearch() {
       this.listQuery.pageNumber = 1
+      this.getList()
+    },
+
+    handleCancel() {
+      this.listQuery.pageNumber = 1
+      this.listQuery.roleName = ''
       this.getList()
     },
 
