@@ -68,7 +68,7 @@ export default {
       tableColumns: [
         {
           type: 'expand',
-          width: 50,
+          minWidth: 50,
           render: (h, params) => {
             return h(expandRow, {
               props: {
@@ -79,7 +79,7 @@ export default {
         },
         {
           title: '序号',
-          width: 65,
+          minWidth: 70,
           render: (h, params) => {
             return h(
               'span',
@@ -89,16 +89,36 @@ export default {
             )
           }
         },
-        { title: '操作模块', key: 'module', tooltip: true },
-        { title: '操作内容', key: 'operation', tooltip: true },
-        { title: '请求url', key: 'requestUrl', tooltip: true },
-        { title: '耗时', key: 'spendTime', tooltip: true, width: 65 },
-        { title: '请求来源', key: 'clientId', tooltip: true },
+        {
+          title: '操作模块',
+          key: 'module',
+          minWidth: 150
+        },
+        {
+          title: '操作内容',
+          key: 'operation',
+          minWidth: 150,
+          tooltip: true
+        },
+        {
+          title: '请求url',
+          key: 'requestUrl',
+          minWidth: 250
+        },
+        {
+          title: '耗时',
+          key: 'spendTime',
+          minWidth: 65
+        },
+        {
+          title: '请求来源',
+          key: 'clientId',
+          minWidth: 120
+        },
         {
           title: '创建时间',
           key: 'createTime',
-          tooltip: true,
-          width: 180,
+          minWidth: 180,
           render: (h, params) => {
             return h(
               'div',
@@ -113,16 +133,22 @@ export default {
           render: (h, params) => {
             const row = params.row
             const text = row.responseCode === 0 ? '正常' : '异常'
-            return h(
-              'div',
-              text
-            )
+            const color = row.responseCode === 0 ? 'green' : 'red'
+            return h('Badge',
+              {
+                props: {
+                  color: color,
+                  text: text
+                }
+              })
           }
         }
       ],
+
       total: 0,
       tableLoading: false,
       loading: true,
+
       listQuery: {
         pageNumber: 1,
         pageSize: 10,
@@ -132,28 +158,36 @@ export default {
         startTime: '',
         endTime: ''
       },
+
       dataListLoading: false,
+
       options: {
         disabledDate(date) {
           return false
         }
       },
+
       stretchName: '展开',
       show: false,
       exportLoading: false
     }
   },
+
   components: {
   },
+
   // 一般ajaxajax请求数据放到created里面就可以了，这样可以及早发请求获取数据，
   // 如果有依赖dom必须存在的情况则需要放导 mounted
   created() {
     this.getList()
   },
+
   // 编译好的HTML 挂载到页面完成后执行的事件钩子，
   // 此钩子函数中一般会做一些ajax请求获取数据进行数据初始化
   // mounted在整个实例中只执行一次
-  mounted() {},
+  mounted() {
+  },
+
   // 组件方法
   methods: {
     getList() {
@@ -168,6 +202,7 @@ export default {
           this.$Message.error(error.msg)
         })
     },
+
     // 重置loading状态 防止重复提交
     changeLoading() {
       this.loading = false
@@ -175,16 +210,19 @@ export default {
         this.loading = true
       })
     },
+
     handleSearch() {
       this.listQuery.pageNumber = 1
       this.getList()
     },
+
     // 清空查询值的时候 重新加载列表数据
     handleClear() {
       this.$nextTick(() => {
         this.getList()
       })
     },
+
     handleStartTime(e) {
       this.listQuery.startTime = e
       this.options = {
@@ -193,6 +231,7 @@ export default {
         }
       }
     },
+
     handleStretch() {
       var s = this.stretchName
       this.listQuery.startTime = ''
@@ -205,6 +244,7 @@ export default {
         this.stretchName = '展开'
       }
     },
+
     exportData() {
       exportOperlog(this.listQuery)
         .then(res => {
@@ -237,5 +277,6 @@ export default {
   }
 }
 </script>
-<style >
+
+<style lang="less" scoped>
 </style>
