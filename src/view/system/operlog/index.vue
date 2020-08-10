@@ -29,6 +29,7 @@
         <span style="margin:2px;" v-show="show">至</span>
         <Date-picker v-show="show" type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="listQuery.endTime=$event" :options="options" :editable="false" v-model="listQuery.endTime" @on-clear="handleClear" placeholder="选择日期和时间" style="width: 200px;margin-right:10px;"></Date-picker>
         <Button @click="handleSearch" class="search-btn">查询</Button>
+        <Button @click="handleCancel" class="search-btn">重置</Button>
         <Button @click="exportData" :loading="exportLoading" class="search-btn">导出</Button>
         <Button @click="handleStretch">{{stretchName}}</Button>
       </div>
@@ -233,6 +234,16 @@ export default {
 
     handleSearch() {
       this.listQuery.pageNumber = 1
+      this.getList()
+    },
+
+    handleCancel() {
+      this.listQuery.pageNumber = 1
+      this.listQuery.module = ''
+      this.listQuery.operation = ''
+      this.listQuery.responseCode = ''
+      this.listQuery.startTime = ''
+      this.listQuery.endTime = ''
       this.getList()
     },
 

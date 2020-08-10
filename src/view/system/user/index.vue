@@ -202,6 +202,7 @@ export default {
       total: 0,
       tableLoading: false,
       loading: true,
+
       listQuery: {
         pageNumber: 1,
         pageSize: 10,
