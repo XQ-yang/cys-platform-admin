@@ -21,6 +21,7 @@
         至
         <Date-picker type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="listQuery.endTime=$event" :options="options" :editable="false" v-model="listQuery.endTime" @on-clear="handleClear" placeholder="选择日期和时间" style="width: 165px;margin-right:10px;"></Date-picker>
         <Button @click="handleSearch" class="search-btn">查询</Button>
+        <Button @click="handleCancel" class="search-btn">重置</Button>
       </div>
       <!--列表 分页-->
       <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
@@ -137,8 +138,11 @@ export default {
         pageNumber: 1,
         pageSize: 10,
         loginName: '',
-        status: ''
+        status: '',
+        startTime: '',
+        endTime: ''
       },
+
       dataListLoading: false,
       options: {
         disabledDate(date) {
@@ -185,6 +189,15 @@ export default {
 
     handleSearch() {
       this.listQuery.pageNumber = 1
+      this.getList()
+    },
+
+    handleCancel() {
+      this.listQuery.pageNumber = 1
+      this.listQuery.loginName = ''
+      this.listQuery.status = ''
+      this.listQuery.startTime = ''
+      this.listQuery.endTime = ''
       this.getList()
     },
 
