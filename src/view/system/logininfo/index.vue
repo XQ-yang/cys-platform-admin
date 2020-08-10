@@ -44,19 +44,22 @@
     </Card>
   </div>
 </template>
+
 <script>
 import { fetchList } from '@/api/logininfo'
+
 export default {
   name: 'logininfo',
-  filters: {
-  },
+
   data() {
     return {
       list: [],
+
       tableColumns: [
         {
           title: '序号',
-          width: 65,
+          align: 'center',
+          minWidth: 65,
           render: (h, params) => {
             return h(
               'span',
@@ -66,16 +69,41 @@ export default {
             )
           }
         },
-        { title: '登录账号', key: 'loginName', tooltip: true },
-        { title: 'IP地址', key: 'ipAddr', tooltip: true },
-        { title: '登录地点', key: 'loginLocation', tooltip: true },
-        { title: '浏览器类型', key: 'browser', tooltip: true },
-        { title: '操作系统', key: 'os', tooltip: true },
-        { title: '提示消息', key: 'msg', tooltip: true },
+        {
+          title: '登录账号',
+          key: 'loginName',
+          minWidth: 110
+        },
+        {
+          title: 'IP地址',
+          key: 'ipAddr',
+          minWidth: 140
+        },
+        {
+          title: '登录地点',
+          key: 'loginLocation',
+          minWidth: 100
+        },
+        {
+          title: '浏览器类型',
+          key: 'browser',
+          minWidth: 170
+        },
+        {
+          title: '操作系统',
+          key: 'os',
+          minWidth: 120
+        },
+        {
+          title: '提示消息',
+          key: 'msg',
+          minWidth: 100,
+          tooltip: true
+        },
         {
           title: '创建时间',
           key: 'createTime',
-          tooltip: true,
+          minWidth: 180,
           render: (h, params) => {
             return h(
               'div',
@@ -86,16 +114,22 @@ export default {
         {
           title: '登录状态',
           key: 'status',
+          minWidth: 100,
           render: (h, params) => {
             const row = params.row
             const text = row.status === 0 ? '正常' : '异常'
-            return h(
-              'div',
-              text
-            )
+            const color = row.status === 0 ? 'green' : 'red'
+            return h('Badge',
+              {
+                props: {
+                  color: color,
+                  text: text
+                }
+              })
           }
         }
       ],
+
       total: 0,
       tableLoading: false,
       loading: true,
@@ -113,17 +147,19 @@ export default {
       }
     }
   },
-  components: {
-  },
+
   // 一般ajaxajax请求数据放到created里面就可以了，这样可以及早发请求获取数据，
   // 如果有依赖dom必须存在的情况则需要放导 mounted
   created() {
     this.getList()
   },
+
   // 编译好的HTML 挂载到页面完成后执行的事件钩子，
   // 此钩子函数中一般会做一些ajax请求获取数据进行数据初始化
   // mounted在整个实例中只执行一次
-  mounted() {},
+  mounted() {
+  },
+
   // 组件方法
   methods: {
     getList() {
@@ -146,16 +182,19 @@ export default {
         this.loading = true
       })
     },
+
     handleSearch() {
       this.listQuery.pageNumber = 1
       this.getList()
     },
+
     // 清空查询值的时候 重新加载列表数据
     handleClear() {
       this.$nextTick(() => {
         this.getList()
       })
     },
+
     handleStartTime(e) {
       this.listQuery.startTime = e
       this.options = {
@@ -167,5 +206,6 @@ export default {
   }
 }
 </script>
-<style >
+
+<style lang="less" scoped>
 </style>
