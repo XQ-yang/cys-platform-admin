@@ -112,6 +112,7 @@ export default {
       type: String,
       default: 'picture-card'
     },
+    // 1: 本地存储, 2: 七牛OSS, 3: 阿里OSS
     storeType: {
       type: Number,
       default: 1
