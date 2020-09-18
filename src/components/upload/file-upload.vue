@@ -56,7 +56,7 @@
         </span>
       </li>
     </ul>
-    <Modal title="查看图片" v-model="visible">
+    <Modal title="查看图片" v-model="visible" :footer-hide="true">
       <img :src="url" v-if="visible" style="width: 100%;" :onerror="onerror">
     </Modal>
   </div>

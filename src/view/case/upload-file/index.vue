@@ -23,11 +23,11 @@
     </Upload>
     <file-upload
       v-model="uploadList1"
-      :storeType="3"
-      :count="1"
-      :format="['pdf']"
-      accept=".pdf" >
-      <div slot="tip" class="tip-style">注意: 最大20M, 必须为pdf格式</div>
+      :storeType="1"
+      :count="5"
+      :format="['jpg', 'jpeg', 'png', 'gif']"
+      accept=".jpg, .jpeg, .png, .gif" >
+      <div slot="tip" class="tip-style">注意: 最大20M, 必须为jpg, jpeg, png, gif格式</div>
     </file-upload>
   </div>
 </template>
@@ -83,5 +83,9 @@ export default {
 }
 
 </script>
-<style>
+<style scoped>
+.tip-style {
+  color: red;
+  font-size: 12px;
+}
 </style>
