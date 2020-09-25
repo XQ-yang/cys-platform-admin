@@ -144,6 +144,10 @@ export default {
           editor.on('NodeChange Change KeyUp SetContent', () => {
             this.hasChange = true
             this.$emit('input', editor.getContent())
+            setTimeout(() => { this.hasChange = false }, 100)
+          })
+          editor.on('Blur', e => {
+            this.hasChange = false
           })
         },
         setup(editor) {
