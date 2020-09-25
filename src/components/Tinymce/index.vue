@@ -19,6 +19,7 @@ import 'tinymce/plugins/paste'
 import 'tinymce/plugins/preview'
 import 'tinymce/plugins/fullscreen'
 import 'tinymce/plugins/image'
+import 'tinymce/icons/default'
 
 import plugins from './plugins'
 import toolbar from './toolbar'
