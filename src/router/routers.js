@@ -79,6 +79,16 @@ export const routerMap = () => [
         component: () => import('@/view/system/menu/index.vue')
       },
       {
+        path: 'sms-send',
+        name: 'sms-send',
+        access: 'sms-send',
+        meta: {
+          icon: 'ios-mail-outline',
+          title: '短信管理'
+        },
+        component: () => import('@/view/system/sms')
+      },
+      {
         path: 'operlog',
         name: 'operlog',
         access: 'operlog',
