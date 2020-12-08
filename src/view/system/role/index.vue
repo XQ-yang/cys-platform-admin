@@ -27,7 +27,7 @@
               </Button>
               <DropdownMenu slot="list">
                 <DropdownItem v-permission="{rule:'role:permission'}" name="setRole">角色权限</DropdownItem>
-                <DropdownItem v-permission="{rule:'role:data'}" name="setDataRole">数据权限</DropdownItem>
+                <!-- <DropdownItem v-permission="{rule:'role:data'}" name="setDataRole">数据权限</DropdownItem> -->
                 <DropdownItem v-permission="{rule:'role:del'}" name="delete">删除</DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -85,6 +85,34 @@ export default {
           key: 'roleName',
           align: 'center',
           minWidth: 100
+        },
+        {
+          title: '数据权限',
+          key: 'dataType',
+          align: 'left',
+          minWidth: 100,
+          render: (h, params) => {
+            // 1. 仅本人数据; 2. 所在部门数据; 3. 所在部门及下属部门数据; 4. 所在公司数据; 5. 所在公司及下属公司数据
+            let dataTypeStr = ''
+            switch (params.row.dataType) {
+              case 1:
+                dataTypeStr = '仅本人数据'
+                break
+              case 2:
+                dataTypeStr = '所在部门数据'
+                break
+              case 3:
+                dataTypeStr = '所在部门及下属部门数据'
+                break
+              case 4:
+                dataTypeStr = '所在公司数据'
+                break
+              case 5:
+                dataTypeStr = '所在公司及下属公司数据'
+                break
+            }
+            return h('div', dataTypeStr)
+          }
         },
         { title: '创建时间',
           key: 'createTime',
