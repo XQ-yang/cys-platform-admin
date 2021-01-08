@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { getToken } from '@/libs/util'
 import refreshToken from '@/api/refresh-token'
+import qs from 'qs'
 let isLock = false
 let requests = []
 
@@ -34,6 +35,11 @@ class HttpRequest {
       headers: {
         'X-URL-PATH': location.pathname,
         'Authorization': 'Bearer ' + getToken()
+      },
+      // axios设置paramsSerializer解决在自己encodeURIComponent参数时参数为null或undefined的问题
+      paramsSerializer: function(params) {
+        let a = qs.stringify(params, { arrayFormat: 'brackets' })
+        return a
       }
     }
     return config
@@ -44,19 +50,6 @@ class HttpRequest {
     instance.interceptors.request.use(request => {
       if (!request.url.includes('/oauth/token')) {
         request.headers['Content-type'] = 'application/json;charset=UTF-8'
-      }
-      // fix The valid characters are defined in RFC 7230 and RFC 3986
-      // get对请求参数中特殊字符进行编码
-      if (request.method === 'get' && request.params) {
-        let url = request.url
-        url += '?'
-        let keys = Object.keys(request.params)
-        for (let key of keys) {
-          url += `${key}=${encodeURIComponent(request.params[key])}&`
-        }
-        url = url.substring(0, url.length - 1)
-        request.params = {}
-        request.url = url
       }
       return request
     }, error => {
