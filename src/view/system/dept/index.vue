@@ -24,7 +24,7 @@
         <Button v-permission="{rule:'dept:add'}" class="search-btn" @click="addOrUpdateHandle()">新增</Button>
       </div>
       <div class="table-dom">
-        <Table row-key="id" :columns="tableColumn" :data="tableData" border stripe>
+        <Table row-key="id" :columns="tableColumn" :data="tableData" :loading="dataListLoading" border stripe>
           <template slot-scope="{row,index}" slot="action">
               <Button v-permission="{rule:'dept:edit'}"  type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(row.id)">编辑</Button>
               <Button v-permission="{rule:'dept:del'}"  type="error" size="small" @click="deleteHandle(row.id)" >删除</Button>
@@ -108,6 +108,7 @@ export default {
         this.dataListLoading = false
       }).catch(error => {
         this.$Message.error(error.msg)
+        this.dataListLoading = false
       })
     },
 

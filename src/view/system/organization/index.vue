@@ -9,7 +9,7 @@
       <Button v-permission="{rule:'org:add'}" class="search-btn" @click="addOrUpdateHandle()">新增</Button>
     </div>
     <div class="table-dom">
-      <Table row-key="id" :columns="tableColumn" :data="tableData" border stripe>
+      <Table row-key="id" :columns="tableColumn" :loading="dataListLoading" :data="tableData" border stripe>
         <template slot-scope="{row,index}" slot="action">
           <Button
             v-permission="{rule:'org:edit'}"
@@ -103,6 +103,7 @@ export default {
         this.dataListLoading = false
       }).catch(error => {
         this.$Message.error(error.msg)
+        this.dataListLoading = false
       })
     },
 

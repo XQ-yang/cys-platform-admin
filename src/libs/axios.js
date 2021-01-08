@@ -38,8 +38,7 @@ class HttpRequest {
       },
       // axios设置paramsSerializer解决在自己encodeURIComponent参数时参数为null或undefined的问题
       paramsSerializer: function(params) {
-        let a = qs.stringify(params, { arrayFormat: 'brackets' })
-        return a
+        return qs.stringify(params, { arrayFormat: 'brackets' })
       }
     }
     return config

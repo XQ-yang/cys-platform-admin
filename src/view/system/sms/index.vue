@@ -179,6 +179,7 @@ export default {
         })
         .catch(error => {
           this.$Message.error(error.msg)
+          this.tableLoading = false
         })
     },
     handleReSend(id) {

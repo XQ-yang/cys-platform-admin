@@ -5,7 +5,7 @@
       <Button v-permission="{rule:'menu:add'}" class="search-btn" @click="addOrUpdateHandle()">新增</Button>
     </div>
     <div class="table-dom">
-        <Table row-key="id" :columns="tableColumn" :data="tableData" border stripe>
+        <Table row-key="id" :columns="tableColumn" :loading="dataListLoading" :data="tableData" border stripe>
           <template slot-scope="{row}" slot="icon">
             <Icon :type="row.icon" />
           </template>
@@ -95,6 +95,7 @@ export default {
         this.dataListLoading = false
       }).catch(error => {
         this.$Message.error(error.msg)
+        this.dataListLoading = false
       })
     },
     addOrUpdateHandle(id) {
