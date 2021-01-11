@@ -21,9 +21,17 @@
         至
         <Date-picker type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="listQuery.endTime=$event" :options="options" :editable="false" v-model="listQuery.endTime" @on-clear="handleClear" placeholder="选择日期和时间" style="width: 165px;margin-right:10px;"></Date-picker>
         <Button @click="handleSearch" class="search-btn">查询</Button>
+        <Button @click="handleCancel" class="search-btn">重置</Button>
       </div>
       <!--列表 分页-->
-      <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
+      <Table
+      border
+      stripe
+      :data="list"
+      :columns="tableColumns"
+      :loading="tableLoading"
+      :max-height="tableHeight"
+      ref="table">
         <template slot-scope="{ row, index }" slot="action">
         </template>
       </Table>
@@ -34,8 +42,10 @@
             :total="total"
             :current.sync="listQuery.pageNumber"
             :page-size.sync="listQuery.pageSize"
+            @on-page-size-change="pageSizeChange"
             @on-change="getList"
             show-total
+            show-sizer
             prev-text="上一页"
             next-text="下一页"
           ></Page>
@@ -44,19 +54,25 @@
     </Card>
   </div>
 </template>
+
 <script>
 import { fetchList } from '@/api/logininfo'
+
 export default {
   name: 'logininfo',
-  filters: {
-  },
+
   data() {
     return {
       list: [],
+
+      // 列表高度
+      tableHeight: 450,
+
       tableColumns: [
         {
           title: '序号',
-          width: 65,
+          align: 'center',
+          minWidth: 65,
           render: (h, params) => {
             return h(
               'span',
@@ -66,16 +82,41 @@ export default {
             )
           }
         },
-        { title: '登录账号', key: 'loginName', tooltip: true },
-        { title: 'IP地址', key: 'ipAddr', tooltip: true },
-        { title: '登录地点', key: 'loginLocation', tooltip: true },
-        { title: '浏览器类型', key: 'browser', tooltip: true },
-        { title: '操作系统', key: 'os', tooltip: true },
-        { title: '提示消息', key: 'msg', tooltip: true },
+        {
+          title: '登录账号',
+          key: 'loginName',
+          minWidth: 110
+        },
+        {
+          title: 'IP地址',
+          key: 'ipAddr',
+          minWidth: 140
+        },
+        {
+          title: '登录地点',
+          key: 'loginLocation',
+          minWidth: 100
+        },
+        {
+          title: '浏览器类型',
+          key: 'browser',
+          minWidth: 170
+        },
+        {
+          title: '操作系统',
+          key: 'os',
+          minWidth: 120
+        },
+        {
+          title: '提示消息',
+          key: 'msg',
+          minWidth: 100,
+          tooltip: true
+        },
         {
           title: '创建时间',
           key: 'createTime',
-          tooltip: true,
+          minWidth: 180,
           render: (h, params) => {
             return h(
               'div',
@@ -86,16 +127,22 @@ export default {
         {
           title: '登录状态',
           key: 'status',
+          minWidth: 100,
           render: (h, params) => {
             const row = params.row
             const text = row.status === 0 ? '正常' : '异常'
-            return h(
-              'div',
-              text
-            )
+            const color = row.status === 0 ? 'green' : 'red'
+            return h('Badge',
+              {
+                props: {
+                  color: color,
+                  text: text
+                }
+              })
           }
         }
       ],
+
       total: 0,
       tableLoading: false,
       loading: true,
@@ -103,8 +150,11 @@ export default {
         pageNumber: 1,
         pageSize: 10,
         loginName: '',
-        status: ''
+        status: '',
+        startTime: '',
+        endTime: ''
       },
+
       dataListLoading: false,
       options: {
         disabledDate(date) {
@@ -113,17 +163,20 @@ export default {
       }
     }
   },
-  components: {
-  },
+
   // 一般ajaxajax请求数据放到created里面就可以了，这样可以及早发请求获取数据，
   // 如果有依赖dom必须存在的情况则需要放导 mounted
   created() {
     this.getList()
   },
+
   // 编译好的HTML 挂载到页面完成后执行的事件钩子，
   // 此钩子函数中一般会做一些ajax请求获取数据进行数据初始化
   // mounted在整个实例中只执行一次
-  mounted() {},
+  mounted() {
+    this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 180
+  },
+
   // 组件方法
   methods: {
     getList() {
@@ -146,16 +199,33 @@ export default {
         this.loading = true
       })
     },
+
     handleSearch() {
       this.listQuery.pageNumber = 1
       this.getList()
     },
+
+    handleCancel() {
+      this.listQuery.pageNumber = 1
+      this.listQuery.loginName = ''
+      this.listQuery.status = ''
+      this.listQuery.startTime = ''
+      this.listQuery.endTime = ''
+      this.getList()
+    },
+
+    pageSizeChange(pagesize) {
+      this.listQuery.pageSize = pagesize
+      this.getList()
+    },
+
     // 清空查询值的时候 重新加载列表数据
     handleClear() {
       this.$nextTick(() => {
         this.getList()
       })
     },
+
     handleStartTime(e) {
       this.listQuery.startTime = e
       this.options = {
@@ -167,5 +237,6 @@ export default {
   }
 }
 </script>
-<style >
+
+<style lang="less" scoped>
 </style>

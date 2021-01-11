@@ -19,6 +19,7 @@ import 'tinymce/plugins/paste'
 import 'tinymce/plugins/preview'
 import 'tinymce/plugins/fullscreen'
 import 'tinymce/plugins/image'
+import 'tinymce/icons/default'
 
 import plugins from './plugins'
 import toolbar from './toolbar'
@@ -124,6 +125,7 @@ export default {
         paste_data_images: true, // 允许粘贴图像
         menubar: this.menubar, // 是否隐藏最上方menu
         plugins: plugins, // 插件
+        branding: true, // 隐藏 由Tiny驱动
         end_container_on_empty_block: true,
         powerpaste_word_import: 'clean',
         code_dialog_height: 450,
@@ -142,6 +144,10 @@ export default {
           editor.on('NodeChange Change KeyUp SetContent', () => {
             this.hasChange = true
             this.$emit('input', editor.getContent())
+            setTimeout(() => { this.hasChange = false }, 100)
+          })
+          editor.on('Blur', e => {
+            this.hasChange = false
           })
         },
         setup(editor) {

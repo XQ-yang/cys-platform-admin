@@ -1,7 +1,7 @@
 import Main from '@/components/main'
 
 /**
- * iview-admin中meta除了原生参数外可配置的参数:
+ * 路由中meta除了原生参数外可配置的参数:
  * meta: {
  *  title: { String|Number|Function }
  *         显示在侧边栏、面包屑和标签栏的文字
@@ -16,7 +16,7 @@ import Main from '@/components/main'
  * }
  */
 // 需要权限控制动态加载的路由
-export const routerMap = [
+export const routerMap = () => [
   {
     path: '/system',
     name: 'system',
@@ -34,8 +34,7 @@ export const routerMap = [
         access: 'user',
         meta: {
           icon: 'ios-contact-outline',
-          title: '用户管理',
-          notCache: true
+          title: '用户管理'
         },
         component: () => import('@/view/system/user')
       },
@@ -78,6 +77,16 @@ export const routerMap = [
           title: '系统菜单'
         },
         component: () => import('@/view/system/menu/index.vue')
+      },
+      {
+        path: 'sms-send',
+        name: 'sms-send',
+        access: 'sms-send',
+        meta: {
+          icon: 'ios-mail-outline',
+          title: '短信管理'
+        },
+        component: () => import('@/view/system/sms')
       },
       {
         path: 'operlog',
@@ -141,6 +150,46 @@ export const routerMap = [
           title: '文章管理'
         },
         component: () => import('@/view/case/artical/')
+      },
+      {
+        path: 'websocket',
+        name: 'websocket',
+        access: 'websocket',
+        meta: {
+          icon: 'ios-cloud-upload-outline',
+          title: '消息推送'
+        },
+        component: () => import('@/view/case/websocket/')
+      },
+      {
+        path: 'flow',
+        name: 'flow',
+        access: 'flow',
+        meta: {
+          icon: 'ios-cloud-upload-outline',
+          title: '流程图'
+        },
+        component: () => import('@/view/case/flow/test.vue')
+      },
+      {
+        path: 'workflow',
+        name: 'workflow',
+        access: 'workflow',
+        meta: {
+          icon: 'ios-cloud-upload-outline',
+          title: '工作流设计'
+        },
+        component: () => import('@/view/case/workflow/')
+      },
+      {
+        path: 'flowtest',
+        name: 'flowtest',
+        access: 'flowtest',
+        meta: {
+          icon: 'ios-cloud-upload-outline',
+          title: '流程图测试'
+        },
+        component: () => import('@/view/case/flowtest/')
       }
     ]
   }
@@ -180,9 +229,8 @@ export const routes = [
     ]
   },
   {
-    path: '/',
+    path: '/userInfo',
     name: 'userInfo',
-    redirect: '/userInfo',
     component: Main,
     meta: {
       hideInMenu: true,

@@ -4,7 +4,7 @@
     <div class="login-con login-content">
       <Card icon="log-in" title=" " :bordered="false">
         <div class="form-con">
-          <login-form   @on-success-valid="handleSubmit"></login-form>
+          <login-form ref="loginForm" @on-success-valid="handleSubmit"></login-form>
           <!-- <p class="login-tip">输入任意用户名和密码即可</p> -->
         </div>
       </Card>
@@ -20,20 +20,31 @@ export default {
     LoginForm
   },
   methods: {
-    ...mapActions([
-      'handleLogin',
-      'getUserInfo'
-    ]),
-    handleSubmit({ userName, password }) {
-      this.handleLogin({ userName, password }).then(res => {
+    ...mapActions(['handleLogin', 'getUserInfo']),
+    handleSubmit(userLogin) {
+      const msg = this.$Message.loading({
+        content: '正在登录...',
+        duration: 0
+      })
+      this.handleLogin(userLogin).then(res => {
         this.getUserInfo().then(res => {
           window.localStorage.removeItem('tagNaveList')
           this.$router.push({
             name: this.$config.homeName
           })
+          msg()
         })
       }).catch(error => {
-        this.$Message.error(error.msg)
+        msg()
+        this.$Message.error({
+          content: error.msg,
+          duration: 5
+        })
+        // 如果用户名或密码错误, 刷新并清空验证码
+        if (error.code === 1012 || error.code === 1013) {
+          this.$refs.loginForm.refreshCode()
+          this.$refs.loginForm.form.captchaCode = ''
+        }
       })
     }
   }

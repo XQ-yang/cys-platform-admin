@@ -46,7 +46,6 @@ export default {
             this.$router.push({
               name: 'login'
             })
-            window.location.reload()
           })
           break
         case 'userInfo':

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import { routes, page404 } from './routers'
 import store from '@/store'
-import iView from 'iview'
+import ViewUI from 'view-design'
 import { setToken, getToken } from '@/libs/util'
 import config from '@/config'
 const { homeName } = config
@@ -12,16 +12,22 @@ const router = new Router({
   routes,
   mode: 'history'
 })
+
+router.$addRoutes = (params) => {
+  router.matcher = new Router({ routes, mode: 'history' }).matcher
+  router.addRoutes(params)
+}
+
 const LOGIN_PAGE_NAME = 'login'
 
 router.beforeEach((to, from, next) => {
-  iView.LoadingBar.start()
+  ViewUI.LoadingBar.start()
   const token = getToken()
   if (token) {
     if (!store.state.router.hasGetRules) {
       store.dispatch('authorization').then(rules => {
         store.dispatch('concatRouters', rules).then(routers => {
-          router.addRoutes(routers.concat(page404))
+          router.$addRoutes(routers.concat(page404))
           next({ ...to, replace: true })
         })
       })
@@ -57,7 +63,7 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach(to => {
-  iView.LoadingBar.finish()
+  ViewUI.LoadingBar.finish()
   window.scrollTo(0, 0)
 })
 

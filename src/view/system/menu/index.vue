@@ -5,61 +5,19 @@
       <Button v-permission="{rule:'menu:add'}" class="search-btn" @click="addOrUpdateHandle()">新增</Button>
     </div>
     <div class="table-dom">
-      <el-table :data="tableData" style="width: 100%;margin-bottom: 20px;" border row-key="id">
-        <el-table-column
-          header-align="center"
-          prop="title"
-          label="名称"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          header-align="center"
-          align="center"
-          prop="icon"
-          label="图标"
-          width="180">
-          <template slot-scope="scope">
-            <Icon :type="scope.row.icon" />
+        <Table row-key="id" :columns="tableColumn" :loading="dataListLoading" :data="tableData" border stripe>
+          <template slot-scope="{row}" slot="icon">
+            <Icon :type="row.icon" />
           </template>
-        </el-table-column>
-        <el-table-column
-          header-align="center"
-          align="center"
-          prop="type"
-          label="类型">
-          <template slot-scope="scope">
-            <tag color="success" v-if="scope.row.type===0">菜单</tag>
+          <template slot-scope="{row}" slot="type">
+            <tag color="success" v-if="row.type===0">菜单</tag>
             <tag color="default" v-else>按钮</tag>
           </template>
-        </el-table-column>
-        <el-table-column
-          header-align="center"
-          align="center"
-          prop="sort"
-          label="排序">
-        </el-table-column>
-        <el-table-column
-          header-align="center"
-          align="center"
-          prop="url"
-          label="路由">
-        </el-table-column>
-        <el-table-column
-          header-align="center"
-          align="center"
-          prop="permission"
-          label="授权标识">
-        </el-table-column>
-        <el-table-column
-          label="操作"
-          header-align="center"
-          align="center">
-          <template slot-scope="scope">
-            <Button v-permission="{rule:'menu:edit'}" type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(scope.row.id)">编辑</Button>
-            <Button v-permission="{rule:'menu:del'}" type="error" size="small" style="margin: 5px" @click="deleteHandle(scope.row.id)" >删除</Button>
+          <template slot-scope="{row,index}" slot="action">
+              <Button v-permission="{rule:'dept:edit'}"  type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(row.id)">编辑</Button>
+              <Button v-permission="{rule:'dept:del'}"  type="error" size="small" @click="deleteHandle(row.id)" >删除</Button>
           </template>
-        </el-table-column>
-      </el-table>
+        </Table>
     </div>
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpate" @refreshDataList="getList"></add-or-update>
   </Card>
@@ -73,6 +31,52 @@ export default {
   data() {
     return {
       tableData: [],
+      tableColumn: [
+        {
+          title: '名称',
+          key: 'title',
+          minWidth: 180,
+          tree: true
+        },
+        {
+          title: '图标',
+          minWidth: 70,
+          slot: 'icon',
+          align: 'center'
+        },
+        {
+          title: '类型',
+          minWidth: 100,
+          slot: 'type',
+          align: 'center'
+        },
+        {
+          title: '排序',
+          key: 'sort',
+          minWidth: 70,
+          align: 'center'
+        },
+        {
+          title: '路由',
+          key: 'url',
+          minWidth: 150,
+          align: 'center'
+        },
+        {
+          title: '授权标识',
+          key: 'permission',
+          minWidth: 150,
+          align: 'center'
+        },
+        {
+          title: '操作',
+          key: 'action',
+          align: 'center',
+          width: 260,
+          fixed: 'right',
+          slot: 'action'
+        }
+      ],
       addOrUpdateVisible: false,
       dataListLoading: false
     }
@@ -91,6 +95,7 @@ export default {
         this.dataListLoading = false
       }).catch(error => {
         this.$Message.error(error.msg)
+        this.dataListLoading = false
       })
     },
     addOrUpdateHandle(id) {

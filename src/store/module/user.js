@@ -46,13 +46,9 @@ export default {
   },
   actions: {
     // 登录
-    handleLogin({ commit }, { userName, password }) {
-      userName = userName.trim()
+    handleLogin({ commit }, userLogin) {
       return new Promise((resolve, reject) => {
-        login({
-          userName,
-          password
-        }).then(res => {
+        login(userLogin).then(res => {
           window.localStorage.removeItem('tagNaveList')
           commit('setToken', res.access_token)
           commit('setRefreshToken', res.refresh_token)

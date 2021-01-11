@@ -214,16 +214,35 @@ export const objEqual = (obj1, obj2) => {
   /* eslint-disable-next-line */
   else return !keysArr1.some(key => obj1[key] != obj2[key])
 }
+
+// 获得数据的数据类型
+export function type(o) {
+  var s = Object.prototype.toString.call(o)
+  return s.match(/\[object (.*?)\]/)[1].toLowerCase()
+}
+
 // 时间格式化
 export function formatDate(date, fmt) {
-  // 如果传入的date为null 就直接返回空字符串
-  if (date === null) {
+  if (!date) {
     return ''
   }
-  // 先将utc格式转换为本地日期格式
-  date = changeDate(date)
-  date = date.replace(new RegExp(/-/gm), '/')// 将所有的'-'转为'/'即可 兼容日期格式
-  date = new Date(date)
+
+  // 判断日期格式是不是date类型
+  if (type(date) === 'date') {
+    // 先将utc格式转换为本地日期格式
+    date = changeDate(date)
+  }
+
+  if (type(date) === 'string') {
+  // 去掉日期中的T
+    date = date.replace(new RegExp(/T/), ' ')
+
+    // 去掉日期后面的小数点及小数点后面的数字
+    date = date.replace(new RegExp(/\.[0-9]+/), '')
+    // 将所有的'-'转为'/'即可 兼容日期格式
+    date = date.replace(new RegExp(/-/gm), '/')
+    date = new Date(date)
+  }
   let o = {
     'M+': date.getMonth() + 1, // 月份
     'd+': date.getDate(), // 日
@@ -232,14 +251,17 @@ export function formatDate(date, fmt) {
     's+': date.getSeconds(), // 秒
     'S': date.getMilliseconds() // 毫秒
   }
+
   if (/(y+)/.test(fmt)) {
     fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
   }
+
   for (var k in o) {
     if (new RegExp('(' + k + ')').test(fmt)) {
       fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
     }
   }
+
   return fmt
 }
 
@@ -319,4 +341,19 @@ export function parseTime(time, cFormat) {
     return value || 0
   })
   return time_str
+}
+
+// 生成uuid字符串
+export function uuid() {
+  var s = []
+  var hexDigits = '0123456789abcdef'
+  for (var i = 0; i < 36; i++) {
+    s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1)
+  }
+  s[14] = '4' // bits 12-15 of the time_hi_and_version field to 0010
+  s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1) // bits 6-7 of the clock_seq_hi_and_reserved to 01
+  s[8] = s[13] = s[18] = s[23] = '-'
+
+  var uuid = s.join('')
+  return uuid
 }

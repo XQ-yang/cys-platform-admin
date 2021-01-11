@@ -29,11 +29,19 @@
         <span style="margin:2px;" v-show="show">至</span>
         <Date-picker v-show="show" type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="listQuery.endTime=$event" :options="options" :editable="false" v-model="listQuery.endTime" @on-clear="handleClear" placeholder="选择日期和时间" style="width: 200px;margin-right:10px;"></Date-picker>
         <Button @click="handleSearch" class="search-btn">查询</Button>
+        <Button @click="handleCancel" class="search-btn">重置</Button>
         <Button @click="exportData" :loading="exportLoading" class="search-btn">导出</Button>
         <Button @click="handleStretch">{{stretchName}}</Button>
       </div>
       <!--列表 分页-->
-      <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
+      <Table
+      border
+      stripe
+      :data="list"
+      :columns="tableColumns"
+      :loading="tableLoading"
+      :max-height="tableHeight"
+      ref="table">
         <template slot-scope="{ row, index }" slot="action">
         </template>
       </Table>
@@ -44,8 +52,10 @@
             :total="total"
             :current.sync="listQuery.pageNumber"
             :page-size.sync="listQuery.pageSize"
+            @on-page-size-change="pageSizeChange"
             @on-change="getList"
             show-total
+            show-sizer
             prev-text="上一页"
             next-text="下一页"
           ></Page>
@@ -54,21 +64,26 @@
     </Card>
   </div>
 </template>
+
 <script>
 import { fetchList, exportOperlog } from '@/api/operlog'
 import expandRow from './table-expand.vue'
 import { export_json_to_excel } from '@/libs/exportExcel'
+
 export default {
   name: 'operlog',
-  filters: {
-  },
+
   data() {
     return {
       list: [],
+
+      // 列表高度
+      tableHeight: 450,
+
       tableColumns: [
         {
           type: 'expand',
-          width: 50,
+          minWidth: 50,
           render: (h, params) => {
             return h(expandRow, {
               props: {
@@ -79,7 +94,7 @@ export default {
         },
         {
           title: '序号',
-          width: 65,
+          minWidth: 70,
           render: (h, params) => {
             return h(
               'span',
@@ -89,16 +104,36 @@ export default {
             )
           }
         },
-        { title: '操作模块', key: 'module', tooltip: true },
-        { title: '操作内容', key: 'operation', tooltip: true },
-        { title: '请求url', key: 'requestUrl', tooltip: true },
-        { title: '耗时', key: 'spendTime', tooltip: true, width: 65 },
-        { title: '请求来源', key: 'clientId', tooltip: true },
+        {
+          title: '操作模块',
+          key: 'module',
+          minWidth: 150
+        },
+        {
+          title: '操作内容',
+          key: 'operation',
+          minWidth: 150,
+          tooltip: true
+        },
+        {
+          title: '请求url',
+          key: 'requestUrl',
+          minWidth: 250
+        },
+        {
+          title: '耗时',
+          key: 'spendTime',
+          minWidth: 65
+        },
+        {
+          title: '请求来源',
+          key: 'clientId',
+          minWidth: 120
+        },
         {
           title: '创建时间',
           key: 'createTime',
-          tooltip: true,
-          width: 180,
+          minWidth: 180,
           render: (h, params) => {
             return h(
               'div',
@@ -113,16 +148,22 @@ export default {
           render: (h, params) => {
             const row = params.row
             const text = row.responseCode === 0 ? '正常' : '异常'
-            return h(
-              'div',
-              text
-            )
+            const color = row.responseCode === 0 ? 'green' : 'red'
+            return h('Badge',
+              {
+                props: {
+                  color: color,
+                  text: text
+                }
+              })
           }
         }
       ],
+
       total: 0,
       tableLoading: false,
       loading: true,
+
       listQuery: {
         pageNumber: 1,
         pageSize: 10,
@@ -132,28 +173,37 @@ export default {
         startTime: '',
         endTime: ''
       },
+
       dataListLoading: false,
+
       options: {
         disabledDate(date) {
           return false
         }
       },
+
       stretchName: '展开',
       show: false,
       exportLoading: false
     }
   },
+
   components: {
   },
+
   // 一般ajaxajax请求数据放到created里面就可以了，这样可以及早发请求获取数据，
   // 如果有依赖dom必须存在的情况则需要放导 mounted
   created() {
     this.getList()
   },
+
   // 编译好的HTML 挂载到页面完成后执行的事件钩子，
   // 此钩子函数中一般会做一些ajax请求获取数据进行数据初始化
   // mounted在整个实例中只执行一次
-  mounted() {},
+  mounted() {
+    this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 180
+  },
+
   // 组件方法
   methods: {
     getList() {
@@ -168,6 +218,7 @@ export default {
           this.$Message.error(error.msg)
         })
     },
+
     // 重置loading状态 防止重复提交
     changeLoading() {
       this.loading = false
@@ -175,16 +226,34 @@ export default {
         this.loading = true
       })
     },
+
+    pageSizeChange(pagesize) {
+      this.listQuery.pageSize = pagesize
+      this.getList()
+    },
+
     handleSearch() {
       this.listQuery.pageNumber = 1
       this.getList()
     },
+
+    handleCancel() {
+      this.listQuery.pageNumber = 1
+      this.listQuery.module = ''
+      this.listQuery.operation = ''
+      this.listQuery.responseCode = ''
+      this.listQuery.startTime = ''
+      this.listQuery.endTime = ''
+      this.getList()
+    },
+
     // 清空查询值的时候 重新加载列表数据
     handleClear() {
       this.$nextTick(() => {
         this.getList()
       })
     },
+
     handleStartTime(e) {
       this.listQuery.startTime = e
       this.options = {
@@ -193,6 +262,7 @@ export default {
         }
       }
     },
+
     handleStretch() {
       var s = this.stretchName
       this.listQuery.startTime = ''
@@ -205,6 +275,7 @@ export default {
         this.stretchName = '展开'
       }
     },
+
     exportData() {
       exportOperlog(this.listQuery)
         .then(res => {
@@ -237,5 +308,6 @@ export default {
   }
 }
 </script>
-<style >
+
+<style lang="less" scoped>
 </style>

@@ -16,6 +16,7 @@ import {
 import beforeClose from '@/router/before-close'
 import router from '@/router'
 import config from '@/config'
+import store from '@/store'
 const { homeName } = config
 
 const closePage = (state, route) => {
@@ -56,6 +57,10 @@ export default {
       if (homeTagIndex > 0) {
         let homeTag = tagList.splice(homeTagIndex, 1)[0]
         tagList.unshift(homeTag)
+      } else if (homeTagIndex === -1) {
+        // 如果没有开home页, 则先把home tag加进来
+        let homeRoute = getHomeRoute(store.state.router.routers, homeName)
+        tagList.push(homeRoute)
       }
       state.tagNavList = tagList
       setTagNavListInLocalstorage([...tagList])
