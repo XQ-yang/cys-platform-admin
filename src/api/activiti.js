@@ -29,7 +29,7 @@ export const activeSuspendProcessDefinition = (processDefinitionId) => {
 }
 
 // 部署流程
-export const deploySuspendProcessDefinition = (mediaId) => {
+export const deployProcessDefinition = (mediaId) => {
   return axios.request({
     url: '/process-definition/deploy',
     method: 'get',
@@ -66,11 +66,11 @@ export const activeSuspendProcessInstance = (processInstanceId) => {
 }
 
 // 启动流程实例
-export const startProcessInstance = (processDefinitionKey) => {
+export const startProcessInstance = (data) => {
   return axios.request({
-    url: '/process-instance/start_process',
-    method: 'get',
-    params: { processDefinitionKey }
+    url: '/process-instance/start_process_instance',
+    method: 'post',
+    data: data
   })
 }
 

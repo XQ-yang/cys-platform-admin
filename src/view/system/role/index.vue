@@ -4,7 +4,7 @@
       <!--查询条件及操作按钮-->
       <div class="search-con search-con-top">
         角色名称：
-        <Input @on-clear="handleClear"  clearable placeholder="角色名称" class="search-input" v-model="listQuery.roleName"/>
+        <Input @on-clear="handleClear" clearable placeholder="角色名称" class="search-input" v-model="listQuery.roleName"/>
         <Button @click="handleSearch" class="search-btn">查询</Button>
         <Button @click="handleCancel" class="search-btn">重置</Button>
         <Button v-permission="{rule:'role:add'}" @click="addOrUpdateHandle()" class="search-btn">新增</Button>
@@ -19,7 +19,7 @@
       :max-height="tableHeight"
       ref="table">
         <template slot-scope="{ row, index }" slot="action">
-            <Button  type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(row.id)">编辑</Button>
+            <Button type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(row.id)">编辑</Button>
             <Dropdown @on-click="dropDownClick($event,row)" transfer>
               <Button type="warning" size="small" style="margin: 5px">
                 更多

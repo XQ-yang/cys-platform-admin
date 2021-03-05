@@ -129,7 +129,7 @@ export const routerMap = () => [
           icon: 'logo-codepen',
           title: '流程部署'
         },
-        component: () => import('@/view/system/dept')
+        component: () => import('@/view/activiti/process-definition')
       },
       {
         path: 'process-instance',
@@ -139,7 +139,7 @@ export const routerMap = () => [
           icon: 'logo-instagram',
           title: '流程实例'
         },
-        component: () => import('@/view/system/sms')
+        component: () => import('@/view/activiti/process-instance')
       },
       {
         path: 'act-task',
@@ -149,7 +149,7 @@ export const routerMap = () => [
           icon: 'ios-flask',
           title: '代办任务'
         },
-        component: () => import('@/view/system/operlog/index.vue')
+        component: () => import('@/view/activiti/act-task')
       },
       {
         path: 'act-history',
@@ -159,7 +159,7 @@ export const routerMap = () => [
           icon: 'logo-buffer',
           title: '历史任务'
         },
-        component: () => import('@/view/system/logininfo/index.vue')
+        component: () => import('@/view/activiti/act-history')
       }
     ]
   },
