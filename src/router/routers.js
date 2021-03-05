@@ -111,6 +111,59 @@ export const routerMap = () => [
     ]
   },
   {
+    path: '/activiti',
+    name: 'activiti',
+    access: 'activiti',
+    meta: {
+      icon: 'md-git-compare',
+      title: '工作流',
+      showAlways: true
+    },
+    component: Main,
+    children: [
+      {
+        path: 'process-definition',
+        name: 'process-definition',
+        access: 'process-definition',
+        meta: {
+          icon: 'logo-codepen',
+          title: '流程部署'
+        },
+        component: () => import('@/view/system/dept')
+      },
+      {
+        path: 'process-instance',
+        name: 'process-instance',
+        access: 'process-instance',
+        meta: {
+          icon: 'logo-instagram',
+          title: '流程实例'
+        },
+        component: () => import('@/view/system/sms')
+      },
+      {
+        path: 'act-task',
+        name: 'act-task',
+        access: 'act-task',
+        meta: {
+          icon: 'ios-flask',
+          title: '代办任务'
+        },
+        component: () => import('@/view/system/operlog/index.vue')
+      },
+      {
+        path: 'act-history',
+        name: 'act-history',
+        access: 'act-history',
+        meta: {
+          icon: 'logo-buffer',
+          title: '历史任务'
+        },
+        component: () => import('@/view/system/logininfo/index.vue')
+      }
+    ]
+  },
+  {
     path: '/case',
     name: 'case',
     access: 'case',
