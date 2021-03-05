@@ -4,8 +4,8 @@
       <Row class="search-con" type="flex" justify="space-between" align="middle" @keyup.enter.native="handleSearch">
         <Col>
           <Input style="width:300px;" @on-clear="handleClear" clearable placeholder="手机号/发送内容" class="search-input" v-model="listQuery.condition"/>
-          <Button @click="handleSearch" class="search-btn" icon="ios-search">搜索</Button>
-          <Button @click="handleCancel" icon="ios-close-circle-outline">取消</Button>
+          <Button @click="handleSearch" class="search-btn">查询</Button>
+          <Button @click="handleCancel" class="search-btn">重置</Button>
         </Col>
         <Col>
         </Col>
