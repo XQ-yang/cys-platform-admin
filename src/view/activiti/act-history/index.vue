@@ -3,7 +3,10 @@
     <Card>
       <Row class="search-con" type="flex" justify="space-between" align="middle" @keyup.enter.native="handleSearch">
         <Col>
-          手机号/发送内容： <Input style="width:300px;" @on-clear="handleClear" clearable placeholder="手机号/发送内容" class="search-input" v-model="listQuery.condition"/>
+          流程部署名称：
+          <Input @on-clear="handleClear" clearable placeholder="流程部署名称" class="search-input" v-model="listQuery.processName"/>
+          流程部署key：
+          <Input @on-clear="handleClear" clearable placeholder="流程部署key" class="search-input" v-model="listQuery.processKey"/>
           <Button @click="handleSearch" class="search-btn">查询</Button>
           <Button @click="handleCancel" class="search-btn">重置</Button>
         </Col>
@@ -12,8 +15,18 @@
       </Row>
       <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
         <template slot-scope="{ row, index }" slot="action">
-          <Button v-show="row.smsType === 2 && row.sendStatus === 2 && row.isResend === 0" type="primary" size="small" style="margin: 5px" @click="handleReSend(row.id)">重新发送</Button>
-          <Button v-show="!row.receiveDate || row.sendStatus !== 3" type="primary" size="small" style="margin: 5px" @click="handleSmsSendReceipt(row.id)">获取回执</Button>
+          <Button type="primary" v-permission="{rule:'user:add'}" size="small" style="margin: 5px" @click="startProcessInstance(row)">启动实例</Button>
+          <Dropdown @on-click="dropDownClick($event, row)" transfer>
+            <Button type="warning" size="small" style="margin: 5px">
+              更多
+              <Icon type="ios-arrow-down"></Icon>
+            </Button>
+            <DropdownMenu slot="list">
+              <DropdownItem v-permission="{rule:'user:add'}" name="activeOrSuspend">{{row.suspensionState === 1 ? '挂起' : '激活'}}</DropdownItem>
+              <DropdownItem v-permission="{rule:'user:add'}" name="view">查看</DropdownItem>
+              <DropdownItem v-permission="{rule:'user:add'}" name="delete">删除部署</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </template>
       </Table>
       <div style="margin: 10px;overflow: hidden">
@@ -36,9 +49,9 @@
   </div>
 </template>
 <script>
-import { getPageList, recordReSend, getSmsSendReceipt } from '@/api/sms-send'
+import { getActHistoryPageList, deleteProcessDefinition, activeSuspendProcessDefinition } from '@/api/activiti'
 export default {
-  name: 'act-history',
+  name: 'process-instance',
   data() {
     return {
       list: [],
@@ -50,108 +63,57 @@ export default {
             return h('span', params.index + (this.listQuery.pageNumber - 1) * this.listQuery.pageSize + 1)
           }
         },
-        { title: '手机号', key: 'phoneNumber', tooltip: true },
+        { title: '任务ID', key: 'id', tooltip: true },
+        { title: '任务名称', key: 'name', width: 200, tooltip: true },
+        { title: '流程实例名称', key: 'processInstanceName', tooltip: true },
+        { title: '流程定义key', key: 'processDefinitionKey', tooltip: true },
         {
-          title: '短信类型',
-          key: 'smsType',
-          render: (h, params) => {
-            const row = params.row
-            let text = null
-            switch (row.smsType) {
-              case 1:
-                text = '验证码'
-                break
-              case 2:
-                text = '通知'
-                break
-            }
-            return h(
-              'div',
-              text
-            )
-          }
-        },
-        { title: '发送内容', key: 'content', tooltip: true },
-        {
-          title: '发送时间',
-          key: 'sendDate',
+          title: '任务创建时间',
+          key: 'createTime',
+          width: 180,
           tooltip: true,
           render: (h, params) => {
             return h(
               'div',
-              this.$formatDate(params.row.sendDate, 'yyyy-MM-dd hh:mm:ss')
+              this.$formatDate(params.row.createTime, 'yyyy-MM-dd hh:mm:ss')
             )
           }
         },
         {
-          title: '接收时间',
-          key: 'receiveDate',
+          title: '任务开始时间',
+          key: 'startTime',
+          width: 180,
           tooltip: true,
           render: (h, params) => {
             return h(
               'div',
-              this.$formatDate(params.row.receiveDate, 'yyyy-MM-dd hh:mm:ss')
+              this.$formatDate(params.row.startTime, 'yyyy-MM-dd hh:mm:ss')
             )
           }
         },
         {
-          title: '发送状态',
-          key: 'sendStatus',
+          title: '任务拾取时间',
+          key: 'claimTime',
+          width: 180,
+          tooltip: true,
           render: (h, params) => {
-            const row = params.row
-            let text = null
-            let type = null
-            switch (row.sendStatus) {
-              case 1:
-                text = '等待回执'
-                type = 'primary'
-                break
-              case 2:
-                text = '发送失败'
-                type = 'error'
-                break
-              case 3:
-                text = '发送成功'
-                type = 'success'
-                break
-            }
-            return h('Badge',
-              {
-                props: {
-                  type: type,
-                  text: text
-                }
-              })
-          }
-        },
-        {
-          title: '是否已发送',
-          key: 'isSend',
-          render: (h, params) => {
-            const row = params.row
-            let text = null
-            switch (row.isSend) {
-              case 0:
-                text = '未发送'
-                break
-              case 1:
-                text = '已发送'
-                break
-            }
             return h(
               'div',
-              text
+              this.$formatDate(params.row.claimTime, 'yyyy-MM-dd hh:mm:ss')
             )
           }
         },
-        { title: '错误状态码', key: 'errCode', tooltip: true },
-        { title: '错误信息', key: 'errMsg', tooltip: true },
         {
-          title: '操作',
-          slot: 'action',
-          align: 'center',
-          width: 210,
-          fixed: 'right'
+          title: '任务结束时间',
+          key: 'endTime',
+          width: 180,
+          tooltip: true,
+          render: (h, params) => {
+            return h(
+              'div',
+              this.$formatDate(params.row.endTime, 'yyyy-MM-dd hh:mm:ss')
+            )
+          }
         }
       ],
       total: 0,
@@ -160,11 +122,10 @@ export default {
       listQuery: {
         pageNumber: 1,
         pageSize: 10,
-        condition: null
+        processName: null,
+        processKey: null
       }
     }
-  },
-  components: {
   },
   created() {
     this.getList()
@@ -173,7 +134,7 @@ export default {
   methods: {
     getList() {
       this.tableLoading = true
-      getPageList(this.listQuery)
+      getActHistoryPageList(this.listQuery)
         .then(res => {
           this.list = res.data.records
           this.total = res.data.total
@@ -183,48 +144,6 @@ export default {
           this.$Message.error(error.msg)
           this.tableLoading = false
         })
-    },
-    handleReSend(id) {
-      this.$Modal.confirm({
-        title: '提示',
-        content: '确认要重新发送吗？',
-        onOk: () => {
-          const loadMsg = this.$Message.loading({
-            content: '正在重新发送...',
-            duration: 0
-          })
-          recordReSend({ id }).then(res => {
-            loadMsg()
-            this.$Message.success(res.msg)
-            this.getList()
-          }).catch(error => {
-            loadMsg()
-            this.$Message.error(error.msg)
-            this.getList()
-          })
-        }
-      })
-    },
-    handleSmsSendReceipt(id) {
-      this.$Modal.confirm({
-        title: '提示',
-        content: '确认要获取发送回执吗？',
-        onOk: () => {
-          const loadMsg = this.$Message.loading({
-            content: '正在获取发送回执...',
-            duration: 0
-          })
-          getSmsSendReceipt(id).then(res => {
-            loadMsg()
-            this.$Message.success(res.msg)
-            this.getList()
-          }).catch(error => {
-            loadMsg()
-            this.$Message.error(error.msg)
-            this.getList()
-          })
-        }
-      })
     },
     changeLoading() {
       this.loading = false
@@ -244,7 +163,8 @@ export default {
       this.listQuery = {
         pageNumber: 1,
         pageSize: 10,
-        condition: null
+        processName: null,
+        processKey: null
       }
       this.getList()
     },
@@ -252,6 +172,41 @@ export default {
       this.$nextTick(() => {
         this.getList()
       })
+    },
+    delete(id) {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '确认要删除该部署吗？',
+        onOk: () => {
+          deleteProcessDefinition(id).then(res => {
+            this.$Message.success(res.msg)
+            this.getList()
+          }).catch(error => {
+            this.$Message.error(error.msg)
+          })
+        }
+      })
+    },
+    activeOrSuspend(processDefinitionId) {
+      activeSuspendProcessDefinition(processDefinitionId).then(res => {
+        this.$Message.success(res.msg)
+        this.getList()
+      }).catch(error => {
+        this.$Message.error(error.msg)
+      })
+    },
+    dropDownClick(e, row) {
+      switch (e) {
+        case 'activeOrSuspend':
+          this.activeOrSuspend(row.id)
+          break
+        case 'view':
+          this.view(row)
+          break
+        case 'delete':
+          this.delete(row.deploymentId)
+          break
+      }
     }
   }
 }
