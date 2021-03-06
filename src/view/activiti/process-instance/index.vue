@@ -3,10 +3,10 @@
     <Card>
       <Row class="search-con" type="flex" justify="space-between" align="middle" @keyup.enter.native="handleSearch">
         <Col>
-          流程部署名称：
-          <Input @on-clear="handleClear" clearable placeholder="流程部署名称" class="search-input" v-model="listQuery.processName"/>
-          流程部署key：
-          <Input @on-clear="handleClear" clearable placeholder="流程部署key" class="search-input" v-model="listQuery.processKey"/>
+          流程实例名称：
+          <Input @on-clear="handleClear" clearable placeholder="流程实例名称" class="search-input" v-model="listQuery.instanceName"/>
+          流程定义key：
+          <Input @on-clear="handleClear" clearable placeholder="流程定义key" class="search-input" v-model="listQuery.processKey"/>
           <Button @click="handleSearch" class="search-btn">查询</Button>
           <Button @click="handleCancel" class="search-btn">重置</Button>
         </Col>
@@ -15,16 +15,15 @@
       </Row>
       <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
         <template slot-scope="{ row, index }" slot="action">
-          <Button type="primary" v-permission="{rule:'user:add'}" size="small" style="margin: 5px" @click="startProcessInstance(row)">启动实例</Button>
+          <Button type="primary" v-permission="{rule:'user:add'}" size="small" style="margin: 5px" @click="activeOrSuspend(row.id)">{{row.suspensionState === 1 ? '挂起' : '激活'}}</Button>
           <Dropdown @on-click="dropDownClick($event, row)" transfer>
             <Button type="warning" size="small" style="margin: 5px">
               更多
               <Icon type="ios-arrow-down"></Icon>
             </Button>
             <DropdownMenu slot="list">
-              <DropdownItem v-permission="{rule:'user:add'}" name="activeOrSuspend">{{row.suspensionState === 1 ? '挂起' : '激活'}}</DropdownItem>
-              <DropdownItem v-permission="{rule:'user:add'}" name="view">查看</DropdownItem>
-              <DropdownItem v-permission="{rule:'user:add'}" name="delete">删除部署</DropdownItem>
+              <DropdownItem v-permission="{rule:'user:add'}" name="view">历史</DropdownItem>
+              <DropdownItem v-permission="{rule:'user:add'}" name="delete">删除实例</DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </template>
@@ -49,7 +48,7 @@
   </div>
 </template>
 <script>
-import { getProcessInstancePageList, deleteProcessDefinition, activeSuspendProcessDefinition } from '@/api/activiti'
+import { getProcessInstancePageList, deleteProcessInstance, activeSuspendProcessInstance } from '@/api/activiti'
 export default {
   name: 'process-instance',
   data() {
@@ -81,8 +80,9 @@ export default {
             )
           }
         },
+        { title: '实例状态', key: 'status', tooltip: true },
         {
-          title: '实例状态',
+          title: '实例挂起状态',
           width: 100,
           key: 'suspensionState',
           render: (h, params) => {
@@ -122,7 +122,7 @@ export default {
       listQuery: {
         pageNumber: 1,
         pageSize: 10,
-        processName: null,
+        instanceName: null,
         processKey: null
       }
     }
@@ -163,7 +163,7 @@ export default {
       this.listQuery = {
         pageNumber: 1,
         pageSize: 10,
-        processName: null,
+        instanceName: null,
         processKey: null
       }
       this.getList()
@@ -173,12 +173,12 @@ export default {
         this.getList()
       })
     },
-    delete(id) {
+    delete(id, reason) {
       this.$Modal.confirm({
         title: '提示',
         content: '确认要删除该部署吗？',
         onOk: () => {
-          deleteProcessDefinition(id).then(res => {
+          deleteProcessInstance(id, reason).then(res => {
             this.$Message.success(res.msg)
             this.getList()
           }).catch(error => {
@@ -188,7 +188,7 @@ export default {
       })
     },
     activeOrSuspend(processDefinitionId) {
-      activeSuspendProcessDefinition(processDefinitionId).then(res => {
+      activeSuspendProcessInstance(processDefinitionId).then(res => {
         this.$Message.success(res.msg)
         this.getList()
       }).catch(error => {
@@ -204,7 +204,7 @@ export default {
           this.view(row)
           break
         case 'delete':
-          this.delete(row.deploymentId)
+          this.delete(row.id, '想删就删, 任性')
           break
       }
     }

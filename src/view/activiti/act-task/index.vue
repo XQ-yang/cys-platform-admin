@@ -15,18 +15,7 @@
       </Row>
       <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
         <template slot-scope="{ row, index }" slot="action">
-          <Button type="primary" v-permission="{rule:'user:add'}" size="small" style="margin: 5px" @click="startProcessInstance(row)">启动实例</Button>
-          <Dropdown @on-click="dropDownClick($event, row)" transfer>
-            <Button type="warning" size="small" style="margin: 5px">
-              更多
-              <Icon type="ios-arrow-down"></Icon>
-            </Button>
-            <DropdownMenu slot="list">
-              <DropdownItem v-permission="{rule:'user:add'}" name="activeOrSuspend">{{row.suspensionState === 1 ? '挂起' : '激活'}}</DropdownItem>
-              <DropdownItem v-permission="{rule:'user:add'}" name="view">查看</DropdownItem>
-              <DropdownItem v-permission="{rule:'user:add'}" name="delete">删除部署</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+          <Button type="primary" v-permission="{rule:'user:add'}" size="small" style="margin: 5px" @click="completeTask(row)">办理</Button>
         </template>
       </Table>
       <div style="margin: 10px;overflow: hidden">
@@ -49,7 +38,7 @@
   </div>
 </template>
 <script>
-import { getActTaskPageList, deleteProcessDefinition, activeSuspendProcessDefinition } from '@/api/activiti'
+import { getActTaskPageList, completeTask } from '@/api/activiti'
 export default {
   name: 'process-instance',
   data() {
@@ -173,40 +162,13 @@ export default {
         this.getList()
       })
     },
-    delete(id) {
-      this.$Modal.confirm({
-        title: '提示',
-        content: '确认要删除该部署吗？',
-        onOk: () => {
-          deleteProcessDefinition(id).then(res => {
-            this.$Message.success(res.msg)
-            this.getList()
-          }).catch(error => {
-            this.$Message.error(error.msg)
-          })
-        }
-      })
-    },
-    activeOrSuspend(processDefinitionId) {
-      activeSuspendProcessDefinition(processDefinitionId).then(res => {
+    completeTask(row) {
+      completeTask(row.id).then(res => {
         this.$Message.success(res.msg)
         this.getList()
       }).catch(error => {
         this.$Message.error(error.msg)
       })
-    },
-    dropDownClick(e, row) {
-      switch (e) {
-        case 'activeOrSuspend':
-          this.activeOrSuspend(row.id)
-          break
-        case 'view':
-          this.view(row)
-          break
-        case 'delete':
-          this.delete(row.deploymentId)
-          break
-      }
     }
   }
 }
