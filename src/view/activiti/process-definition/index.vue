@@ -11,6 +11,8 @@
           <Button @click="handleCancel" class="search-btn">重置</Button>
         </Col>
         <Col>
+          <Button v-permission="{rule:'role:add'}" @click="uploadDrawingProcess()" class="search-btn">上传流程文件</Button>
+          <Button v-permission="{rule:'role:add'}" @click="onlineDrawingProcess()" class="search-btn">在线绘制流程</Button>
         </Col>
       </Row>
       <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
@@ -50,6 +52,7 @@
   </div>
 </template>
 <script>
+import { getToken } from '@/libs/util'
 import addProcessInstance from './add-process-instance'
 import { getProcessDefinitionPageList, deleteProcessDefinition, activeSuspendProcessDefinition } from '@/api/activiti'
 export default {
@@ -215,6 +218,12 @@ export default {
           this.delete(row.deploymentId)
           break
       }
+    },
+    onlineDrawingProcess() {
+      localStorage.setItem('VUE_APP_BASE_API', process.env.VUE_APP_BASE_API_URL)
+      localStorage.setItem('VUE_APP_ACCESS_TOKEN', getToken())
+      let url = '/bpmnjs/index.html?type=addBpmn'
+      window.open(url)
     }
   }
 }
