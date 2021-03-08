@@ -1,25 +1,33 @@
 <template>
 <div>
   <Modal
-    title="启动流程部署信息"
+    title="上传部署流程"
     v-model="visible"
     :loading="loading"
     @on-ok="submitHandle()"
     class-name="vertical-center-modal"
     :mask-closable="false">
-    <Form ref="addForm" :model="dataForm" :rules="rules" :label-width="100">
+    <Form ref="addForm" :model="dataForm" :rules="rules" :label-width="110">
     <Card dis-hover :bordered="false">
       <Row>
         <Col span="24">
-          <Form-item label="实例名称" prop="instanceName">
-            <Input type="text" v-model="dataForm.instanceName" :maxlength="20" placeholder="请填写实例名称"></Input>
+          <Form-item label="流程文件" prop="uploadList">
+            <file-upload
+              v-model="dataForm.uploadList"
+              :defaultFileList="defaultFileList"
+              :storeType="1"
+              :count="1"
+              :format="['bpmn', 'zip']"
+              accept=".bpmn, .zip" >
+              <div slot="tip" class="tip-style">注意: 最大20M, 必须为bpmn或zip格式</div>
+            </file-upload>
           </Form-item>
         </Col>
       </Row>
       <Row>
         <Col span="24">
-          <Form-item label="实例描述" prop="instanceDescription">
-            <Input type="textarea" :autosize="{minRows: 2, maxRows: 4}" v-model="dataForm.instanceDescription" :maxlength="200" placeholder="请填写实例描述"></Input>
+          <Form-item label="流程定义名称" prop="processDefinitionName">
+            <Input type="text" v-model="dataForm.processDefinitionName" :maxlength="20" placeholder="请填写流程定义名称"></Input>
           </Form-item>
         </Col>
       </Row>
@@ -29,27 +37,33 @@
 </div>
 </template>
 <script>
-import { startProcessInstance } from '@/api/activiti'
+import { deployProcessDefinition } from '@/api/activiti'
+import FileUpload from '_c/upload'
 export default {
-  name: 'AddProcessInstance',
+  name: 'UploadProcessDefinition',
+  components: {
+    FileUpload
+  },
   data() {
     return {
       visible: false,
       loading: true,
       dataFormSrc: {
-        definitionKey: null,
-        instanceName: null,
-        instanceDescription: null
+        processDefinitionName: null,
+        uploadList: [],
+        mediaId: null
       },
       dataForm: {},
       rules: {
-        instanceName: [
+        uploadList: [
+          { type: 'array', required: true, message: '必填项，不能为空', trigger: 'change' }
+        ],
+        processDefinitionName: [
           { type: 'string', required: true, message: '必填项，不能为空', trigger: 'blur' }
         ]
-      }
+      },
+      defaultFileList: []
     }
-  },
-  components: {
   },
   computed: {
   },
@@ -61,10 +75,11 @@ export default {
     showModal(row) {
       this.$refs['addForm'].resetFields()
       this.dataForm = {
-        definitionKey: row.key,
-        instanceName: null,
-        instanceDescription: null
+        mediaId: null,
+        processDefinitionName: null,
+        uploadList: []
       }
+      this.defaultFileList = []
       this.visible = true
     },
     // 页面初始化
@@ -78,9 +93,11 @@ export default {
         if (!valid) {
           return this.changeLoading()
         }
-        startProcessInstance(this.dataForm).then(res => {
+        this.dataForm.mediaId = this.dataForm.uploadList.map(file => file.id).join(',')
+        deployProcessDefinition(this.dataForm).then(res => {
           this.changeLoading()
           this.visible = false
+          this.$emit('refreshList')
           this.$Message.success(res.msg)
         }).catch(error => {
           this.changeLoading()
@@ -99,3 +116,9 @@ export default {
   }
 }
 </script>
+<style scoped>
+.tip-style {
+  color: red;
+  font-size: 12px;
+}
+</style>

@@ -20,20 +20,20 @@ export const deleteProcessDefinition = (deploymentId) => {
 }
 
 // 激活/挂起部署流程
-export const activeSuspendProcessDefinition = (processDefinitionId) => {
+export const activeSuspendProcessDefinition = (processDefinitionId, suspensionState) => {
   return axios.request({
     url: '/process-definition/active_suspend',
-    method: 'get',
-    params: { processDefinitionId }
+    method: 'post',
+    data: { processDefinitionId, suspensionState }
   })
 }
 
 // 部署流程
-export const deployProcessDefinition = (mediaId) => {
+export const deployProcessDefinition = (data) => {
   return axios.request({
     url: '/process-definition/deploy',
-    method: 'get',
-    params: { mediaId }
+    method: 'post',
+    data: data
   })
 }
 

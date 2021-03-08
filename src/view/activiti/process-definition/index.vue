@@ -49,16 +49,19 @@
       </div>
     </Card>
     <add-process-instance ref="addProcessInstance"></add-process-instance>
+    <upload-process-definition ref="uploadProcessDefinition" @refreshList="getList"></upload-process-definition>
   </div>
 </template>
 <script>
 import { getToken } from '@/libs/util'
 import addProcessInstance from './add-process-instance'
+import uploadProcessDefinition from './upload-process-definition'
 import { getProcessDefinitionPageList, deleteProcessDefinition, activeSuspendProcessDefinition } from '@/api/activiti'
 export default {
   name: 'process-definition',
   components: {
-    addProcessInstance
+    addProcessInstance,
+    uploadProcessDefinition
   },
   data() {
     return {
@@ -184,6 +187,9 @@ export default {
     startProcessInstance(row) {
       this.$refs.addProcessInstance.showModal(row)
     },
+    uploadDrawingProcess(row) {
+      this.$refs.uploadProcessDefinition.showModal(row)
+    },
     delete(id) {
       this.$Modal.confirm({
         title: '提示',
@@ -198,18 +204,24 @@ export default {
         }
       })
     },
-    activeOrSuspend(processDefinitionId) {
-      activeSuspendProcessDefinition(processDefinitionId).then(res => {
-        this.$Message.success(res.msg)
-        this.getList()
-      }).catch(error => {
-        this.$Message.error(error.msg)
+    activeOrSuspend(row) {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '确认要' + (row.suspensionState === 1 ? '挂起' : '激活') + '该部署吗？',
+        onOk: () => {
+          activeSuspendProcessDefinition(row.id, row.suspensionState === 1 ? 2 : 1).then(res => {
+            this.$Message.success(res.msg)
+            this.getList()
+          }).catch(error => {
+            this.$Message.error(error.msg)
+          })
+        }
       })
     },
     dropDownClick(e, row) {
       switch (e) {
         case 'activeOrSuspend':
-          this.activeOrSuspend(row.id)
+          this.activeOrSuspend(row)
           break
         case 'view':
           this.viewDrawingProcess(row)
