@@ -48,6 +48,7 @@
   </div>
 </template>
 <script>
+import { getToken } from '@/libs/util'
 import { getProcessInstancePageList, deleteProcessInstance, activeSuspendProcessInstance } from '@/api/activiti'
 export default {
   name: 'process-instance',
@@ -201,12 +202,19 @@ export default {
           this.activeOrSuspend(row.id)
           break
         case 'view':
-          this.view(row)
+          this.viewDrawingProcess(row)
           break
         case 'delete':
           this.delete(row.id, '想删就删, 任性')
           break
       }
+    },
+    viewDrawingProcess(row) {
+      localStorage.setItem('VUE_APP_BASE_API', process.env.VUE_APP_BASE_API_URL)
+      localStorage.setItem('VUE_APP_ACCESS_TOKEN', getToken())
+      // '/bpmnjs/index.html?type=lookBpmn&deploymentFileUUID=' + row.deploymentId + '&deploymentName=' + encodeURI(row.resourceName)
+      let url = '/bpmnjs/index.html?type=lookBpmn&instanceId=' + row.id + '&deploymentFileUUID=' + row.deploymentId + '&deploymentName=' + encodeURI(row.resourceName)
+      window.open(url)
     }
   }
 }
