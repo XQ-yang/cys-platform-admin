@@ -3,12 +3,12 @@
     <Card>
       <Row class="search-con" type="flex" justify="space-between" align="middle" @keyup.enter.native="handleSearch">
         <Col>
-          流程部署名称：
+          <!-- 流程部署名称：
           <Input @on-clear="handleClear" clearable placeholder="流程部署名称" class="search-input" v-model="listQuery.processName"/>
           流程部署key：
           <Input @on-clear="handleClear" clearable placeholder="流程部署key" class="search-input" v-model="listQuery.processKey"/>
           <Button @click="handleSearch" class="search-btn">查询</Button>
-          <Button @click="handleCancel" class="search-btn">重置</Button>
+          <Button @click="handleCancel" class="search-btn">重置</Button> -->
         </Col>
         <Col>
         </Col>
@@ -114,16 +114,15 @@ export default {
               this.$formatDate(params.row.endTime, 'yyyy-MM-dd hh:mm:ss')
             )
           }
-        }
+        },
+        { title: '办理人', key: 'assignee', tooltip: true }
       ],
       total: 0,
       tableLoading: false,
       loading: true,
       listQuery: {
         pageNumber: 1,
-        pageSize: 10,
-        processName: null,
-        processKey: null
+        pageSize: 10
       }
     }
   },
@@ -162,9 +161,7 @@ export default {
     handleCancel() {
       this.listQuery = {
         pageNumber: 1,
-        pageSize: 10,
-        processName: null,
-        processKey: null
+        pageSize: 10
       }
       this.getList()
     },

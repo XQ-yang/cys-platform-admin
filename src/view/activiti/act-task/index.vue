@@ -3,10 +3,10 @@
     <Card>
       <Row class="search-con" type="flex" justify="space-between" align="middle" @keyup.enter.native="handleSearch">
         <Col>
-          流程部署名称：
-          <Input @on-clear="handleClear" clearable placeholder="流程部署名称" class="search-input" v-model="listQuery.processName"/>
-          流程部署key：
-          <Input @on-clear="handleClear" clearable placeholder="流程部署key" class="search-input" v-model="listQuery.processKey"/>
+          流程名称：
+          <Input @on-clear="handleClear" clearable placeholder="流程名称" class="search-input" v-model="listQuery.taskName"/>
+          流程定义key：
+          <Input @on-clear="handleClear" clearable placeholder="流程定义key" class="search-input" v-model="listQuery.processKey"/>
           <Button @click="handleSearch" class="search-btn">查询</Button>
           <Button @click="handleCancel" class="search-btn">重置</Button>
         </Col>
@@ -111,7 +111,7 @@ export default {
       listQuery: {
         pageNumber: 1,
         pageSize: 10,
-        processName: null,
+        taskName: null,
         processKey: null
       }
     }
@@ -152,7 +152,7 @@ export default {
       this.listQuery = {
         pageNumber: 1,
         pageSize: 10,
-        processName: null,
+        taskName: null,
         processKey: null
       }
       this.getList()
