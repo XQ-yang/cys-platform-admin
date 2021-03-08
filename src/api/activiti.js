@@ -57,11 +57,11 @@ export const deleteProcessInstance = (processInstanceId, deleteReason) => {
 }
 
 // 激活/挂起流程实例
-export const activeSuspendProcessInstance = (processInstanceId) => {
+export const activeSuspendProcessInstance = (processInstanceId, suspensionState) => {
   return axios.request({
     url: '/process-instance/active_suspend',
-    method: 'get',
-    params: { processInstanceId }
+    method: 'post',
+    data: { processInstanceId, suspensionState }
   })
 }
 

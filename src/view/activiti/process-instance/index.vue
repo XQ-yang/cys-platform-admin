@@ -15,7 +15,7 @@
       </Row>
       <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
         <template slot-scope="{ row, index }" slot="action">
-          <Button type="primary" v-permission="{rule:'user:add'}" size="small" style="margin: 5px" @click="activeOrSuspend(row.id)">{{row.suspensionState === 1 ? '挂起' : '激活'}}</Button>
+          <Button type="primary" v-permission="{rule:'user:add'}" size="small" style="margin: 5px" @click="activeOrSuspend(row)">{{row.suspensionState === 1 ? '挂起' : '激活'}}</Button>
           <Dropdown @on-click="dropDownClick($event, row)" transfer>
             <Button type="warning" size="small" style="margin: 5px">
               更多
@@ -177,7 +177,7 @@ export default {
     delete(id, reason) {
       this.$Modal.confirm({
         title: '提示',
-        content: '确认要删除该部署吗？',
+        content: '确认要删除该流程实例吗？',
         onOk: () => {
           deleteProcessInstance(id, reason).then(res => {
             this.$Message.success(res.msg)
@@ -188,19 +188,22 @@ export default {
         }
       })
     },
-    activeOrSuspend(processDefinitionId) {
-      activeSuspendProcessInstance(processDefinitionId).then(res => {
-        this.$Message.success(res.msg)
-        this.getList()
-      }).catch(error => {
-        this.$Message.error(error.msg)
+    activeOrSuspend(row) {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '确认要' + (row.suspensionState === 1 ? '挂起' : '激活') + '该流程实例吗？',
+        onOk: () => {
+          activeSuspendProcessInstance(row.id, row.suspensionState === 1 ? 2 : 1).then(res => {
+            this.$Message.success(res.msg)
+            this.getList()
+          }).catch(error => {
+            this.$Message.error(error.msg)
+          })
+        }
       })
     },
     dropDownClick(e, row) {
       switch (e) {
-        case 'activeOrSuspend':
-          this.activeOrSuspend(row.id)
-          break
         case 'view':
           this.viewDrawingProcess(row)
           break
