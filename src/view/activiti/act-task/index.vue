@@ -53,7 +53,7 @@ export default {
           }
         },
         { title: '任务ID', key: 'id', tooltip: true },
-        { title: '任务名称', key: 'name', width: 200, tooltip: true },
+        { title: '任务名称', key: 'name', tooltip: true },
         { title: '流程实例名称', key: 'processInstanceName', tooltip: true },
         { title: '流程定义key', key: 'processDefinitionKey', tooltip: true },
         { title: '任务业务Key', key: 'businessKey', tooltip: true },

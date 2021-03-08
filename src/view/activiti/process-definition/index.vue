@@ -212,7 +212,7 @@ export default {
           this.activeOrSuspend(row.id)
           break
         case 'view':
-          this.view(row)
+          this.viewDrawingProcess(row)
           break
         case 'delete':
           this.delete(row.deploymentId)
@@ -223,6 +223,12 @@ export default {
       localStorage.setItem('VUE_APP_BASE_API', process.env.VUE_APP_BASE_API_URL)
       localStorage.setItem('VUE_APP_ACCESS_TOKEN', getToken())
       let url = '/bpmnjs/index.html?type=addBpmn'
+      window.open(url)
+    },
+    viewDrawingProcess(row) {
+      localStorage.setItem('VUE_APP_BASE_API', process.env.VUE_APP_BASE_API_URL)
+      localStorage.setItem('VUE_APP_ACCESS_TOKEN', getToken())
+      let url = '/bpmnjs/index.html?type=lookBpmn&deploymentFileUUID=' + row.deploymentId + '&deploymentName=' + encodeURI(row.resourceName)
       window.open(url)
     }
   }
