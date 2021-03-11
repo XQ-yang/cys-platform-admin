@@ -35,12 +35,17 @@
         </div>
       </div>
     </Card>
+    <data-form ref="dataForm"></data-form>
   </div>
 </template>
 <script>
-import { getActTaskPageList, completeTask } from '@/api/activiti'
+import DataForm from './data-form'
+import { getActTaskPageList, checkFormData, completeTask } from '@/api/activiti'
 export default {
   name: 'process-instance',
+  components: {
+    DataForm
+  },
   data() {
     return {
       list: [],
@@ -163,9 +168,25 @@ export default {
       })
     },
     completeTask(row) {
-      completeTask(row.id).then(res => {
-        this.$Message.success(res.msg)
-        this.getList()
+      checkFormData(row.id).then(res => {
+        if (res && res.data) {
+          // 传入taskId的值, 然后弹出层显示出来
+          let taskId = row.id
+          this.$refs.dataForm.showModal(taskId)
+        } else {
+          this.$Modal.confirm({
+            title: '提示',
+            content: '确认要办理该任务吗？',
+            onOk: () => {
+              completeTask(row.id).then(res => {
+                this.$Message.success(res.msg)
+                this.getList()
+              }).catch(error => {
+                this.$Message.error(error.msg)
+              })
+            }
+          })
+        }
       }).catch(error => {
         this.$Message.error(error.msg)
       })

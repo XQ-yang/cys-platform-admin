@@ -93,6 +93,24 @@ export const completeTask = (taskId) => {
   })
 }
 
+// 获取用户任务表单信息
+export const getFormData = (taskId) => {
+  return axios.request({
+    url: '/act-task/get_form_data',
+    method: 'get',
+    params: { taskId }
+  })
+}
+
+// 获取用户任务是否有表单信息
+export const checkFormData = (taskId) => {
+  return axios.request({
+    url: '/act-task/check_form_data',
+    method: 'get',
+    params: { taskId }
+  })
+}
+
 // -------历史任务相关-------------------------------------
 // 分页获取历史任务列表
 export const getActHistoryPageList = (query) => {

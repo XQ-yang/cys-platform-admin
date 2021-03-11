@@ -1,0 +1,127 @@
+<template>
+<div>
+  <Modal
+    :title="formInfo.formName"
+    v-model="visible"
+    :loading="loading"
+    @on-ok="submitHandle()"
+    class-name="vertical-center-modal"
+    :mask-closable="false">
+    <Card dis-hover :bordered="false">
+      <Form
+        ref="dataForm"
+        :model="dataForm"
+        :label-width="labelWidth">
+        <Row
+          v-if="formInfo.formDataItemList && formInfo.formDataItemList.length"
+          v-for="(item, index) in formInfo.formDataItemList"
+          :key="index">
+          <Col span="24">
+            <FormItem
+            :label="item.controlName"
+            :rules="{required: item.isRequired, message: item.controlName + '不能为空', trigger: 'blur'}"
+            :prop="item.controlId">
+              <Input v-if="item.controlType === 'input'" type="text" v-model="dataForm[item.controlId]" :maxlength="30" :placeholder="item.placeHolder"></Input>
+              <DatePicker v-else-if="item.controlType === 'date-picker'" v-model="dataForm[item.controlId]" type="date" style="width: 100%;" :placeholder="item.placeHolder"></DatePicker>
+            </FormItem>
+          </Col>
+        </Row>
+      </Form>
+    </Card>
+  </Modal>
+</div>
+</template>
+<script>
+import { getFormData, submitFormData } from '@/api/activiti'
+export default {
+  name: 'DataForm',
+  props: {
+    taskId: {
+      type: String,
+      default: null
+    }
+  },
+  data() {
+    return {
+      visible: false,
+      labelWidth: 80,
+      loading: true,
+      formInfo: {},
+      dataForm: {},
+      rules: {
+        taskId: [
+          { type: 'string', required: true, message: '必填项，不能为空', trigger: 'blur' }
+        ]
+      }
+    }
+  },
+  components: {
+  },
+  computed: {
+  },
+  created() {
+  },
+  mounted() {
+  },
+  watch: {
+    // taskId: {
+    //   immediate: true,
+    //   handler(value) {
+    //     if (value) {
+    //       this.taskId = value
+    //       getFormData(this.taskId).then(res => {
+    //         if (res && res.data) {
+    //           this.formInfo = res.data
+    //         }
+    //       }).catch(error => {
+    //         this.$Message.error(error.msg)
+    //       })
+    //     }
+    //   }
+    // }
+  },
+  methods: {
+    showModal(taskId) {
+      this.init(taskId)
+    },
+    // 页面初始化
+    init(taskId) {
+      this.$refs['dataForm'].resetFields()
+      if (taskId) {
+        getFormData(taskId).then(res => {
+          if (res && res.data) {
+            this.formInfo = res.data
+          }
+          this.visible = true
+        }).catch(error => {
+          this.$Message.error(error.msg)
+        })
+      }
+    },
+    // 提交表单
+    submitHandle() {
+      this.$refs['dataForm'].validate(valid => {
+        if (!valid) {
+          return this.changeLoading()
+        }
+        submitFormData(this.dataForm).then(res => {
+          this.changeLoading()
+          this.visible = false
+          this.$Message.success(res.msg)
+        }).catch(error => {
+          this.changeLoading()
+          this.visible = true
+          this.$Message.error(error.msg)
+        })
+      })
+    },
+    // 按钮加载
+    changeLoading() {
+      this.loading = false
+      this.$nextTick(() => {
+        this.loading = true
+      })
+    }
+  }
+}
+</script>
