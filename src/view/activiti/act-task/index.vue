@@ -172,7 +172,7 @@ export default {
         if (res && res.data) {
           // 传入taskId的值, 然后弹出层显示出来
           let taskId = row.id
-          this.$refs.dataForm.showModal(taskId)
+          this.$refs.dataForm.showModal(taskId, row.processInstanceId)
         } else {
           this.$Modal.confirm({
             title: '提示',

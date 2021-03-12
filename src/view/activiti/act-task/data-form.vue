@@ -10,6 +10,37 @@
     :mask-closable="false">
     <Card dis-hover :bordered="false">
       <Form
+        v-if="historyFormList && historyFormList.length"
+        v-for="historyForm in historyFormList"
+        :key="historyForm.formId"
+        :ref="historyForm.formKey"
+        :model="historyForm"
+        :label-width="labelWidth">
+        <Divider orientation="left">{{"【" + historyForm.assignee + "】：" + historyForm.formName}}</Divider>
+        <Row
+          v-if="historyForm.formDataItemList && historyForm.formDataItemList.length"
+          v-for="(item, index) in historyForm.formDataItemList"
+          :key="index">
+          <Col span="24">
+            <FormItem
+            :label="item.controlName"
+            :rules="{required: item.isRequired, message: item.controlName + '不能为空', trigger: 'blur'}"
+            :prop="item.controlId">
+              <Input v-if="item.controlType === 'input'" type="text" v-model="item.userVal" :maxlength="30" :placeholder="item.placeHolder" disabled></Input>
+              <Input v-else-if="item.controlType === 'text-area'" type="textarea" :autosize="{minRows: 2, maxRows: 4}" v-model="dataForm[item.controlId]" :placeholder="item.placeHolder" :maxlength="1000" disabled></Input>
+              <DatePicker v-else-if="item.controlType === 'date-picker'" v-model="dataForm[item.controlId]" type="date" style="width: 100%;" :placeholder="item.placeHolder" disabled></DatePicker>
+              <RadioGroup v-else-if="item.controlType === 'radio'" v-model="dataForm[item.controlId]">
+                <Radio v-for="innerItem in JSON.parse(item.optionalVal)" :label="innerItem.value" :key="innerItem.value" disabled>{{innerItem.label}}</Radio>
+              </RadioGroup>
+              <Select v-else-if="item.controlType === 'select'" v-model="dataForm[item.controlId]">
+                <Option v-for="innerItem in JSON.parse(item.optionalVal)" :value="innerItem.value" :key="innerItem.value" disabled>{{ innerItem.label }}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+        </Row>
+      <Divider></Divider>
+      </Form>
+      <Form
         ref="dataForm"
         :model="dataForm"
         :label-width="labelWidth">
@@ -40,7 +71,7 @@
 </div>
 </template>
 <script>
-import { getFormData, saveFormData } from '@/api/activiti'
+import { getHistoryFormData, getFormData, saveFormData } from '@/api/activiti'
 export default {
   name: 'DataForm',
   props: {
@@ -54,6 +85,7 @@ export default {
       visible: false,
       labelWidth: 80,
       loading: true,
+      historyFormList: [],
       formInfo: {},
       dataForm: {},
       rules: {
@@ -89,11 +121,11 @@ export default {
     // }
   },
   methods: {
-    showModal(taskId) {
-      this.init(taskId)
+    showModal(taskId, processInstanceId) {
+      this.init(taskId, processInstanceId)
     },
     // 页面初始化
-    init(taskId) {
+    init(taskId, processInstanceId) {
       this.$refs['dataForm'].resetFields()
       if (taskId) {
         getFormData(taskId).then(res => {
@@ -101,6 +133,13 @@ export default {
             this.formInfo = res.data
           }
           this.visible = true
+        }).catch(error => {
+          this.$Message.error(error.msg)
+        })
+        getHistoryFormData(processInstanceId).then(res => {
+          if (res && res.data) {
+            this.historyFormList = res.data
+          }
         }).catch(error => {
           this.$Message.error(error.msg)
         })

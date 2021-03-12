@@ -138,3 +138,12 @@ export const getHighLine = (instanceId) => {
     params: { instanceId }
   })
 }
+
+// 获取已完成任务表单数据
+export const getHistoryFormData = (instanceId) => {
+  return axios.request({
+    url: '/act-history/get_history_form_data',
+    method: 'get',
+    params: { instanceId }
+  })
+}
