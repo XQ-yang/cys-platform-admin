@@ -16,7 +16,7 @@
         :ref="historyForm.formKey"
         :model="historyForm"
         :label-width="labelWidth">
-        <Divider orientation="left">{{"【" + historyForm.assignee + "】：" + historyForm.formName}}</Divider>
+        <Divider style="margin-top: -10px;" orientation="left">{{"【" + historyForm.assignee + "】：" + historyForm.formName}}</Divider>
         <Row
           v-if="historyForm.formDataItemList && historyForm.formDataItemList.length"
           v-for="(item, index) in historyForm.formDataItemList"
@@ -38,8 +38,9 @@
             </FormItem>
           </Col>
         </Row>
-      <Divider></Divider>
       </Form>
+
+      <Divider style="margin-top: -10px;" orientation="left">{{"【" + formInfo.assignee + "】：" + formInfo.formName}}</Divider>
       <Form
         ref="dataForm"
         :model="dataForm"

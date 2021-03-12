@@ -17,15 +17,25 @@
             <div slot="content">
               <p>表单属性id必须满足如下格式：</p>
               <p>{</p>
+                <p>// 控件id(控件编号)</p>
                 <p>"controlId": "approve",</p>
+                <p>// 控件名称</p>
                 <p>"controlName": "是否批准",</p>
+                <p>// 控件类型(input, date-picker, radio, checkbox, switch, select, city-select)</p>
                 <p>"controlType": "radio",</p>
+                <p>// 数据类型(string, number, date, array)</p>
                 <p>"dataType": "number",</p>
+                <p>// 可选值[{"label": "名称", "value": "值"},{"label1": "名称1", "value1": "值1"}]</p>
                 <p>"optionalVal": "[{ \"label\": \"批准\", \"value\": \"1\"}, { \"label\": \"驳回\", \"value\": \"0\"}]",</p>
+                <p>// 是否必填(0: 否, 1: 是)</p>
                 <p>"isRequired": true,</p>
+                <p>// 输入提示语</p>
                 <p>"placeHolder": "请选择是否同意",</p>
+                <p>// 默认值</p>
                 <p>"defaultVal": null,</p>
+                <p>// 是否作为下一流程参数(0: 否, 1: 是)</p>
                 <p>"isParam": true,</p>
+                <p>// 校验约束</p>
                 <p>"validateConstraint": null</p>
               <p>}</p>
             </div>
