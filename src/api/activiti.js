@@ -111,6 +111,15 @@ export const checkFormData = (taskId) => {
   })
 }
 
+// 保存用户任务表单数据
+export const saveFormData = (data) => {
+  return axios.request({
+    url: '/act-task/save_form_data',
+    method: 'post',
+    data: data
+  })
+}
+
 // -------历史任务相关-------------------------------------
 // 分页获取历史任务列表
 export const getActHistoryPageList = (query) => {

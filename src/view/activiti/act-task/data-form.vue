@@ -4,6 +4,7 @@
     :title="formInfo.formName"
     v-model="visible"
     :loading="loading"
+    ok-text="提交"
     @on-ok="submitHandle()"
     class-name="vertical-center-modal"
     :mask-closable="false">
@@ -32,7 +33,7 @@
 </div>
 </template>
 <script>
-import { getFormData, submitFormData } from '@/api/activiti'
+import { getFormData, saveFormData } from '@/api/activiti'
 export default {
   name: 'DataForm',
   props: {
@@ -104,7 +105,23 @@ export default {
         if (!valid) {
           return this.changeLoading()
         }
-        submitFormData(this.dataForm).then(res => {
+        let data = {
+          taskId: this.formInfo.taskId,
+          procDefId: this.formInfo.procDefId,
+          businessKey: this.formInfo.businessKey,
+          formId: this.formInfo.formId,
+          formKey: this.formInfo.formKey
+        }
+        if (this.formInfo.formDataItemList && this.formInfo.formDataItemList.length) {
+          let itemList = this.formInfo.formDataItemList.map(item => {
+            return {
+              controlId: item.controlId,
+              userVal: this.dataForm[item.controlId]
+            }
+          })
+          data.itemList = itemList
+        }
+        saveFormData(data).then(res => {
           this.changeLoading()
           this.visible = false
           this.$Message.success(res.msg)
