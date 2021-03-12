@@ -23,10 +23,14 @@
             :rules="{required: item.isRequired, message: item.controlName + '不能为空', trigger: 'blur'}"
             :prop="item.controlId">
               <Input v-if="item.controlType === 'input'" type="text" v-model="dataForm[item.controlId]" :maxlength="30" :placeholder="item.placeHolder"></Input>
+              <Input v-else-if="item.controlType === 'text-area'" type="textarea" :autosize="{minRows: 2, maxRows: 4}" v-model="dataForm[item.controlId]" :placeholder="item.placeHolder" :maxlength="1000"></Input>
               <DatePicker v-else-if="item.controlType === 'date-picker'" v-model="dataForm[item.controlId]" type="date" style="width: 100%;" :placeholder="item.placeHolder"></DatePicker>
               <RadioGroup v-else-if="item.controlType === 'radio'" v-model="dataForm[item.controlId]">
                 <Radio v-for="innerItem in JSON.parse(item.optionalVal)" :label="innerItem.value" :key="innerItem.value">{{innerItem.label}}</Radio>
               </RadioGroup>
+              <Select v-else-if="item.controlType === 'select'" v-model="dataForm[item.controlId]">
+                <Option v-for="innerItem in JSON.parse(item.optionalVal)" :value="innerItem.value" :key="innerItem.value">{{ innerItem.label }}</Option>
+              </Select>
             </FormItem>
           </Col>
         </Row>
