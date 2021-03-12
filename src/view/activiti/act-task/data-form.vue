@@ -24,6 +24,9 @@
             :prop="item.controlId">
               <Input v-if="item.controlType === 'input'" type="text" v-model="dataForm[item.controlId]" :maxlength="30" :placeholder="item.placeHolder"></Input>
               <DatePicker v-else-if="item.controlType === 'date-picker'" v-model="dataForm[item.controlId]" type="date" style="width: 100%;" :placeholder="item.placeHolder"></DatePicker>
+              <RadioGroup v-else-if="item.controlType === 'radio'" v-model="dataForm[item.controlId]">
+                <Radio v-for="innerItem in JSON.parse(item.optionalVal)" :label="innerItem.value" :key="innerItem.value">{{innerItem.label}}</Radio>
+              </RadioGroup>
             </FormItem>
           </Col>
         </Row>
