@@ -12,7 +12,24 @@
         </Col>
         <Col>
           <Button v-permission="{rule:'role:add'}" @click="uploadDrawingProcess()" class="search-btn">上传流程文件</Button>
-          <Button v-permission="{rule:'role:add'}" @click="onlineDrawingProcess()" class="search-btn">在线绘制流程</Button>
+          <Tooltip>
+            <Button v-permission="{rule:'role:add'}" @click="onlineDrawingProcess()" class="search-btn">在线绘制流程</Button>
+            <div slot="content">
+              <p>表单属性id必须满足如下格式：</p>
+              <p>{</p>
+                <p>"controlId": "approve",</p>
+                <p>"controlName": "是否批准",</p>
+                <p>"controlType": "radio",</p>
+                <p>"dataType": "number",</p>
+                <p>"optionalVal": "[{ \"label\": \"批准\", \"value\": \"1\"}, { \"label\": \"驳回\", \"value\": \"0\"}]",</p>
+                <p>"isRequired": true,</p>
+                <p>"placeHolder": "请选择是否同意",</p>
+                <p>"defaultVal": null,</p>
+                <p>"isParam": true,</p>
+                <p>"validateConstraint": null</p>
+              <p>}</p>
+            </div>
+          </Tooltip>
         </Col>
       </Row>
       <Table :data="list" :columns="tableColumns" :loading="tableLoading" border stripe>
