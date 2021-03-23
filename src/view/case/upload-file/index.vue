@@ -23,7 +23,8 @@
     </Upload>
     <file-upload
       v-model="uploadList1"
-      :storeType="1"
+      :default-file-list="defaultFileList"
+      :storeType="3"
       :count="5"
       :format="['jpg', 'jpeg', 'png', 'gif']"
       accept=".jpg, .jpeg, .png, .gif" >
@@ -42,6 +43,7 @@ export default {
   },
   data() {
     return {
+      defaultFileList: [27, 28],
       uploadList: [],
       uploadList1: [],
       actionUrl: this.$baseUrl + '/upload/local_single',
