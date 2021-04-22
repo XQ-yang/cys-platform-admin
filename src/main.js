@@ -21,7 +21,6 @@ import Bus from './bus'
 
 Vue.use(ViewUI)
 Vue.prototype.$bus=Bus
-const fileUrl = process.env.VUE_APP_FILE_URL
 const baseUrl = process.env.VUE_APP_BASE_API_URL
 /**
  * @description 注册admin内置插件
@@ -35,10 +34,6 @@ Vue.config.productionTip = false
  * @description 全局注册应用配置
  */
 Vue.prototype.$config = config
-/**
- * @description 全局注册文件模板基础路径
- */
-Vue.prototype.$fileUrl = fileUrl
 /**
  * @description 全局注册后端基础路径
  */
