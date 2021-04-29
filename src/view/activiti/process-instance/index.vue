@@ -58,17 +58,18 @@ export default {
       tableColumns: [
         {
           title: '序号',
+          fixed: 'left',
           width: 80,
           render: (h, params) => {
             return h('span', params.index + (this.listQuery.pageNumber - 1) * this.listQuery.pageSize + 1)
           }
         },
-        { title: '流程实例ID', key: 'id', tooltip: true },
-        { title: '流程实例名称', key: 'name', width: 200, tooltip: true },
-        { title: '流程定义ID', key: 'processDefinitionId', width: 320, tooltip: true },
-        { title: '流程定义key', key: 'processDefinitionKey', tooltip: true },
+        { title: '流程实例ID', key: 'id', width: 320, fixed: 'left', tooltip: true },
+        { title: '流程实例名称', key: 'name', width: 130, tooltip: true },
+        { title: '流程定义ID', key: 'processDefinitionId', width: 130, tooltip: true },
+        { title: '流程定义key', key: 'processDefinitionKey', width: 130, tooltip: true },
         { title: '部署版本', key: 'processDefinitionVersion', width: 100, tooltip: true },
-        { title: '流程文件名称', key: 'resourceName', tooltip: true },
+        { title: '流程文件名称', key: 'resourceName', width: 200, tooltip: true },
         {
           title: '实例开始时间',
           key: 'startTime',
@@ -81,10 +82,10 @@ export default {
             )
           }
         },
-        { title: '实例状态', key: 'status', tooltip: true },
+        { title: '实例状态', key: 'status', width: 100, tooltip: true },
         {
           title: '实例挂起状态',
-          width: 100,
+          width: 130,
           key: 'suspensionState',
           render: (h, params) => {
             const row = params.row

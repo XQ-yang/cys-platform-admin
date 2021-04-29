@@ -53,15 +53,16 @@ export default {
         {
           title: '序号',
           width: 80,
+          fixed: 'left',
           render: (h, params) => {
             return h('span', params.index + (this.listQuery.pageNumber - 1) * this.listQuery.pageSize + 1)
           }
         },
-        { title: '任务ID', key: 'id', tooltip: true },
-        { title: '任务名称', key: 'name', tooltip: true },
-        { title: '流程实例名称', key: 'processInstanceName', tooltip: true },
-        { title: '流程定义key', key: 'processDefinitionKey', tooltip: true },
-        { title: '任务业务Key', key: 'businessKey', tooltip: true },
+        { title: '任务ID', key: 'id', width: 130, fixed: 'left', tooltip: true },
+        { title: '任务名称', key: 'name', width: 130, tooltip: true },
+        { title: '流程实例名称', key: 'processInstanceName', width: 160, tooltip: true },
+        { title: '流程定义key', key: 'processDefinitionKey', width: 130, tooltip: true },
+        { title: '任务业务Key', key: 'businessKey', width: 130, tooltip: true },
         {
           title: '任务创建时间',
           key: 'createTime',
@@ -74,10 +75,10 @@ export default {
             )
           }
         },
-        { title: '任务状态', key: 'status', tooltip: true },
+        { title: '任务状态', key: 'status', width: 130, tooltip: true },
         {
           title: '任务挂起状态',
-          width: 100,
+          width: 130,
           key: 'suspensionState',
           render: (h, params) => {
             const row = params.row

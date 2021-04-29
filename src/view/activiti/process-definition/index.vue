@@ -57,6 +57,9 @@
             </DropdownMenu>
           </Dropdown>
         </template>
+        <template slot-scope="{ row, index }" slot="suspensionState">
+          <Badge :type="row.suspensionState === 1 ? 'primary' : 'error'" :text="row.suspensionState === 1 ? '激活' : '挂起'"></Badge>
+        </template>
       </Table>
       <div style="margin: 10px;overflow: hidden">
         <div style="float: right;">
@@ -96,17 +99,18 @@ export default {
       tableColumns: [
         {
           title: '序号',
+          fixed: 'left',
           width: 80,
           render: (h, params) => {
             return h('span', params.index + (this.listQuery.pageNumber - 1) * this.listQuery.pageSize + 1)
           }
         },
-        { title: '部署ID', key: 'deploymentId', width: 320, tooltip: true },
-        { title: '流程定义ID', key: 'id', tooltip: true },
+        { title: '部署ID', key: 'deploymentId', width: 330, fixed: 'left', tooltip: true },
+        { title: '流程定义ID', key: 'id', width: 130, tooltip: true },
         { title: '流程定义名称', key: 'name', width: 200, tooltip: true },
-        { title: '流程定义key', key: 'key', tooltip: true },
+        { title: '流程定义key', key: 'key', width: 130, tooltip: true },
         { title: '部署版本', key: 'version', width: 100, tooltip: true },
-        { title: '流程文件名称', key: 'resourceName', tooltip: true },
+        { title: '流程文件名称', key: 'resourceName', width: 130, tooltip: true },
         {
           title: '部署时间',
           key: 'deployTime',
@@ -122,37 +126,33 @@ export default {
         {
           title: '部署状态',
           width: 100,
-          key: 'suspensionState',
-          render: (h, params) => {
-            const row = params.row
-            let text = null
-            let type = null
-            switch (row.suspensionState) {
-              case 1:
-                text = '激活'
-                type = 'primary'
-                break
-              case 2:
-                text = '挂起'
-                type = 'error'
-                break
-            }
-            return h('Badge',
-              {
-                props: {
-                  type: type,
-                  text: text
-                }
-              })
-          }
-        },
-        {
-          title: '操作',
-          slot: 'action',
           align: 'center',
-          width: 210,
-          fixed: 'right'
-        }
+          key: 'suspensionState',
+          slot: 'suspensionState'
+          // render: (h, params) => {
+          //   const row = params.row
+          //   let text = null
+          //   let type = null
+          //   switch (row.suspensionState) {
+          //     case 1:
+          //       text = '激活'
+          //       type = 'primary'
+          //       break
+          //     case 2:
+          //       text = '挂起'
+          //       type = 'error'
+          //       break
+          //   }
+          //   return h('Badge',
+          //     {
+          //       props: {
+          //         type: type,
+          //         text: text
+          //       }
+          //     })
+          // }
+        },
+        { title: '操作', slot: 'action', align: 'center', width: 210, fixed: 'right' }
       ],
       total: 0,
       tableLoading: false,
