@@ -43,7 +43,7 @@ export default {
   },
   data() {
     return {
-      defaultFileList: [27, 28],
+      defaultFileList: [27, 28, 'https://mmbiz.qpic.cn/mmbiz_gif/21cOFPsKNm8qyJo8OicOnyyhk1WYHF3J5iakozy9e1WFqygicfS27RQV0TTYPLibPjWMUibzQiaZe3xdLZbXA91WI6fg/640?wx_fmt=gif&tp=webp&wxfrom=5&wx_lazy=1'],
       uploadList: [],
       uploadList1: [],
       actionUrl: this.$baseUrl + '/upload/local_single',

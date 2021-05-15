@@ -7,7 +7,7 @@
             :mask-closable="true"
             :styles="styles"
         >
-          <Tree v-if="treeList && treeList.length" :data="treeList" show-checkbox  check-directly ref="roleTree"></Tree>
+          <Tree v-if="treeList && treeList.length" :data="treeList" show-checkbox check-directly ref="roleTree" style="margin-bottom: 30px;"></Tree>
           <Spin v-else fix>
             <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
             <div>加载中...</div>

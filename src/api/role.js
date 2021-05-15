@@ -57,18 +57,3 @@ export const getRoleMenuById = (id) => {
     params: { roleId: id }
   })
 }
-// 根据角色id获取全部的部门标记已选权限
-export const getRoleDeptById = (id) => {
-  return axios.request({
-    url: '/role/get_depts_by_role_id',
-    method: 'get',
-    params: { roleId: id }
-  })
-}
-export const setDeptRoles = (deptRoles) => {
-  return axios.request({
-    url: '/role/save_role_dept',
-    method: 'post',
-    data: deptRoles
-  })
-}
