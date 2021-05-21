@@ -129,8 +129,8 @@ export default {
           align: 'center',
           minWidth: 80,
           render: (h, params) => {
-            const row = params.row
-            let text = this.$options.filters.genderFilter(row.sex)
+            const sex = params.row.sex
+            let text = this.$options.filters.genderFilter(sex)
             return h('div', text)
           }
         },
@@ -221,6 +221,7 @@ export default {
 
   filters: {
     genderFilter(gender) {
+      if (!gender) return '未知'
       const genderMap = ['未知', '男', '女']
       return genderMap[gender]
     }

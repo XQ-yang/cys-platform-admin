@@ -147,8 +147,8 @@ export default {
           width: 100,
           render: (h, params) => {
             const row = params.row
-            const text = row.responseCode === 0 ? '正常' : '异常'
-            const color = row.responseCode === 0 ? 'green' : 'red'
+            const text = row.responseCode === 2000 ? '正常' : '异常'
+            const color = row.responseCode === 2000 ? 'green' : 'red'
             return h('Badge',
               {
                 props: {
