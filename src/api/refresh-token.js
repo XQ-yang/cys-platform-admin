@@ -7,11 +7,13 @@ export default async() => {
   let client_id = 'admin-web'
   let client_secret = '4402b06a67334d769fed712453284dae'
   let refresh_token = localRead('refreshToken')
+  let auth_type = 'admin-web'
   const refreshData = {
     grant_type: grant_type,
     client_id: client_id,
     client_secret: client_secret,
-    refresh_token: refresh_token
+    refresh_token: refresh_token,
+    auth_type: auth_type
   }
   try {
     const res = await axios.request({

@@ -112,7 +112,7 @@ export default {
       type: String,
       default: 'picture-card'
     },
-    // 1: 本地存储, 2: 七牛OSS, 3: 阿里OSS
+    // 1: 本地存储, 2: 七牛OSS, 3: 阿里OSS, 4: minio
     storeType: {
       type: Number,
       default: 1
@@ -257,25 +257,33 @@ export default {
       this.value.splice(0, this.value.length)
       this.cpDefaultFileList = []
       if (fileList && fileList.length) {
-        let ids = fileList.map(m => {
-          let id
-          if (typeof m === 'number') {
-            id = m
-          } else if (typeof m === 'string') {
-            id = parseInt(m)
-          } else if (typeof m === 'object' && m.id && typeof m.id === 'number') {
-            id = m.id
-          }
-          return id
-        })
         let newValue = []
-        await getMediaListInfo(ids).then(async res => {
-          let medias = res.data
-          newValue = medias
-          this.cpDefaultFileList = medias
-        }).catch(error => {
-          this.$Message.error(error.msg)
+        let ids = []
+        fileList.forEach(obj => {
+          if (typeof obj === 'number') {
+            ids.push(obj)
+          } else if (typeof obj === 'string') {
+            if (obj.indexOf('http://') === 0 || obj.indexOf('https://') === 0) {
+              newValue.push({
+                mediaType: 1,
+                url: obj
+              })
+            } else {
+              ids.push(parseInt(obj))
+            }
+          } else if (typeof m === 'object' && obj.id && typeof obj.id === 'number') {
+            ids.push(obj.id)
+          }
         })
+        if (ids && ids.length) {
+          await getMediaListInfo(ids).then(async res => {
+            let medias = res.data
+            medias.map(m => newValue.push(m))
+          }).catch(error => {
+            this.$Message.error(error.msg)
+          })
+        }
+        this.cpDefaultFileList = newValue
         if (newValue.length) {
           newValue.forEach(m => this.value.push(m))
         }

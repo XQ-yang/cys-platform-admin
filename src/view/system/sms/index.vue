@@ -3,9 +3,9 @@
     <Card>
       <Row class="search-con" type="flex" justify="space-between" align="middle" @keyup.enter.native="handleSearch">
         <Col>
-          <Input style="width:300px;" @on-clear="handleClear" clearable placeholder="手机号/发送内容" class="search-input" v-model="listQuery.condition"/>
-          <Button @click="handleSearch" class="search-btn" icon="ios-search">搜索</Button>
-          <Button @click="handleCancel" icon="ios-close-circle-outline">取消</Button>
+          手机号/发送内容： <Input style="width:300px;" @on-clear="handleClear" clearable placeholder="手机号/发送内容" class="search-input" v-model="listQuery.condition"/>
+          <Button @click="handleSearch" class="search-btn">查询</Button>
+          <Button @click="handleCancel" class="search-btn">重置</Button>
         </Col>
         <Col>
         </Col>
@@ -45,7 +45,7 @@ export default {
       tableColumns: [
         {
           title: '序号',
-          width: 65,
+          width: 80,
           render: (h, params) => {
             return h('span', params.index + (this.listQuery.pageNumber - 1) * this.listQuery.pageSize + 1)
           }
@@ -149,7 +149,9 @@ export default {
         {
           title: '操作',
           slot: 'action',
-          align: 'center'
+          align: 'center',
+          width: 210,
+          fixed: 'right'
         }
       ],
       total: 0,

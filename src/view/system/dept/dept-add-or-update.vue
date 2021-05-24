@@ -1,6 +1,6 @@
 <template>
   <div>
-      <Modal
+    <Modal
       v-model="visible"
       :title="returnModalTitle"
       :loading="loading"
@@ -10,39 +10,39 @@
       width="700"
       class="editForm"
       >
-        <Form ref="deptForm" :model="dataForm" :rules="rules" :label-width="100">
-          <Form-item label="所属机构" prop="orgName">
-            <Poptip trigger='click' v-model="orgVisible" placement="bottom-start" >
-              <Input type="text" v-model="dataForm.orgName" :readonly='true' :maxlength="20"></Input>
-              <div slot="content">
-                <Tree
-                :data='selectOrgData'
-                :multiple='false'
-                @on-select-change='handleOrgTreeSelectChange'
-                ></Tree>
-              </div>
-            </Poptip>
-          </Form-item>
-          <Form-item label="名称" prop="deptName">
-            <Input v-model="dataForm.deptName" type="text"  :maxlength="20"></Input>
-          </Form-item>
-          <Form-item label="上级部门" prop="parentName">
-            <Poptip trigger='click' v-model="popVisible" placement="bottom-start" >
-              <Input type="text" v-model="dataForm.parentName" :readonly='true' :maxlength="20"></Input>
-              <div slot="content">
-                <Tree
-                :data='selectData'
-                :multiple='false'
-                @on-select-change='handleTreeSelectChange'
-                ></Tree>
-              </div>
-            </Poptip>
-          </Form-item>
-          <Form-item label="排序" prop="sort">
-            <Input v-model="dataForm.sort" type="number"  :maxlength="6"></Input>
-          </Form-item>
-        </Form>
-      </Modal>
+      <Form ref="deptForm" :model="dataForm" :rules="rules" :label-width="100">
+        <Form-item label="所属机构" prop="orgName">
+          <Poptip trigger='click' v-model="orgVisible" placement="bottom-start" >
+            <Input type="text" v-model="dataForm.orgName" :readonly='true' :maxlength="20"></Input>
+            <div slot="content">
+              <Tree
+              :data='selectOrgData'
+              :multiple='false'
+              @on-select-change='handleOrgTreeSelectChange'
+              ></Tree>
+            </div>
+          </Poptip>
+        </Form-item>
+        <Form-item label="名称" prop="deptName">
+          <Input v-model="dataForm.deptName" type="text"  :maxlength="20"></Input>
+        </Form-item>
+        <Form-item label="上级部门" prop="parentName">
+          <Poptip trigger='click' v-model="popVisible" placement="bottom-start" >
+            <Input type="text" v-model="dataForm.parentName" :readonly='true' :maxlength="20"></Input>
+            <div slot="content">
+              <Tree
+              :data='selectData'
+              :multiple='false'
+              @on-select-change='handleTreeSelectChange'
+              ></Tree>
+            </div>
+          </Poptip>
+        </Form-item>
+        <Form-item label="排序" prop="sort">
+          <Input v-model="dataForm.sort" type="number"  :maxlength="6"></Input>
+        </Form-item>
+      </Form>
+    </Modal>
   </div>
 </template>
 

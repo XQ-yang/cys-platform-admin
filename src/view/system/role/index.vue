@@ -4,7 +4,7 @@
       <!--查询条件及操作按钮-->
       <div class="search-con search-con-top">
         角色名称：
-        <Input @on-clear="handleClear"  clearable placeholder="角色名称" class="search-input" v-model="listQuery.roleName"/>
+        <Input @on-clear="handleClear" clearable placeholder="角色名称" class="search-input" v-model="listQuery.roleName"/>
         <Button @click="handleSearch" class="search-btn">查询</Button>
         <Button @click="handleCancel" class="search-btn">重置</Button>
         <Button v-permission="{rule:'role:add'}" @click="addOrUpdateHandle()" class="search-btn">新增</Button>
@@ -19,7 +19,7 @@
       :max-height="tableHeight"
       ref="table">
         <template slot-scope="{ row, index }" slot="action">
-            <Button  type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(row.id)">编辑</Button>
+            <Button type="primary" size="small" style="margin: 5px" @click="addOrUpdateHandle(row.id)">编辑</Button>
             <Dropdown @on-click="dropDownClick($event,row)" transfer>
               <Button type="warning" size="small" style="margin: 5px">
                 更多
@@ -27,7 +27,6 @@
               </Button>
               <DropdownMenu slot="list">
                 <DropdownItem v-permission="{rule:'role:permission'}" name="setRole">角色权限</DropdownItem>
-                <!-- <DropdownItem v-permission="{rule:'role:data'}" name="setDataRole">数据权限</DropdownItem> -->
                 <DropdownItem v-permission="{rule:'role:del'}" name="delete">删除</DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -50,7 +49,6 @@
       </div>
       <add-or-update v-if="addOrUpdateVisible" ref="addOrUpate" @refreshDataList="getList"></add-or-update>
       <set-role v-if="setRoleVisible" ref="setRole"></set-role>
-      <set-data-role v-if="setDataRoleVisible" ref="setDataRole"></set-data-role>
     </Card>
   </div>
 </template>
@@ -59,7 +57,6 @@
 import { fetchList, deleteRole } from '@/api/role'
 import AddOrUpdate from './add-or-update'
 import SetRole from './set-role'
-import SetDataRole from './set-data-role'
 
 export default {
   name: 'role',
@@ -143,15 +140,13 @@ export default {
       },
 
       addOrUpdateVisible: false,
-      setRoleVisible: false,
-      setDataRoleVisible: false
+      setRoleVisible: false
     }
   },
 
   components: {
     AddOrUpdate,
-    SetRole,
-    SetDataRole
+    SetRole
   },
 
   // 一般ajaxajax请求数据放到created里面就可以了，这样可以及早发请求获取数据，
@@ -215,15 +210,6 @@ export default {
       })
     },
 
-    setDataRole(row) {
-      this.setDataRoleVisible = true
-      this.$nextTick(() => {
-        this.$refs.setDataRole.roleDeptTemp.roleId = row.id
-        this.$refs.setDataRole.roleName = row.roleName
-        this.$refs.setDataRole.init()
-      })
-    },
-
     handleDelete(id) {
       this.$Modal.confirm({
         title: '提示',
@@ -250,9 +236,6 @@ export default {
       switch (e) {
         case 'setRole':
           this.setRole(row)
-          break
-        case 'setDataRole':
-          this.setDataRole(row)
           break
         case 'delete':
           this.handleDelete(row.id)
