@@ -98,6 +98,13 @@ export const exportData = (query) => {
   })
 }
 
+export const downloadTemplate = () => {
+  return axios.request({
+    url: '/user/download_template',
+    method: 'get'
+  })
+}
+
 export const exportWord = (query) => {
   return axios.request({
     url: '/export/export_word',

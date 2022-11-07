@@ -37,10 +37,10 @@ export const deleteOrg = (id) => {
 /**
  * 根据组织id获取部门
  */
-export const getDeptsByOrgId = (id) => {
+export const getDeptsByOrgId = (orgId) => {
   return axios.request({
-    url: '/dept/get_list',
+    url: '/dept/deptSelectList',
     method: 'get',
-    params: { orgId: id }
+    params: { orgId }
   })
 }

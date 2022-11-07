@@ -31,3 +31,11 @@ export const deleteDept = (id) => {
   })
 }
 
+export const getUserList = (deptId) => {
+  return axios.request({
+    url: '/user/getUserList',
+    method: 'get',
+    params: { deptId }
+  })
+}
+

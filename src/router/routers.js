@@ -69,6 +69,26 @@ export const routerMap = () => [
         component: () => import('@/view/system/dept')
       },
       {
+        path: 'equipment',
+        name: 'equipment',
+        access: 'equipment',
+        meta: {
+          icon: 'ios-cog-outline',
+          title: '设备管理'
+        },
+        component: () => import('@/view/system/equipment')
+      },
+      {
+        path: 'equip-type',
+        name: 'equip-type',
+        access: 'equip-type',
+        meta: {
+          icon: 'ios-podium-outline',
+          title: '设备类型'
+        },
+        component: () => import('@/view/system/equip-type')
+      },
+      {
         path: 'menu',
         name: 'menu',
         access: 'menu',
@@ -277,7 +297,7 @@ export const routes = [
           notCache: true,
           icon: 'md-home'
         },
-        component: () => import('@/view/single-page/home/')
+        component: () => import('@/view/single-page/home/equipmentIndex')
       }
     ]
   },

@@ -5,7 +5,7 @@
       <Button v-permission="{rule:'menu:add'}" class="search-btn" @click="addOrUpdateHandle()">新增</Button>
     </div>
     <div class="table-dom">
-        <Table row-key="id" :columns="tableColumn" :loading="dataListLoading" :data="tableData" border stripe>
+        <Table row-key="id" :columns="tableColumn" :loading="dataListLoading" :data="tableData" :max-height="tableHeight" border stripe>
           <template slot-scope="{row}" slot="icon">
             <Icon :type="row.icon" />
           </template>
@@ -30,6 +30,7 @@ export default {
   name: 'menus',
   data() {
     return {
+      tableHeight: 500,
       tableData: [],
       tableColumn: [
         {

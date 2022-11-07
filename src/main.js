@@ -6,6 +6,8 @@ import App from './App'
 import router from './router'
 import store from './store'
 import ViewUI from 'view-design'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 import 'view-design/dist/styles/iview.css'
 import config from '@/config'
 import importDirective from '@/directive'
@@ -20,6 +22,7 @@ import Bus from './bus'
 //if (process.env.NODE_ENV !== 'production') require('@/mock')
 
 Vue.use(ViewUI)
+Vue.use(ElementUI)
 Vue.prototype.$bus=Bus
 const baseUrl = process.env.VUE_APP_BASE_API_URL
 /**

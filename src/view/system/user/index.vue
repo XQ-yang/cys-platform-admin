@@ -76,14 +76,14 @@
 </template>
 
 <script>
-import {
-  fetchList,
-  deleteUser,
-  resetPassword,
-  exportData,
-  exportWord,
-  exportPdf
-} from '@/api/user'
+  import {
+    fetchList,
+    deleteUser,
+    resetPassword,
+    exportData,
+    exportWord,
+    exportPdf, downloadTemplate
+  } from '@/api/user'
 import AddOrUpdate from './add-or-update'
 import { saveAs } from 'file-saver'
 
@@ -228,7 +228,7 @@ export default {
   },
 
   // 一般ajaxajax请求数据放到created里面就可以了，这样可以及早发请求获取数据，
-  // 如果有依赖dom必须存在的情况则需要放导 mounted
+  // 如果有依赖dom必须存在的情况则需要放到 mounted
   created() {
     this.getList()
   },

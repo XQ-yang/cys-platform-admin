@@ -6,10 +6,11 @@
          {{userName}}
         <Icon :size="18" type="md-arrow-dropdown"></Icon>
       </span>
+      <!--用户头像-->
        <!-- <Avatar :src="userAvator"/> -->
       <DropdownMenu slot="list">
-        <DropdownItem name="userInfo">个人中心</DropdownItem>
-        <DropdownItem name="logout">退出登录</DropdownItem>
+        <DropdownItem name="userInfo">个人中心 <Icon size="20" type="ios-person-outline" /></DropdownItem>
+        <DropdownItem name="logout">退出登录 <Icon size="20" type="ios-log-out" /></DropdownItem>
       </DropdownMenu>
     </Dropdown>
   </div>
